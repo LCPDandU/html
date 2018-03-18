@@ -1,10 +1,10 @@
 <?php
 
 //defenitions go here
-     private $DB_HOST = 'dbclass.cs.nmsu.edu';
-     private $DB_USER = 'cs448sp18team4';
-     private $DB_PSW = 'JJ_F3b8gB0zsq87H';
-     private $DB_NAME = 'cs448sp18team4';
+define('DB_HOST', 'dbclass.cs.nmsu.edu'); /*Database Server*/
+define('DB_NAME', 'cs448sp18team4'); /*Database Name*/
+define('DB_USER', 'cs448sp18team4'); /*Database Username*/
+define('DB_PWD', 'JJ_F3b8gB0zsq87H'); /*Database Password*/
 
 function connectDB() {
     $link = new mysqli(DB_HOST, DB_USER, DB_PWD, DB_NAME);
