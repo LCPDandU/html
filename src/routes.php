@@ -71,10 +71,32 @@ $app->get('/api/notifications/title/{title}', function(Request $request, Respons
 });
 
 # Get notification by date.
-$app->get('/api/notifications/date/{date}', function(Request $request, Response $response){
+$app->get('/api/notifications/date/day/{date}', function(Request $request, Response $response){
     $date = $request->getAttribute('date');
 
     $sql = "SELECT * FROM Notification WHERE postdate LIKE '$date'";
+
+    try{
+      // Get DB object
+      $db = new db();
+      // Call connect; connect to database.
+      $db = $db->connect();
+
+      # PDO statement
+      $stmt = $db->query($sql);
+      $notification = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+      echo json_encode($notification);
+    } catch(PDOException $e){
+      echo '{"error": {"text": '.$e->getMessage().'}';
+    }
+});
+
+# Get notification by month.
+$app->get('/api/notifications/date/month/{date}', function(Request $request, Response $response){
+    $date = $request->getAttribute('date');
+
+    $sql = "SELECT * FROM Notification WHERE postdate LIKE '$date-__'";
 
     try{
       // Get DB object
