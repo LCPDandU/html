@@ -27,10 +27,54 @@ $app->get('/api/notifications', function(Request $request, Response $response){
 });
 
 # Get single notiication.
-$app->get('/api/notification/{id}', function(Request $request, Response $response){
+$app->get('/api/notifications/id/{id}', function(Request $request, Response $response){
     $id = $request->getAttribute('id');
 
     $sql = "SELECT * FROM Notification WHERE id = $id";
+
+    try{
+      // Get DB object
+      $db = new db();
+      // Call connect; connect to database.
+      $db = $db->connect();
+
+      # PDO statement
+      $stmt = $db->query($sql);
+      $notification = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+      echo json_encode($notification);
+    } catch(PDOException $e){
+      echo '{"error": {"text": '.$e->getMessage().'}';
+    }
+});
+
+# Get notification by title.
+$app->get('/api/notifications/title/{title}', function(Request $request, Response $response){
+    $title = $request->getAttribute('title');
+
+    $sql = "SELECT * FROM Notification WHERE title LIKE '$title'";
+
+    try{
+      // Get DB object
+      $db = new db();
+      // Call connect; connect to database.
+      $db = $db->connect();
+
+      # PDO statement
+      $stmt = $db->query($sql);
+      $notification = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+      echo json_encode($notification);
+    } catch(PDOException $e){
+      echo '{"error": {"text": '.$e->getMessage().'}';
+    }
+});
+
+# Get notification by date.
+$app->get('/api/notifications/date/{date}', function(Request $request, Response $response){
+    $date = $request->getAttribute('date');
+
+    $sql = "SELECT * FROM Notification WHERE postdate LIKE '$date'";
 
     try{
       // Get DB object
