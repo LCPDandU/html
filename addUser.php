@@ -1,7 +1,7 @@
 <html>
 <body>
   <h2>Create Account</h2>
-  <form action="addUserSubmit.php" method="post">
+  <form action="addUserSubmit" method="post">
   <fieldset>
     <p>
       <label>Name:</label>
@@ -22,6 +22,6 @@
       <input type="submit" value="Create" />
     </p>
   </fieldset>
-  </form>  
+  </form>
 </body>
 </html>

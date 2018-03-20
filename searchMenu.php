@@ -7,10 +7,10 @@
 
 <!--<body style = "Color: #000000; background-color:#afbfff;">-->
 <body>
-  <form action="seeAllMenu.php" method="post">
+  <form action="seeAllMenu" method="post">
       <input type="submit" value="See All Menu"/>
   </form>
-  <form action="searchMenu.php" method="post">
+  <form action="searchMenu" method="post">
       <input type="submit" value="Search By Attribute"/>
       <i>(not implemented yet)</i>
   </form>

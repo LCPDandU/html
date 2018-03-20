@@ -28,14 +28,14 @@ $Media3 = "null";
 
 try
 {
-   //Connect to CRUD Database  mysqli(Server,User,Password,Database) 
+   //Connect to CRUD Database  mysqli(Server,User,Password,Database)
    $link = connectDB();
 
    $sql = "UPDATE CalendarEvent SET Title = '".$EventTitle."', Category = '".$EventCategory."', EventDate = '".$EventDate."', EventStartTime = '".$EventStartTime."', EventStartTimeAMPM = '".$EventStartTimeAMPM."', Location = '".$EventLocation."', Description = '".$EventDescription."', Media1 = ".$Media1.", Media2 = ".$Media2.", Media3 = ".$Media3." WHERE ID = '".$EventID."'";
-   if (mysqli_query($link, $sql)) 
+   if (mysqli_query($link, $sql))
    {
       $message = 'Event edited.';
-   } 
+   }
    else
    {
       echo  "<br>Error: " . $sql . "<br>" . mysqli_error($link);
@@ -49,13 +49,13 @@ catch(Exception $e)
 ?>
 
 <html>
-   
+
    <p>
       <?php echo $message;?>
-      <form action="editEvent.php" method="post">
+      <form action="editEvent" method="post">
          <input type="hidden" name="EventID" value="<?php echo $EventID;?>"/>
          <input type="submit" value="Return"/>
       </form>
    </p>
-   
+
 </html>

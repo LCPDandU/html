@@ -23,14 +23,14 @@ $PostTimeAMPM = $_POST['PostTimeAMPM'];
 
 try
 {
-   //Connect to CRUD Database  mysqli(Server,User,Password,Database) 
+   //Connect to CRUD Database  mysqli(Server,User,Password,Database)
    $link = connectDB();
 
    $sql = "UPDATE Notification SET Title = '".$NotificationTitle."', Description = '".$NotificationDescription."', PostDate = '".$PostDate."', PostTime = '".$PostTime."', PostTimeAMPM = '".$PostTimeAMPM."' WHERE ID = '".$NotificationID."'";
-   if (mysqli_query($link, $sql)) 
+   if (mysqli_query($link, $sql))
    {
       $message = 'Notification edited.';
-   } 
+   }
    else
    {
       echo  "<br>Error: " . $sql . "<br>" . mysqli_error($link);
@@ -44,13 +44,13 @@ catch(Exception $e)
 ?>
 
 <html>
-   
+
    <p>
       <?php echo $message;?>
-      <form action="editNotification.php" method="post">
+      <form action="editNotification" method="post">
          <input type="hidden" name="NotificationID" value="<?php echo $NotificationID;?>"/>
          <input type="submit" value="Return"/>
       </form>
    </p>
-   
+
 </html>

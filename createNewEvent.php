@@ -26,14 +26,14 @@ $Media3 = "null";
 
 try
 {
-   //Connect to CRUD Database  mysqli(Server,User,Password,Database) 
+   //Connect to CRUD Database  mysqli(Server,User,Password,Database)
    $link = connectDB();
 
    $sql = "INSERT INTO CalendarEvent VALUES (null,'".$EventTitle."','".$EventCategory."','".$EventDate."','".$EventStartTime."','".$EventStartTimeAMPM."','".$EventLocation."','".$EventDescription."',".$Media1.",".$Media2.",".$Media3.")";
-   if (mysqli_query($link, $sql)) 
+   if (mysqli_query($link, $sql))
    {
       $message = 'New Event added';
-   } 
+   }
    else
    {
       echo  "<br>Error: " . $sql . "<br>" . mysqli_error($link);
@@ -47,10 +47,10 @@ catch(Exception $e)
 ?>
 
 <html>
-   
+
    <p>
       <?php echo $message;?>
-      <form action="createMenu.php" method="post"><input type="submit" value="Return"/></form>
+      <form action="createMenu" method="post"><input type="submit" value="Return"/></form>
    </p>
-   
+
 </html>

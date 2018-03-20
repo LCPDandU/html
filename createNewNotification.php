@@ -21,14 +21,14 @@ $PostTimeAMPM = $_POST['PostTimeAMPM'];
 
 try
 {
-   //Connect to CRUD Database  mysqli(Server,User,Password,Database) 
+   //Connect to CRUD Database  mysqli(Server,User,Password,Database)
    $link = connectDB();
 
    $sql = "INSERT INTO Notification VALUES (null,'".$NotificationTitle."','".$NotificationDescription."','".$PostDate."','".$PostTime."','".$PostTimeAMPM."')";
-   if (mysqli_query($link, $sql)) 
+   if (mysqli_query($link, $sql))
    {
       $message = 'New Notification added';
-   } 
+   }
    else
    {
       echo  "<br>Error: " . $sql . "<br>" . mysqli_error($link);
@@ -42,10 +42,10 @@ catch(Exception $e)
 ?>
 
 <html>
-   
+
    <p>
       <?php echo $message;?>
-      <form action="createMenu.php" method="post"><input type="submit" value="Return"/></form>
+      <form action="createMenu" method="post"><input type="submit" value="Return"/></form>
    </p>
-   
+
 </html>
