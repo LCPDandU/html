@@ -6,7 +6,11 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 $app = new \Slim\App;
 
-# Get all customers.
+/*********************************************
+NOTIFICATIONS
+*********************************************/
+
+# Get all notifications.
 $app->get('/api/notifications', function(Request $request, Response $response){
     $sql = "SELECT * FROM Notification";
 
@@ -26,7 +30,7 @@ $app->get('/api/notifications', function(Request $request, Response $response){
     }
 });
 
-# Get single notiication.
+# Get notification by ID.
 $app->get('/api/notifications/id/{id}', function(Request $request, Response $response){
     $id = $request->getAttribute('id');
 
@@ -109,6 +113,54 @@ $app->get('/api/notifications/date/month/{date}', function(Request $request, Res
       $notification = $stmt->fetchAll(PDO::FETCH_OBJ);
       $db = null;
       echo json_encode($notification);
+    } catch(PDOException $e){
+      echo '{"error": {"text": '.$e->getMessage().'}';
+    }
+});
+
+/*********************************************
+EVENTS
+*********************************************/
+
+# Get all events.
+$app->get('/api/events', function(Request $request, Response $response){
+    $sql = "SELECT * FROM CalendarEvent";
+
+    try{
+      // Get DB object
+      $db = new db();
+      // Call connect; connect to database.
+      $db = $db->connect();
+
+      # PDO statement
+      $stmt = $db->query($sql);
+      $events = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+      echo json_encode($events);
+    } catch(PDOException $e){
+      echo '{"error": {"text": '.$e->getMessage().'}';
+    }
+});
+
+/*********************************************
+USERS
+*********************************************/
+
+# Get all users.
+$app->get('/api/users', function(Request $request, Response $response){
+    $sql = "SELECT * FROM User";
+
+    try{
+      // Get DB object
+      $db = new db();
+      // Call connect; connect to database.
+      $db = $db->connect();
+
+      # PDO statement
+      $stmt = $db->query($sql);
+      $notifications = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+      echo json_encode($notifications);
     } catch(PDOException $e){
       echo '{"error": {"text": '.$e->getMessage().'}';
     }

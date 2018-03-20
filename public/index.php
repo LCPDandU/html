@@ -2,6 +2,7 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
+
 require '../vendor/autoload.php';
 
 require '../src/db.php';
@@ -13,7 +14,6 @@ $app->get('/hello/{name}', function (Request $request, Response $response, array
 
     return $response;
 });
-
 
 require '../src/routes.php';
 
