@@ -14,10 +14,10 @@ http://tm4sp18.cs.nmsu.edu:8000/public/api/notifications/id/{id}
 http://tm4sp18.cs.nmsu.edu:8000/public/api/notifications/title/{title}
 
 # Display all with date {year-month-day}
-http://tm4sp18.cs.nmsu.edu:8000/public/api/notifications/date/{year-month-day}
+http://tm4sp18.cs.nmsu.edu:8000/public/api/notifications/date/day/{year-month-day}
 
 # Display in month {month-day}
-http://tm4sp18.cs.nmsu.edu:8000/public/api/notifications/date/{month-day}
+http://tm4sp18.cs.nmsu.edu:8000/public/api/notifications/date/month/{month-day}
 
 ## EVENTS
 
