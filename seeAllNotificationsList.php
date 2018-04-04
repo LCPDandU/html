@@ -7,21 +7,21 @@ include('config.php');
 include('header.php');
 echo "<html><head><h1>See All Notifications List</h1></head>";
 
-
+ 
 try
 {
-   //Connect to MySQL Database  mysqli(Server,User,Password,Database)
+   //Connect to MySQL Database  mysqli(Server,User,Password,Database) 
    $link = connectDB();
-
-
-   // Prep SQL statement which will pull all notifications and order them by ID in descending order
+     
+     
+   // Prep SQL statement which will pull all notifications and order them by ID in descending order 
    $sql = "SELECT * FROM Notification ORDER BY ID DESC;";
-   //echo $sql."<br>";
-
-   //Run the query
-   if($result=mysqli_query($link,$sql))
+   //echo $sql."<br>"; 
+     
+   //Run the query 
+   if($result=mysqli_query($link,$sql)) 
    {
-
+   
       echo '<table align="center" style="width:100%">
             <tr>
 	            <th>ID</th>
@@ -32,7 +32,7 @@ try
             	<th>PostTimeAMPM</th>
                <th>Edit Notification</th>
             </tr>';
-
+            
       //Loop through all entries
         while($row = mysqli_fetch_array($result)) {
          echo '<tr><td align="center">' .
@@ -42,31 +42,31 @@ try
            $row['PostDate'] . '</td><td align="center">' .
            $row['PostTime'] . '</td><td align="center">' .
            $row['PostTimeAMPM'] . '</td><td align="center">';
-
+           
          //edit button is spawned
-         echo '<form action="editNotification" method="post">' .
+         echo '<form action="editNotification.php" method="post">' .
               '<input type="hidden" name="NotificationID" value="'.$row['ID'].'"/>' .
               '<input type="submit" value="Edit"/>' .
               '</form>' .
               '</td>';
-
+                        
          echo '</tr>';
         }
-
-        echo "</table>";
+        
+        echo "</table>";        
    }
-}
+}    
 catch(Exception $e)
 {
    $message = 'Unable to process request';
 }
 
-?>
+?>   
 
-   <form action="seeAllMenu" method="post">
+   <form action="seeAllMenu.php" method="post">
       <input type="submit" value="Return"/>
    </form>
-
+   
     <body>
     <p><?php echo $message; ?>
     </body>

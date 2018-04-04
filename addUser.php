@@ -24,12 +24,5 @@
     </p>
   </fieldset>
   </form>  
-  
-  <form action="index.php" method="post">
-    <p>
-      <input type="submit" value="Back" />
-    </p>
-  </form>
-  
 </body>
 </html>
