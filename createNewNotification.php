@@ -3,6 +3,40 @@
 include("config.php");
 include("header.php");
 
+// REST url
+$url = 'http://localhost/public/api/notifications/add';
+
+// Need to initiate curl
+$ch = curl_init($url);
+
+// Create array for json data.
+$jsonData = array(
+    'NotificationTitle' => $_POST['NotificationTitle'],
+    'NotificationDescription' => $_POST['NotificationTitle'],
+    'PostDate' => $_POST['PostDate'],
+    'PostTimeHour' => $_POST['PostTimeHour'],
+    'PostTimeMinute' => $_POST['PostTimeMinute'],
+    'PostTimeAMPM' => $_POST['PostTimeAMPM'],
+);
+
+// Need to encode this array into json.
+$jsonDataEncoded = json_encode($jsonData);
+
+// curl hands the post request
+curl_setopt($ch, CURLOPT_POST, 1);
+
+// json string is now attached to the post fields.
+curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonDataEncoded);
+
+// Set the content type to application/json.
+curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+
+// Need to execute the request.
+$result = curl_exec($ch);
+
+
+// Below is the code for the old method of posting
+/*
 //check that all of the fields are populated correctly
 
 //check that inputs are of valid lengths?
@@ -38,13 +72,12 @@ catch(Exception $e)
 {
    $message = 'Unable to process request';
 }
-
+*/
 ?>
 
 <html>
 
    <p>
-      <?php echo $message;?>
       <form action="createMenu" method="post"><input type="submit" value="Return"/></form>
    </p>
 

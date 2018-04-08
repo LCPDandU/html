@@ -7,7 +7,7 @@ use \Psr\Http\Message\ResponseInterface as Response;
 $app = new \Slim\App;
 
 /*********************************************
-NOTIFICATIONS
+GET: NOTIFICATIONS
 *********************************************/
 
 # Get all notifications.
@@ -119,7 +119,7 @@ $app->get('/api/notifications/date/month/{date}', function(Request $request, Res
 });
 
 /*********************************************
-EVENTS
+GET: EVENTS
 *********************************************/
 
 # Get all events.
@@ -143,7 +143,7 @@ $app->get('/api/events', function(Request $request, Response $response){
 });
 
 /*********************************************
-USERS
+GET: USERS
 *********************************************/
 
 # Get all users.
@@ -161,6 +161,47 @@ $app->get('/api/users', function(Request $request, Response $response){
       $notifications = $stmt->fetchAll(PDO::FETCH_OBJ);
       $db = null;
       echo json_encode($notifications);
+    } catch(PDOException $e){
+      echo '{"error": {"text": '.$e->getMessage().'}';
+    }
+});
+
+/*********************************************
+POST: NOTIFICATION
+*********************************************/
+# Add notification.
+$app->post('/api/notifications/add', function(Request $request, Response $response){
+
+    $NotificationTitle = $request->getParam('NotificationTitle');
+    $NotificationDescription = $request->getParam('NotificationDescription');
+    $PostDate = $request->getParam('PostDate');
+    $PostTimeHour = $request->getParam('PostTimeHour');
+    $PostTimeMinute = $request->getParam('PostTimeMinute');
+    $PostTime = $PostTimeHour.":".$PostTimeMinute;
+    $PostTimeAMPM = $request->getParam('PostTimeAMPM');
+
+    $sql = "INSERT INTO Notification (ID,Title,Description,PostDate,PostTime,PostTimeAMPM)
+      VALUES (NULL,:NotificationTitle,:NotificationDescription,:PostDate,:PostTime,:PostTimeAMPM)";
+
+
+    try{
+      // Get DB object
+      $db = new db();
+      // Call connect; connect to database.
+      $db = $db->connect();
+
+      # PDO statement
+      $stmt = $db->prepare($sql);
+
+      $stmt->bindParam(':NotificationTitle', $NotificationTitle);
+      $stmt->bindParam(':NotificationDescription', $NotificationDescription);
+      $stmt->bindParam(':PostDate', $PostDate);
+      $stmt->bindParam(':PostTime', $PostTime);
+      $stmt->bindParam(':PostTimeAMPM', $PostTimeAMPM);
+
+      $stmt->execute();
+      echo '{"notice": {"text": "Notification Added"}';
+
     } catch(PDOException $e){
       echo '{"error": {"text": '.$e->getMessage().'}';
     }
