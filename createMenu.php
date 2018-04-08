@@ -112,6 +112,14 @@
       </p>
 
       <p>
+      <label>Send Push Notification?</label>
+         <select name="PushNotificationOption">
+            <option value=1 selected>Yes</option>
+            <option value=0>No</option>
+         </select>
+      </p>
+
+      <p>
          <input type="submit" value="Create New Notification"/>
       </p>
 
