@@ -5,6 +5,32 @@ include('config.php');
 
 //to include header hyperlinks
 include('header.php');
+
+if(isset($_GET['order']))
+{
+   if($_GET['order']=='ID'){$order='ID';}
+   else if($_GET['order']=='Title'){$order='Title';}
+   else if($_GET['order']=='Description'){$order='Description';}
+   else if($_GET['order']=='PostDate'){$order='PostDate';}
+   else if($_GET['order']=='PostTime'){$order='PostTime';}
+   else if($_GET['order']=='PostTimeAMPM'){$order='PostTimeAMPM';}
+   else{$order='ID';}
+}
+else
+{
+   $order='ID';
+}
+if(isset($_GET['sort']))
+{
+   if($_GET['sort']=='desc'){$sort='DESC';$sorting='Descending';}
+   else if($_GET['sort']=='asc'){$sort='ASC';$sorting='Ascending';}
+   else{$sort='DESC';$sorting='Descending';}
+}
+else
+{
+   $sort='DESC';$sorting='Descending';
+}
+
 echo "<html><head><h1>See All Notifications List</h1></head>";
 
  
@@ -15,21 +41,25 @@ try
      
      
    // Prep SQL statement which will pull all notifications and order them by ID in descending order 
-   $sql = "SELECT * FROM Notification ORDER BY ID DESC;";
+   //$sql = "SELECT * FROM Notification ORDER BY ID DESC;";
+   
+   $sql = "SELECT * FROM Notification ORDER BY $order $sort;";
+   
    //echo $sql."<br>"; 
      
    //Run the query 
    if($result=mysqli_query($link,$sql)) 
    {
+      $sort == 'DESC' ? $sort = 'asc' : $sort = 'desc';
    
       echo '<table align="center" style="width:100%">
             <tr>
-	            <th>ID</th>
-            	<th>Title</th>
-            	<th>Description</th>
-            	<th>PostDate</th>
-            	<th>PostTime</th>
-            	<th>PostTimeAMPM</th>
+	            <th><a href="?order=ID&&sort='.$sort.'">ID</a></th>
+            	<th><a href="?order=Title&&sort='.$sort.'">Title</a></th>
+            	<th><a href="?order=Description&&sort='.$sort.'">Description</a></th>
+            	<th><a href="?order=PostDate&&sort='.$sort.'">PostDate</a></th>
+            	<th><a href="?order=PostTime&&sort='.$sort.'">PostTime</a></th>
+            	<th><a href="?order=PostTimeAMPM&&sort='.$sort.'">PostTimeAMPM</a></th>
                <th>Edit Notification</th>
             </tr>';
             

@@ -8,7 +8,7 @@
    }
    if(isset($_POST['val']))
    {
-      $message = 'val ='.$_POST['val'];
+      $message = 'val ="'.$_POST['val'].'"';
       echo ("<body><p>".$message."</p></body>");
    }
 ?>
