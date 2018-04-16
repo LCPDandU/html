@@ -71,7 +71,7 @@ else
             $token = bin2hex(random_bytes(64));
             $_SESSION['token'] = $token;
 
-            $sql = "UPDATE user SET token = :Token WHERE LoginID = :LoginID";
+            $sql = "UPDATE user SET Token = :Token WHERE LoginID = :LoginID";
 
             try{
               // Get DB object

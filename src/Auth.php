@@ -7,7 +7,7 @@ class Auth
     //          $LoginID = $_SESSION['LoginID'];
           $LoginID = 'admin12';
 
-          $sql = "SELECT * FROM user WHERE LoginID = '$LoginID' AND token = '$token'";
+          $sql = "SELECT * FROM user WHERE LoginID = '$LoginID' AND Token = '$token'";
     //  $sql = "SELECT * FROM user WHERE token = '$token'";
 
           // Get DB object

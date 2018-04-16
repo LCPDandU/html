@@ -29,5 +29,6 @@ create table User (
 	LoginID varchar(32),
     Password varchar(32),
     Name varchar(128),
-    AccountStatus enum ('Pending', 'Standard', 'Admin')
+    AccountStatus enum ('Pending', 'Standard', 'Admin'),
+		Token varchar(128)
 );
