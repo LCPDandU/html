@@ -10,8 +10,11 @@ POST TO DATABASE VIA REST
 // REST url
 $url = 'http://localhost/public/api/notifications/add';
 
+// Store session token in variable.
+$token = $_SESSION['token'];
+
 // Need to initiate curl
-$ch = curl_init($url);
+$ch = curl_init($url . '?authorization=' . $token);
 
 // Create array for json data.
 $jsonData = array(

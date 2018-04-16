@@ -1,5 +1,8 @@
 <?php
 
+// Allow creation of db object.
+require 'src/db.php';
+
 //to connect to the database we do this
 include('config.php');
 
@@ -61,12 +64,38 @@ else
             $_SESSION['LoginID'] = $userLoginID;
             $_SESSION['Name'] = $userName;
 
+            $message = 'You are now logged in';
+
+
+            // Generate key for this Login
+            $token = bin2hex(random_bytes(64));
+            $_SESSION['token'] = $token;
+
+            $sql = "UPDATE user SET token = :Token WHERE LoginID = :LoginID";
+
+            try{
+              // Get DB object
+              $db = new db();
+              // Call connect; connect to database.
+              $db = $db->connect();
+
+              # PDO statement
+              $stmt = $db->prepare($sql);
+
+              $stmt->bindParam(':LoginID', $userLoginID);
+              $stmt->bindParam(':Token', $token);
+
+              $stmt->execute();
+              echo '{"notice": {"text": "Token Added"}';
+
+            } catch(PDOException $e){
+              echo '{"error": {"text": '.$e->getMessage().'}';
+            }
+
             echo ("<script>
                window.location.assign('home');
                </script>");
 
-
-            $message = 'You are now logged in';
             exit();
           }
         }

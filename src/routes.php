@@ -4,7 +4,40 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
-$app = new \Slim\App;
+use Slim\App;
+use Slim\Middleware\TokenAuthentication;
+
+require 'Auth.php';
+
+$config = [
+    'settings' => [
+        'displayErrorDetails' => true,
+  //      'addContentLengthHeader' => false
+    ]
+];
+
+$app = new App($config);
+
+$authenticator = function($request, TokenAuthentication $tokenAuth){
+
+    // Try find authorization token via header, parameters, cookie or attribute
+    //  If token not found, return response with status 401 (unauthorized)
+    $token = $tokenAuth->findToken($request);
+
+    //  Call authentication logic class
+    $auth = new Auth();
+
+    // Verify if token is valid on database
+    //  If token isn't valid, must throw an UnauthorizedExceptionInterface
+    $auth->getUserByToken($token);
+
+};
+
+$app->add(new TokenAuthentication([
+    'path' =>   '/api/notifications/add',
+//    'path' =>   '/api/restrict',
+    'authenticator' => $authenticator
+]));
 
 /*********************************************
 GET: NOTIFICATIONS
@@ -161,6 +194,30 @@ $app->get('/api/users', function(Request $request, Response $response){
       $notifications = $stmt->fetchAll(PDO::FETCH_OBJ);
       $db = null;
       echo json_encode($notifications);
+    } catch(PDOException $e){
+      echo '{"error": {"text": '.$e->getMessage().'}';
+    }
+});
+
+//Restrict route example    Our token is "usertokensecret"
+$app->get('/api/restrict', function(Request $request, Response $response){
+    $output = ['msg' => 'It\'s a restrict area. Token authentication works!'];
+    $response->withJson($output, 200, JSON_PRETTY_PRINT);
+
+    $sql = "SELECT * FROM Notification";
+
+    try{
+      // Get DB object
+      $db = new db();
+      // Call connect; connect to database.
+      $db = $db->connect();
+
+      # PDO statement
+      $stmt = $db->query($sql);
+      $notifications = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+      echo json_encode($notifications);
+
     } catch(PDOException $e){
       echo '{"error": {"text": '.$e->getMessage().'}';
     }

@@ -7,6 +7,7 @@
       private $dbpass = 'JJ_F3b8gB0zsq87H';
       private $dbname = 'cs448sp18team4';
 
+
       # Connect to DB
       # Using PDO
       public function connect(){
@@ -16,4 +17,3 @@
         return $dbConnection;
       }
     }
-
