@@ -5,10 +5,9 @@ class Auth
     public function getUserByToken($token)
     {
     //          $LoginID = $_SESSION['LoginID'];
-          $LoginID = 'admin12';
 
-          $sql = "SELECT * FROM user WHERE LoginID = '$LoginID' AND Token = '$token'";
-    //  $sql = "SELECT * FROM user WHERE token = '$token'";
+    //      $sql = "SELECT * FROM user WHERE LoginID = '$LoginID' AND Token = '$token'";
+      $sql = "SELECT * FROM user WHERE token = '$token'";
 
           // Get DB object
           $db = new db();
@@ -21,7 +20,7 @@ class Auth
           $db = null;
 
       if (! $row) {
-            throw new UnauthorizedException('Invalid Toke');
+            throw new UnauthorizedException('Invalid Token');
       }
     }
   }

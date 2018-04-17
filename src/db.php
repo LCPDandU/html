@@ -1,11 +1,18 @@
 <?php
     class db{
-
+/*
       # Properties
       private $dbhost = 'dbclass.cs.nmsu.edu';
       private $dbuser = 'cs448sp18team4';
       private $dbpass = 'JJ_F3b8gB0zsq87H';
       private $dbname = 'cs448sp18team4';
+      */
+
+
+      private $dbhost = 'localhost';
+      private $dbuser = 'root';
+      private $dbpass = '';
+      private $dbname = 'cs448sp18team4'; 
 
 
       # Connect to DB
