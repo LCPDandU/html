@@ -175,6 +175,61 @@ $app->get('/api/events', function(Request $request, Response $response){
     }
 });
 
+# Get all events ordered
+$app->get('/api/events/order/{order}/sort/{sort}', function(Request $request, Response $response){
+   //$order = $request->getParam('order');
+   //$sort = $request->getParam('sort');
+   $order = $request->getAttribute('order');
+   $sort = $request->getAttribute('sort');
+   
+   $sql = "SELECT * FROM CalendarEvent ORDER BY $order $sort";
+   
+   try{
+      //get db object
+      $db = new db();
+      //call connect to connect to database
+      $db = $db->connect();
+      
+      #PDO statement
+      $stmt = $db->query($sql);
+      $events = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+      
+      $eventsEncoded=json_encode($events);
+      $result=json_decode($eventsEncoded,true);
+      
+      foreach($result as $row){
+         echo '<tr><td align="center">' .
+           $row['ID'] . '</td><td align="center">' .
+           $row['Title'] . '</td><td align="center">' .
+           $row['Category'] . '</td><td align="center">' .
+           $row['EventDate'] . '</td><td align="center">' .
+           $row['EventStartTime'] . '</td><td align="center">' .
+           $row['EventStartTimeAMPM'] . '</td><td align="center">' .
+           $row['Location'] . '</td><td align="center">' .
+           $row['Description'] . '</td><td align="center">'; 
+         
+         //Media fields not implemented yet
+         echo '<i>(not implemented yet)</i></td><td align="center">' . 
+              '<i>(not implemented yet)</i></td><td align="center">' .
+              '<i>(not implemented yet)</i></td><td align="center">';
+              
+         //edit button is spawned
+         echo '<form action="editEvent.php" method="post">' .
+              '<input type="hidden" name="EventID" value="'.$row['ID'].'"/>' .
+              '<input type="submit" value="Edit"/>' .
+              '</form>' .
+              '</td>';
+                        
+         echo '</tr>';
+        }
+      
+      //echo json_encode($events);
+   } catch(PDOException $e){
+      echo '{error": {"text": '.$e->getMessage().'}';
+   }
+});
+
 /*********************************************
 GET: USERS
 *********************************************/

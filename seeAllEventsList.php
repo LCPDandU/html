@@ -33,19 +33,9 @@ else
    $sort='DESC';$sorting='Descending';
 }
 
-/*if(isset($_POST['TitleSearch']))
-{
-   $titleSearch=$_POST['TitleSearch'];
-   $searchCriteria=$searchCriteria."Title, ";
-}
-else
-{
-   $titleSearch="";
-}*/
- 
-//echo "<html><head><h1>See All Events List <i>(Order By ".$order.", ".$sorting." Sorting)</i></h1></head>";
+
 echo "<html><head><h1>See All Events List <i>(Order By ".$order.", ".$sorting." Sorting)</i></h1>";
-echo "<h2><i>Search By: ".$searchCriteria."</i></h2></head>";
+//echo "<h2><i>Search By: ".$searchCriteria."</i></h2></head>";
  
 try
 {
@@ -56,15 +46,55 @@ try
    // Prep SQL statement which pull all events and order them by ID in descending order 
    //$sql = "SELECT * FROM CalendarEvent ORDER BY ID DESC;";
    
-   $sql = "SELECT * FROM CalendarEvent ORDER BY $order $sort;";
+   //$sql = "SELECT * FROM CalendarEvent ORDER BY $order $sort;";
    //echo $order.", ";
    //echo $sort.", ";
    //echo $sql;
    
    //echo $sql."<br>"; 
+   
+   
+   // REST url
+   $url = 'http://localhost/public/api/events/order/'.$order.'/sort/'.$sort;
+   
+   
+   // Store session token in variable.
+   $token = $_SESSION['token'];
+   
+   // Need to initiate curl
+   $ch = curl_init($url . '?authorization=' . $token);
+   //echo '<p>'.$url.'</p>';
+   
+   
+   
+      $sort == 'DESC' ? $sort = 'asc' : $sort = 'desc';
+   
+      echo '<table align="center" style="width:100%">
+            <tr>
+	            <th><a href="?order=ID&&sort='.$sort.'">ID</a></th>
+            	<th><a href="?order=Title&&sort='.$sort.'">Title</a></th>
+            	<th><a href="?order=Category&&sort='.$sort.'">Category</a></th>
+            	<th><a href="?order=EventDate&&sort='.$sort.'">EventDate</a></th>
+            	<th><a href="?order=EventStartTime&&sort='.$sort.'">EventStartTime</a></th>
+            	<th><a href="?order=EventStartTimeAMPM&&sort='.$sort.'">EventStartTimeAMPM</a></th>
+            	<th><a href="?order=Location&&sort='.$sort.'">Location</a></th>
+               <th><a href="?order=Description&&sort='.$sort.'">Description</a></th>
+               <th>Media1</th>
+               <th>Media2</th>
+               <th>Media3</th>
+               <th>Edit Event</th>
+            </tr>';
+   
+   
+   
+     
+   // Need to execute the request.
+   $result = curl_exec($ch);
+   
      
    //Run the query 
-   if($result=mysqli_query($link,$sql)) 
+   /*if($result=mysqli_query($link,$sql)) 
+   //if($result=curl_exec($ch))
    {
       $sort == 'DESC' ? $sort = 'asc' : $sort = 'desc';
    
@@ -83,16 +113,10 @@ try
                <th>Media3</th>
                <th>Edit Event</th>
             </tr>';
-            //<tr>
-            //   <form action="seeAllEventsList.php" method="post">
-            //   <th><input type="text" name="TitleSearch"/></th>
-            //   <input type="hidden" name="prevSQL" value="'.$sql.'"/>
-            //   <th><input type="submit" value="Submit"/></th>
-            //   </form>
-            //</tr>';
             
       //Loop through all entries
         while($row = mysqli_fetch_array($result)) {
+        //while($row = json_decode($result, true)){
          echo '<tr><td align="center">' .
            $row['ID'] . '</td><td align="center">' .
            $row['Title'] . '</td><td align="center">' .
@@ -118,8 +142,8 @@ try
          echo '</tr>';
         }
         
-        echo "</table>";        
-   }
+        echo "</table>";   
+   }*/
 }    
 catch(Exception $e)
 {

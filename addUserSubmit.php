@@ -58,7 +58,7 @@ if($valid_form){
 
     else //insert if its a new login id
     {
-      $sql = "INSERT INTO User VALUES (null, '".$LoginID."', '".$Password."', '".$Name."', 'Pending')";
+      $sql = "INSERT INTO User VALUES (null, '".$LoginID."', '".$Password."', '".$Name."', 'Pending', null)";
 
       $result=mysqli_query($link,$sql);
 
