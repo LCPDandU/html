@@ -107,7 +107,7 @@ $app->get('/api/notifications/title/{title}', function(Request $request, Respons
     }
 });
 
-# Get notification by date.
+# Get notification by date. (Exact Date)
 $app->get('/api/notifications/date/day/{date}', function(Request $request, Response $response){
     $date = $request->getAttribute('date');
 
@@ -182,6 +182,394 @@ $app->get('/api/notifications/order/{order}/sort/{sort}', function(Request $requ
       $db = null;
       
       echo json_encode($notifications);
+   } catch(PDOException $e){
+      echo '{error": {"text": '.$e->getMessage().'}';
+   }
+});
+
+#Get all notifications by exact Title
+$app->get('/api/notifications/order/{order}/sort/{sort}/TitleExact/{title}', function(Request $request, Response $response){
+   
+   //Get Parameters from url
+   //order is the Attribute that results are 'Ordered By'
+   //sort can be either ASC (ascending order), or DESC (descending order)
+   $order = $request->getAttribute('order');
+   $processedSort = $request->getAttribute('sort');
+   $title = $request->getAttribute('title');
+   
+   if($processedSort=='desc'||$processedSort=='asc'||$processedSort=='DESC'||$processedSort=='ASC')
+   {
+      $sort=$processedSort;
+   }
+   else
+   {
+      $sort='DESC';
+   }
+   
+   $sql = "SELECT * FROM Notification WHERE Title='$title' ORDER BY $order $sort";
+   
+   try{
+      //get db object
+      $db = new db();
+      //call connect to connect to database
+      $db = $db->connect();
+      
+      #PDO statement
+      $stmt = $db->query($sql);
+      $events = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+      
+      echo json_encode($events);
+   } catch(PDOException $e){
+      echo '{error": {"text": '.$e->getMessage().'}';
+   }
+});
+
+#Get all notifications by like-Title
+$app->get('/api/notifications/order/{order}/sort/{sort}/TitleLike/{title}', function(Request $request, Response $response){
+   
+   //Get Parameters from url
+   //order is the Attribute that results are 'Ordered By'
+   //sort can be either ASC (ascending order), or DESC (descending order)
+   $order = $request->getAttribute('order');
+   $processedSort = $request->getAttribute('sort');
+   $title = $request->getAttribute('title');
+   
+   if($processedSort=='desc'||$processedSort=='asc'||$processedSort=='DESC'||$processedSort=='ASC')
+   {
+      $sort=$processedSort;
+   }
+   else
+   {
+      $sort='DESC';
+   }
+   
+   $sql = "SELECT * FROM Notification WHERE Title LIKE '%$title%' ORDER BY $order $sort";
+   
+   try{
+      //get db object
+      $db = new db();
+      //call connect to connect to database
+      $db = $db->connect();
+      
+      #PDO statement
+      $stmt = $db->query($sql);
+      $events = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+      
+      echo json_encode($events);
+   } catch(PDOException $e){
+      echo '{error": {"text": '.$e->getMessage().'}';
+   }
+});
+
+#Get all notifications by like-Description
+$app->get('/api/notifications/order/{order}/sort/{sort}/DescriptionLike/{description}', function(Request $request, Response $response){
+   
+   //Get Parameters from url
+   //order is the Attribute that results are 'Ordered By'
+   //sort can be either ASC (ascending order), or DESC (descending order)
+   $order = $request->getAttribute('order');
+   $processedSort = $request->getAttribute('sort');
+   $description = $request->getAttribute('description');
+   
+   if($processedSort=='desc'||$processedSort=='asc'||$processedSort=='DESC'||$processedSort=='ASC')
+   {
+      $sort=$processedSort;
+   }
+   else
+   {
+      $sort='DESC';
+   }
+   
+   $sql = "SELECT * FROM Notification WHERE Description LIKE '%$description%' ORDER BY $order $sort";
+   
+   try{
+      //get db object
+      $db = new db();
+      //call connect to connect to database
+      $db = $db->connect();
+      
+      #PDO statement
+      $stmt = $db->query($sql);
+      $events = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+      
+      echo json_encode($events);
+   } catch(PDOException $e){
+      echo '{error": {"text": '.$e->getMessage().'}';
+   }
+});
+
+#Get all notifications by exact Date
+$app->get('/api/notifications/order/{order}/sort/{sort}/PostDateExact/{date}', function(Request $request, Response $response){
+   
+   //Get Parameters from url
+   //order is the Attribute that results are 'Ordered By'
+   //sort can be either ASC (ascending order), or DESC (descending order)
+   $order = $request->getAttribute('order');
+   $processedSort = $request->getAttribute('sort');
+   $date = $request->getAttribute('date');
+   
+   if($processedSort=='desc'||$processedSort=='asc'||$processedSort=='DESC'||$processedSort=='ASC')
+   {
+      $sort=$processedSort;
+   }
+   else
+   {
+      $sort='DESC';
+   }
+   
+   $sql = "SELECT * FROM Notification WHERE PostDate='$date' ORDER BY $order $sort";
+   
+   try{
+      //get db object
+      $db = new db();
+      //call connect to connect to database
+      $db = $db->connect();
+      
+      #PDO statement
+      $stmt = $db->query($sql);
+      $events = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+      
+      echo json_encode($events);
+   } catch(PDOException $e){
+      echo '{error": {"text": '.$e->getMessage().'}';
+   }
+});
+
+#Get all notifications by Date Range
+$app->get('/api/notifications/order/{order}/sort/{sort}/PostDateA/{dateA}/PostDateB/{dateB}', function(Request $request, Response $response){
+   
+   //Get Parameters from url
+   //order is the Attribute that results are 'Ordered By'
+   //sort can be either ASC (ascending order), or DESC (descending order)
+   $order = $request->getAttribute('order');
+   $processedSort = $request->getAttribute('sort');
+   $dateA = $request->getAttribute('dateA');
+   $dateB = $request->getAttribute('dateB');
+   
+   if($processedSort=='desc'||$processedSort=='asc'||$processedSort=='DESC'||$processedSort=='ASC')
+   {
+      $sort=$processedSort;
+   }
+   else
+   {
+      $sort='DESC';
+   }
+   
+   $sql = "SELECT * FROM Notification WHERE PostDate BETWEEN '$dateA' AND '$dateB' ORDER BY $order $sort";
+   
+   try{
+      //get db object
+      $db = new db();
+      //call connect to connect to database
+      $db = $db->connect();
+      
+      #PDO statement
+      $stmt = $db->query($sql);
+      $events = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+      
+      echo json_encode($events);
+   } catch(PDOException $e){
+      echo '{error": {"text": '.$e->getMessage().'}';
+   }
+});
+
+#Get all notificaions by Before/After Date
+$app->get('/api/notificaions/order/{order}/sort/{sort}/PostDateBefAft/{date}/BefAft/{befaft}', function(Request $request, Response $response){
+   
+   //Get Parameters from url
+   //order is the Attribute that results are 'Ordered By'
+   //sort can be either ASC (ascending order), or DESC (descending order)
+   $order = $request->getAttribute('order');
+   $processedSort = $request->getAttribute('sort');
+   $date = $request->getAttribute('date');
+   $processedbefaft = $request->getAttribute('befaft');
+   
+   if($processedSort=='desc'||$processedSort=='asc'||$processedSort=='DESC'||$processedSort=='ASC')
+   {
+      $sort=$processedSort;
+   }
+   else
+   {
+      $sort='DESC';
+   }
+   if($processedbefaft=='Before'||$processedbefaft=='After')
+   {
+      $befaft=$processedbefaft;
+   }
+   else if($processedbefaft=='before'){
+      $befaft='Before';
+   }
+   else if($processedbefaft=='after'){
+      $befaft='After';
+   }
+   else{
+      $befaft='After';
+   }
+   
+   if($beftaft=='After'){
+      $sql = "SELECT * FROM Notification WHERE PostDate>='$date' ORDER BY $order $sort";
+   }
+   //$befaft must be Before
+   else{
+      $sql = "SELECT * FROM Notification WHERE PostDate<='$date' ORDER BY $order $sort";
+   }
+   
+   try{
+      //get db object
+      $db = new db();
+      //call connect to connect to database
+      $db = $db->connect();
+      
+      #PDO statement
+      $stmt = $db->query($sql);
+      $events = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+      
+      echo json_encode($events);
+   } catch(PDOException $e){
+      echo '{error": {"text": '.$e->getMessage().'}';
+   }
+});
+
+#Get all notifications by exact StartTime
+$app->get('/api/notifications/order/{order}/sort/{sort}/PostTimeHourExact/{hour}/PostTimeMinuteExact/{minute}/PostTimeAMPM/{ampm}', function(Request $request, Response $response){
+   
+   //Get Parameters from url
+   //order is the Attribute that results are 'Ordered By'
+   //sort can be either ASC (ascending order), or DESC (descending order)
+   $order = $request->getAttribute('order');
+   $processedSort = $request->getAttribute('sort');
+   $hour = $request->getAttribute('hour');
+   $minute = $request->getAttribute('minute');
+   $processedampm = $request->getAttribute('ampm');
+   
+   if($processedSort=='desc'||$processedSort=='asc'||$processedSort=='DESC'||$processedSort=='ASC')
+   {
+      $sort=$processedSort;
+   }
+   else
+   {
+      $sort='DESC';
+   }
+   
+   if($processedampm=='PM'||$processedampm=='AM')
+   {
+      $ampm=$processedampm;
+   }
+   else if($processedampm=='am'){
+      $ampm='AM';
+   }
+   else if($processedampm=='pm'){
+      $ampm='PM';
+   }
+   else{
+      $ampm='AM';
+   }
+   
+   $sql = "SELECT * FROM Notification WHERE PostTime='$hour:$minute' AND PostStartTimeAMPM='$ampm' ORDER BY $order $sort";
+   
+   try{
+      //get db object
+      $db = new db();
+      //call connect to connect to database
+      $db = $db->connect();
+      
+      #PDO statement
+      $stmt = $db->query($sql);
+      $events = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+      
+      echo json_encode($events);
+   } catch(PDOException $e){
+      echo '{error": {"text": '.$e->getMessage().'}';
+   }
+});
+
+#Get all notifications by Before/After StartTime
+$app->get('/api/notifications/order/{order}/sort/{sort}/PostTimeHourBefAft/{hour}/PostTimeMinuteBefAft/{minute}/PostTimeAMPM/{ampm}/BefAft/{befaft}', function(Request $request, Response $response){
+   
+   //Get Parameters from url
+   //order is the Attribute that results are 'Ordered By'
+   //sort can be either ASC (ascending order), or DESC (descending order)
+   $order = $request->getAttribute('order');
+   $processedSort = $request->getAttribute('sort');
+   $hour = $request->getAttribute('hour');
+   $minute = $request->getAttribute('minute');
+   $processedampm = $request->getAttribute('ampm');
+   $processedbefaft = $request->getAttribute('befaft');
+   
+   if($processedSort=='desc'||$processedSort=='asc'||$processedSort=='DESC'||$processedSort=='ASC')
+   {
+      $sort=$processedSort;
+   }
+   else
+   {
+      $sort='DESC';
+   }
+   
+   if($processedampm=='PM'||$processedampm=='AM')
+   {
+      $ampm=$processedampm;
+   }
+   else if($processedampm=='am'){
+      $ampm='AM';
+   }
+   else if($processedampm=='pm'){
+      $ampm='PM';
+   }
+   else{
+      $ampm='AM';
+   }
+   
+   if($processedbefaft=='Before'||$processedbefaft=='After')
+   {
+      $befaft=$processedbefaft;
+   }
+   else if($processedbefaft=='before'){
+      $befaft='Before';
+   }
+   else if($processedbefaft=='after'){
+      $befaft='After';
+   }
+   else{
+      $befaft='After';
+   }
+   
+   if($beftaft=='After'){
+      if($ampm=='PM'){
+         $sql="SELECT * FROM Notification WHERE PostTime>='$hour:$minute' AND PostStartTimeAMPM='PM' ORDER BY $order $sort";
+      }
+      else{//$ampm must be 'AM'
+         $sql="SELECT * FROM Notification WHERE PostTime>='$hour:$minute' AND ID IN (SELECT ID FROM Notification WHERE PostStartTimeAMPM='AM' OR PostStartTimeAMPM='PM') ORDER BY $order $sort";
+      }
+   }
+   //$befaft must be Before
+   else{
+      if($ampm=='AM'){
+         $sql="SELECT * FROM Notification WHERE PostTime<='$hour:$minute' AND PostStartTimeAMPM='AM' ORDER BY $order $sort";
+      }
+      else{//$ampm must be 'PM'
+         $sql="SELECT * FROM Notification WHERE PostTime<='$hour:$minute' AND ID IN (SELECT ID FROM Notification WHERE PostStartTimeAMPM='AM' OR PostStartTimeAMPM='PM') ORDER BY $order $sort";
+      }
+   }
+   
+   try{
+      //get db object
+      $db = new db();
+      //call connect to connect to database
+      $db = $db->connect();
+      
+      #PDO statement
+      $stmt = $db->query($sql);
+      $events = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+      
+      echo json_encode($events);
    } catch(PDOException $e){
       echo '{error": {"text": '.$e->getMessage().'}';
    }
