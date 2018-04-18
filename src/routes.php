@@ -1161,6 +1161,29 @@ $app->get('/api/users', function(Request $request, Response $response){
     }
 });
 
+#Login get request
+$app->get('/api/users/login/LoginID/{login}/Password/{password}', function(Request $request, Response $response){
+   $login=$request->getAttribute('login');
+   $password=$request->getAttribute('password');
+
+    $sql = "SELECT * FROM User WHERE LoginID='$login' AND AccountStatus!='Pending' AND Password='$password'";
+
+    try{
+      // Get DB object
+      $db = new db();
+      // Call connect; connect to database.
+      $db = $db->connect();
+
+      # PDO statement
+      $stmt = $db->query($sql);
+      $notifications = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+      echo json_encode($notifications);
+    } catch(PDOException $e){
+      echo '{"error": {"text": '.$e->getMessage().'}';
+    }
+});
+
 //Restrict route example    Our token is "usertokensecret"
 $app->get('/api/restrict', function(Request $request, Response $response){
     $output = ['msg' => 'It\'s a restrict area. Token authentication works!'];

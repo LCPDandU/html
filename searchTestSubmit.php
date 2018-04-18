@@ -11,6 +11,38 @@
       $message = 'val ="'.$_POST['val'].'"';
       echo ("<body><p>".$message."</p></body>");
    }
+   
+   $jsonA='[{"ID":"5","LoginID":"cscirone","Password":"U8theb8m80","Name":"CJ Scirone II","AccountStatus":"Admin","Token":"dddbe20879364c20975eca849ee3891e9b0855a4b23caa57dd1ba9c845b4e3217dc8e72f0f52cf0d004c27e9dd81eb3da120512a6fb3c4864d37386f4b686d0c"}]';  
+   $jsonB='[]';
+    
+   echo "<body><p>jsonA=".$jsonA."</p></body>";
+   
+   $jsonAArr=json_decode($jsonA,true);
+   echo '<body><p>';
+   var_dump($jsonAArr);
+   echo '</p></body>';
+   
+   //$jsonA_isset=isset($jsonAArr);
+   //echo "<body><p>jsonA_isset=".$jsonA_isset."</p></body>";
+   if(isset($jsonAArr)){echo "<body><p>jsonA is set</p></body>";}
+   else{echo "<body><p>jsonA is not set</p></body>";}
+   if(empty($jsonAArr)){echo "<body><p>jsonA is empty</p></body>";}
+   else{echo "<body><p>jsonA is not empty</p></body>";}
+   
+   echo "<body><p>jsonB=".$jsonB."</p></body>";
+   
+   $jsonBArr=json_decode($jsonB,true);
+   echo '<body><p>';
+   var_dump($jsonBArr);
+   echo '</p></body>';
+   
+    //$jsonABisset=isset($jsonBArr);
+   //echo "<body><p>jsonB_isset=".$jsonB_isset."</p></body>";
+   if(isset($jsonBArr)){echo "<body><p>jsonB is set</p></body>";}
+   else{echo "<body><p>jsonB is not set</p></body>";}
+   if(empty($jsonBArr)){echo "<body><p>jsonB is empty</p></body>";}
+   else{echo "<body><p>jsonB is not empty</p></body>";}
+   
 ?>
 <html>
 
