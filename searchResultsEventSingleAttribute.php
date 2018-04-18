@@ -6,111 +6,200 @@ include('config.php');
 //to include header hyperlinks
 include('header.php');
 
- 
-try
+
+/*Processing of URL variables 'order' and 'sort'*/
+//Determine what Attribute to ORDER BY (ID is the default)
+if(isset($_GET['order']))
 {
-   //Connect to MySQL Database  mysqli(Server,User,Password,Database) 
-   $link = connectDB();
-     
-     
-   // Prep SQL statement which pull all events and order them by ID in descending order 
-   //$sql = "SELECT * FROM CalendarEvent ORDER BY ID DESC;";
+   if($_GET['order']=='ID'){$order='ID';}
+   else if($_GET['order']=='Title'){$order='Title';}
+   else if($_GET['order']=='Category'){$order='Category';}
+   else if($_GET['order']=='EventDate'){$order='EventDate';}
+   else if($_GET['order']=='EventStartTime'){$order='EventStartTime';}
+   else if($_GET['order']=='EventStartTimeAMPM'){$order='EventStartTimeAMPM';}
+   else if($_GET['order']=='Location'){$order='Location';}
+   else if($_GET['order']=='Description'){$order='Description';}
+   else{$order='ID';}
+}
+else
+{
+   $order='ID';
+}
+//Determine whether sorting is Ascending or Descending (Descending is default)
+if(isset($_POST['Ordering']))
+{
+   if($_POST['Ordering']=='DESC'){$sort='DESC';$sorting='Descending';}
+   else if($_POST['Ordering']=='ASC'){$sort='ASC';$sorting='Ascending';}
+   else{$sort='DESC';$sorting='Descending';}
+}
+else if(isset($_GET['sort']))
+{
+   if($_GET['sort']=='desc'){$sort='DESC';$sorting='Descending';}
+   else if($_GET['sort']=='asc'){$sort='ASC';$sorting='Ascending';}
+   else{$sort='DESC';$sorting='Descending';}
+}
+else
+{
+   $sort='DESC';$sorting='Descending';
+  //isset($_POST['Ordering']) ? $sort=$_POST['Ordering'] : $title='DESC';
+}
+
+
+/*Processing of form/URL variables*/
+//Form variables ($_POST) come from the initial form on the page searchSingleAttributeInputEvent
+//URL variables ($_GET) are used to preserve search criteria while allowing the results to be dynamically sorted via table headers
+
+//The following variables are set below: $url, $href, $attr, and the appropriate variables for each search
+
+//$url - A variable used to hold the REST api route
+//$attr - A variable used to hold the Single Attribute Search being performed
+//$href - A variable used to hold the new URL variables that will be used to preserve search criteria
+if(isset($_POST['EventTitleExact']) || isset($_GET['EventTitleExact']))
+{
+   //The Exact Title being searched for
+   isset($_POST['EventTitleExact']) ? $title=$_POST['EventTitleExact'] : $title=$_GET['EventTitleExact'];
+
+   $href="?EventTitleExact=".$title;
+   $url="http://localhost/public/api/events/order/$order/sort/$sort/TitleExact/$title";
+   $attr="Exact Title";
+}
+if(isset($_POST['EventTitleLike']) || isset($_GET['EventTitleLike']))
+{
+   //The Like-Title being searched for
+   isset($_POST['EventTitleLike']) ? $title=$_POST['EventTitleLike'] : $title=$_GET['EventTitleLike'];
    
-   if(isset($_POST['EventTitleExact']))
-   {
-      $sql = "SELECT * FROM CalendarEvent WHERE Title='" . $_POST['EventTitleExact'] . "' ORDER BY Title " . $_POST['Ordering'] . ";";
-      $attr="Exact Title";
-   }
-   if(isset($_POST['EventTitleLike']))
-   {
-      $sql = "SELECT * FROM CalendarEvent WHERE Title LIKE '%" . $_POST['EventTitleLike'] . "%' ORDER BY Title " . $_POST['Ordering'] . ";";
-      $attr="Like-Title";
-   }
-   if(isset($_POST['EventCategory']))
-   {
-      $sql = "SELECT * FROM CalendarEvent WHERE Category='" . $_POST['EventCategory'] . "' ORDER BY ID " . $_POST['Ordering'] . ";";
-      $attr="Category";
-   }
-   if(isset($_POST['EventDateExact']))
-   {
-      $sql = "SELECT * FROM CalendarEvent WHERE EventDate='" . $_POST['EventDateExact'] . "' ORDER BY EventDate " . $_POST['Ordering'] . ";";
-      $attr="Exact Date";
-   }
-   if(isset($_POST['EventDateA']))
-   {
-      $sql = "SELECT * FROM CalendarEvent WHERE EventDate BETWEEN '" . $_POST['EventDateA'] . "' AND '" . $_POST['EventDateB'] . "' ORDER BY EventDate " . $_POST['Ordering'] . ";";
-      $attr="Date Range";
-   }
-   if(isset($_POST['EventDateBefAft']))
-   {
-      if($_POST['BefAftEventDate']=="Before"){$sql = "SELECT * FROM CalendarEvent WHERE EventDate<'" . $_POST['EventDateBefAft'] . "' ORDER BY EventDate " . $_POST['Ordering'] . ";";$attr="Before Date";}
-      if($_POST['BefAftEventDate']=="After"){$sql = "SELECT * FROM CalendarEvent WHERE EventDate>'" . $_POST['EventDateBefAft'] . "' ORDER BY EventDate " . $_POST['Ordering'] . ";";$attr="After Date";}
-   }
-   if(isset($_POST['EventStartTimeHourExact']))
-   {
-      $sql = "SELECT * FROM CalendarEvent WHERE EventStartTime='" . $_POST['EventStartTimeHourExact'] . ":" . $_POST['EventStartTimeMinuteExact'] ."' AND EventStartTimeAMPM='" . $_POST['EventStartTimeAMPMExact'] . "' ORDER BY EventStartTime " . $_POST['Ordering'] . ";";
-      $attr="Exact Start Time";
-   }
-   if(isset($_POST['EventStartTimeHourBefAft']))
-   {
-      if($_POST['BefAftEventStartTime']=="Before")
-      {
-         if($_POST['EventStartTimeAMPMBefAft']=="AM")
-         {
-            $sql = "SELECT * FROM CalendarEvent WHERE EventStartTime<'" . $_POST['EventStartTimeHourBefAft'] . ":" . $_POST['EventStartTimeMinuteBefAft'] ."' AND EventStartTimeAMPM='AM' ORDER BY EventStartTime " . $_POST['Ordering'] . ";";
-         }
-         if($_POST['EventStartTimeAMPMBefAft']=="PM")
-         {
-            $sql = "SELECT * FROM CalendarEvent WHERE EventStartTime<'" . $_POST['EventStartTimeHourBefAft'] . ":" . $_POST['EventStartTimeMinuteBefAft'] . "' AND ID IN (SELECT ID FROM CalendarEvent WHERE EventStartTimeAMPM='AM' OR EventStartTimeAMPM='PM') ORDER BY EventStartTime " . $_POST['Ordering'] . ";";
-         }
-         $attr="Before Start Time";
-      }
-      if($_POST['BefAftEventStartTime']=="After")
-      {
-         if($_POST['EventStartTimeAMPMBefAft']=="PM")
-         {
-            $sql = "SELECT * FROM CalendarEvent WHERE EventStartTime>'" . $_POST['EventStartTimeHourBefAft'] . ":" . $_POST['EventStartTimeMinuteBefAft'] ."' AND EventStartTimeAMPM='PM' ORDER BY EventStartTime " . $_POST['Ordering'] . ";";
-         }
-         if($_POST['EventStartTimeAMPMBefAft']=="AM")
-         {
-            $sql = "SELECT * FROM CalendarEvent WHERE EventStartTime>'" . $_POST['EventStartTimeHourBefAft'] . ":" . $_POST['EventStartTimeMinuteBefAft'] . "' AND ID IN (SELECT ID FROM CalendarEvent WHERE EventStartTimeAMPM='AM' OR EventStartTimeAMPM='PM') ORDER BY EventStartTime " . $_POST['Ordering'] . ";";
-         }
-         $attr="After Start Time";
-      }
-   }
-   if(isset($_POST['EventLocationExact']))
-   {
-      $sql = "SELECT * FROM CalendarEvent WHERE Location='" . $_POST['EventLocationExact'] . "' ORDER BY Location " . $_POST['Ordering'] . ";";
-      $attr="Exact Location";
-   }
-   if(isset($_POST['EventLocationLike']))
-   {
-      $sql = "SELECT * FROM CalendarEvent WHERE Location LIKE '%" . $_POST['EventLocationLike'] . "%' ORDER BY Location " . $_POST['Ordering'] . ";";
-      $attr="Like-Location";
-   }
-   if(isset($_POST['EventDescriptionLike']))
-   {
-      $sql = "SELECT * FROM CalendarEvent WHERE Description LIKE '%" . $_POST['EventDescriptionLike'] . "%' ORDER BY Description " . $_POST['Ordering'] . ";";
-      $attr="Like-Description";
-   }
+   $href="?EventTitleLike=".$title;
+   $url="http://localhost/public/api/events/order/$order/sort/$sort/TitleLike/$title";
+   $attr="Like-Title";
+}
+if(isset($_POST['EventCategory']) || isset($_GET['EventCategory']))
+{
+   //The Category being searched for
+   isset($_POST['EventCategory']) ? $category=$_POST['EventCategory'] : $category=$_GET['EventCategory'];
+
+   $href="?EventCategory=".$category;
+   $url="http://localhost/public/api/events/order/$order/sort/$sort/Category/$category";
+   $attr="Category";
+}
+if(isset($_POST['EventDateExact']) || isset($_GET['EventDateExact']))
+{
+   //The Exact Date being searched for
+   isset($_POST['EventDateExact']) ? $date=$_POST['EventDateExact'] : $date=$_GET['EventDateExact'];
+
+   $href="?EventDateExact=".$date;
+   $url="http://localhost/public/api/events/order/$order/sort/$sort/EventDateExact/$date";
+   $attr="Exact Date";
+}
+if(isset($_POST['EventDateA']) || isset($_GET['EventDateA']))
+{
+   //The Dates describing the date range being searched for
+   //The Range is $dateA - $dateB, inclusive
+   isset($_POST['EventDateA']) ? $dateA=$_POST['EventDateA'] : $dateA=$_GET['EventDateA'];
+   isset($_POST['EventDateB']) ? $dateB=$_POST['EventDateB'] : $dateB=$_GET['EventDateB'];
+
+   $href="?EventDateA=".$dateA."&&EventDateB=".$dateB;
+   $url="http://localhost/public/api/events/order/$order/sort/$sort/EventDateA/$dateA/EventDateB/$dateB";
+   $attr="Date Range";
+}
+if(isset($_POST['EventDateBefAft']) || isset($_GET['EventDateBefAft']))
+{
+   //Determines whether we are looking at dates before the given date, or after
+   isset($_POST['EventDateBefAft']) ? $date=$_POST['EventDateBefAft'] : $date=$_GET['EventDateBefAft'];
    
-   echo "<html><head><h1>Search Results (Event by " . $attr . ")</h1></head>";
-   //echo $sql."<br>"; 
-     
-   //Run the query 
-   if($result=mysqli_query($link,$sql)) 
-   {
+   //The Date that serves as dividing date
+   isset($_POST['BefAftEventDate']) ? $befaft=$_POST['BefAftEventDate'] : $befaft=$_GET['BefAftEventDate'];
    
+   $href="?EventDateBefAft=".$date."&&BefAftEventDate=".$befaft;
+   $url="http://localhost/public/api/events/order/$order/sort/$sort/EventDateBefAft/$date/BefAft/$befaft";
+
+   if($befaft=="Before"){
+      $attr="Before Date";
+   }
+   if($befaft=="After"){
+      $attr="After Date";
+   }
+}
+if(isset($_POST['EventStartTimeHourExact']) || isset($_GET['EventStartTimeHourExact']))
+{
+   //Together form the Exact Start Time being searched for
+   isset($_POST['EventStartTimeHourExact']) ? $hour=$_POST['EventStartTimeHourExact'] : $hour=$_GET['EventStartTimeHourExact'];
+   isset($_POST['EventStartTimeMinuteExact']) ? $minute=$_POST['EventStartTimeMinuteExact'] : $minute=$_GET['EventStartTimeMinuteExact'];
+   isset($_POST['EventStartTimeAMPMExact']) ? $ampm=$_POST['EventStartTimeAMPMExact'] : $ampm=$_GET['EventStartTimeAMPMExact'];
+   
+   $href="?EventStartTimeHourExact=".$hour."&&EventStartTimeMinuteExact=".$minute."&&EventStartTimeAMPMExact=".$ampm;
+   $url="http://localhost/public/api/events/order/$order/sort/StartTimeHourExact/$hour/StartTimeMinuteExact/$minute/StartTimeAMPM/$ampm";
+   $attr="Exact Start Time";
+}
+if(isset($_POST['EventStartTimeHourBefAft']) || isset($_GET['EventStartTimeHourBefAft']))
+{
+   //Together form the Start Time that serves as dividing time
+   isset($_POST['EventStartTimeHourBefAft']) ? $hour=$_POST['EventStartTimeHourBefAft'] : $hour=$_GET['EventStartTimeHourBefAft'];
+   isset($_POST['EventStartTimeMinuteBefAft']) ? $minute=$_POST['EventStartTimeMinuteBefAft'] : $minute=$_GET['EventStartTimeMinuteBefAft'];
+   isset($_POST['EventStartTimeAMPMBefAft']) ? $ampm=$_POST['EventStartTimeAMPMBefAft'] : $ampm=$_GET['EventStartTimeAMPMBefAft'];
+   
+   //Determines whether we are looking at times before the given time, or after
+   isset($_POST['BefAftEventStartTime']) ? $befaft=$_POST['BefAftEventStartTime'] : $befaft=$_GET['BefAftEventStartTime'];
+   
+   $href="?EventStartTimeHourBefAft=".$hour."&&EventStartTimeMinuteBefAft=".$minute."&&EventStartTimeAMPMBefAft=".$ampm."&&BefAftEventStartTime=".$befaft;
+   $url="http://localhost/public/api/events/order/$order/sort/StartTimeHourBefAft/$hour/StartTimeMinuteBefAft/$minute/StartTimeAMPM/$ampm/BefAft/$befaft";
+
+   if($befaft=="Before")
+   {
+      $attr="Before Start Time";
+   }
+   if($befaft=="After")
+   {
+      $attr="After Start Time";
+   }
+}
+if(isset($_POST['EventLocationExact']) || isset($_GET['EventLocationExact']))
+{
+   //The Exact Location being searched for
+   isset($_POST['EventLocationExact']) ? $location=$_POST['EventLocationExact'] : $location=$_GET['EventLocationExact'];
+
+   $href="?EventLocationExact=".$location;
+   $url="http://localhost/public/api/events/order/$order/sort/$sort/LocationExact/$location";
+   $attr="Exact Location";
+}
+if(isset($_POST['EventLocationLike']) || isset($_GET['EventLocationLike']))
+{
+   //The Like-Location being searched for
+   isset($_POST['EventLocationLike']) ? $location=$_POST['EventLocationLike'] : $location=$_GET['EventLocationLike'];
+
+   $href="?EventLocationLike=".$location;
+   $url="http://localhost/public/api/events/order/$order/sort/$sort/LocationLike/$location";
+   $attr="Like-Location";
+}
+if(isset($_POST['EventDescriptionLike']) || isset($_GET['EventDescriptionLike']))
+{
+   //The Description key-words being searched for
+   isset($_POST['EventDescriptionLike']) ? $description=$_POST['EventDescriptionLike'] : $description=$_GET['EventDescriptionLike'];
+
+   $href="?EventDescriptionLike=".$description;
+   $url="http://localhost/public/api/events/order/$order/sort/$sort/DescriptionLike/$description";
+   $attr="Like-Description";
+}
+
+echo "<html><head><h1>Search Results (Event by " . $attr . ", Ordered by ".$order.", ".$sorting." Sorting)</h1></head>";
+
+//open the file generated by the REST API
+$handle=fopen($url,"r");
+if($handle){
+   while(($line=fgets($handle))!==false){
+      
+      $sort == 'DESC' ? $sort = 'asc' : $sort = 'desc';
+      
+      //Table headers are generated
       echo '<table align="center" style="width:100%">
             <tr>
-	            <th>ID</th>
-            	<th>Title</th>
-            	<th>Category</th>
-            	<th>EventDate</th>
-            	<th>EventStartTime</th>
-            	<th>EventStartTimeAMPM</th>
-            	<th>Location</th>
-               <th>Description</th>
+	            <th><a href="'.$href.'&&order=ID&&sort='.$sort.'">ID</a></th>
+            	<th><a href="'.$href.'&&order=Title&&sort='.$sort.'">Title</a></th>
+            	<th><a href="'.$href.'&&order=Category&&sort='.$sort.'">Category</a></th>
+            	<th><a href="'.$href.'&&order=EventDate&&sort='.$sort.'">EventDate</a></th>
+            	<th><a href="'.$href.'&&order=EventStartTime&&sort='.$sort.'">EventStartTime</a></th>
+            	<th><a href="'.$href.'&&order=EventStartTimeAMPM&&sort='.$sort.'">EventStartTimeAMPM</a></th>
+            	<th><a href="'.$href.'&&order=Location&&sort='.$sort.'">Location</a></th>
+               <th><a href="'.$href.'&&order=Description&&sort='.$sort.'">Description</a></th>
                <th>Media1</th>
                <th>Media2</th>
                <th>Media3</th>
@@ -118,7 +207,7 @@ try
             </tr>';
             
       //Loop through all entries
-        while($row = mysqli_fetch_array($result)) {
+        foreach(json_decode($line,true) as $row){
          echo '<tr><td align="center">' .
            $row['ID'] . '</td><td align="center">' .
            $row['Title'] . '</td><td align="center">' .
@@ -144,12 +233,13 @@ try
          echo '</tr>';
         }
         
-        echo "</table>";        
+        echo "</table>"; 
    }
-}    
-catch(Exception $e)
-{
-   $message = 'Unable to process request';
+   fclose($handle);
+}
+//If file cannot be read, an error is shown
+else{
+   echo "error reading file (".$url.")";
 }
 
 ?>   

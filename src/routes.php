@@ -85,7 +85,7 @@ $app->get('/api/notifications/id/{id}', function(Request $request, Response $res
     }
 });
 
-# Get notification by title.
+# Get notification by title.  (Like-Title)
 $app->get('/api/notifications/title/{title}', function(Request $request, Response $response){
     $title = $request->getAttribute('title');
 
@@ -151,6 +151,42 @@ $app->get('/api/notifications/date/month/{date}', function(Request $request, Res
     }
 });
 
+#Get all notifications ordered
+$app->get('/api/notifications/order/{order}/sort/{sort}', function(Request $request, Response $response){
+   
+   //Get Parameters from url
+   //order is the Attribute that results are 'Ordered By'
+   //sort can be either ASC (ascending order), or DESC (descending order)
+   $order = $request->getAttribute('order');
+   $processedSort = $request->getAttribute('sort');
+   if($processedSort=='desc'||$processedSort=='asc'||$processedSort=='DESC'||$processedSort=='ASC')
+   {
+      $sort=$processedSort;
+   }
+   else
+   {
+      $sort='DESC';
+   }
+   
+   $sql = "SELECT * FROM Notification ORDER BY $order $sort";
+   
+   try{
+      //get db object
+      $db = new db();
+      //call connect to connect to database
+      $db = $db->connect();
+      
+      #PDO statement
+      $stmt = $db->query($sql);
+      $notifications = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+      
+      echo json_encode($notifications);
+   } catch(PDOException $e){
+      echo '{error": {"text": '.$e->getMessage().'}';
+   }
+});
+
 /*********************************************
 GET: EVENTS
 *********************************************/
@@ -177,54 +213,537 @@ $app->get('/api/events', function(Request $request, Response $response){
 
 # Get all events ordered
 $app->get('/api/events/order/{order}/sort/{sort}', function(Request $request, Response $response){
-   //$order = $request->getParam('order');
-   //$sort = $request->getParam('sort');
+   
+   //Get Parameters from url
+   //order is the Attribute that results are 'Ordered By'
+   //sort can be either ASC (ascending order), or DESC (descending order)
    $order = $request->getAttribute('order');
-   $sort = $request->getAttribute('sort');
-
+   $processedSort = $request->getAttribute('sort');
+   if($processedSort=='desc'||$processedSort=='asc'||$processedSort=='DESC'||$processedSort=='ASC')
+   {
+      $sort=$processedSort;
+   }
+   else
+   {
+      $sort='DESC';
+   }
+   
    $sql = "SELECT * FROM CalendarEvent ORDER BY $order $sort";
-
+   
    try{
       //get db object
       $db = new db();
       //call connect to connect to database
       $db = $db->connect();
-
+      
       #PDO statement
       $stmt = $db->query($sql);
       $events = $stmt->fetchAll(PDO::FETCH_OBJ);
       $db = null;
+      
+      echo json_encode($events);
+   } catch(PDOException $e){
+      echo '{error": {"text": '.$e->getMessage().'}';
+   }
+});
 
-      $eventsEncoded=json_encode($events);
-      $result=json_decode($eventsEncoded,true);
+#Get all events by exact Title
+$app->get('/api/events/order/{order}/sort/{sort}/TitleExact/{title}', function(Request $request, Response $response){
+   
+   //Get Parameters from url
+   //order is the Attribute that results are 'Ordered By'
+   //sort can be either ASC (ascending order), or DESC (descending order)
+   $order = $request->getAttribute('order');
+   $processedSort = $request->getAttribute('sort');
+   $title = $request->getAttribute('title');
+   
+   if($processedSort=='desc'||$processedSort=='asc'||$processedSort=='DESC'||$processedSort=='ASC')
+   {
+      $sort=$processedSort;
+   }
+   else
+   {
+      $sort='DESC';
+   }
+   
+   $sql = "SELECT * FROM CalendarEvent WHERE Title='$title' ORDER BY $order $sort";
+   
+   try{
+      //get db object
+      $db = new db();
+      //call connect to connect to database
+      $db = $db->connect();
+      
+      #PDO statement
+      $stmt = $db->query($sql);
+      $events = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+      
+      echo json_encode($events);
+   } catch(PDOException $e){
+      echo '{error": {"text": '.$e->getMessage().'}';
+   }
+});
 
-      foreach($result as $row){
-         echo '<tr><td align="center">' .
-           $row['ID'] . '</td><td align="center">' .
-           $row['Title'] . '</td><td align="center">' .
-           $row['Category'] . '</td><td align="center">' .
-           $row['EventDate'] . '</td><td align="center">' .
-           $row['EventStartTime'] . '</td><td align="center">' .
-           $row['EventStartTimeAMPM'] . '</td><td align="center">' .
-           $row['Location'] . '</td><td align="center">' .
-           $row['Description'] . '</td><td align="center">';
+#Get all events by like-Title
+$app->get('/api/events/order/{order}/sort/{sort}/TitleLike/{title}', function(Request $request, Response $response){
+   
+   //Get Parameters from url
+   //order is the Attribute that results are 'Ordered By'
+   //sort can be either ASC (ascending order), or DESC (descending order)
+   $order = $request->getAttribute('order');
+   $processedSort = $request->getAttribute('sort');
+   $title = $request->getAttribute('title');
+   
+   if($processedSort=='desc'||$processedSort=='asc'||$processedSort=='DESC'||$processedSort=='ASC')
+   {
+      $sort=$processedSort;
+   }
+   else
+   {
+      $sort='DESC';
+   }
+   
+   $sql = "SELECT * FROM CalendarEvent WHERE Title LIKE '%$title%' ORDER BY $order $sort";
+   
+   try{
+      //get db object
+      $db = new db();
+      //call connect to connect to database
+      $db = $db->connect();
+      
+      #PDO statement
+      $stmt = $db->query($sql);
+      $events = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+      
+      echo json_encode($events);
+   } catch(PDOException $e){
+      echo '{error": {"text": '.$e->getMessage().'}';
+   }
+});
 
-         //Media fields not implemented yet
-         echo '<i>(not implemented yet)</i></td><td align="center">' .
-              '<i>(not implemented yet)</i></td><td align="center">' .
-              '<i>(not implemented yet)</i></td><td align="center">';
+#Get all events by Category
+$app->get('/api/events/order/{order}/sort/{sort}/Category/{category}', function(Request $request, Response $response){
+   
+   //Get Parameters from url
+   //order is the Attribute that results are 'Ordered By'
+   //sort can be either ASC (ascending order), or DESC (descending order)
+   $order = $request->getAttribute('order');
+   $processedSort = $request->getAttribute('sort');
+   $category = $request->getAttribute('category');
+   
+   if($processedSort=='desc'||$processedSort=='asc'||$processedSort=='DESC'||$processedSort=='ASC')
+   {
+      $sort=$processedSort;
+   }
+   else
+   {
+      $sort='DESC';
+   }
+   
+   $sql = "SELECT * FROM CalendarEvent WHERE Category='$category' ORDER BY $order $sort";
+   
+   try{
+      //get db object
+      $db = new db();
+      //call connect to connect to database
+      $db = $db->connect();
+      
+      #PDO statement
+      $stmt = $db->query($sql);
+      $events = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+      
+      echo json_encode($events);
+   } catch(PDOException $e){
+      echo '{error": {"text": '.$e->getMessage().'}';
+   }
+});
 
-         //edit button is spawned
-         echo '<form action="editEvent.php" method="post">' .
-              '<input type="hidden" name="EventID" value="'.$row['ID'].'"/>' .
-              '<input type="submit" value="Edit"/>' .
-              '</form>' .
-              '</td>';
+#Get all events by exact Date
+$app->get('/api/events/order/{order}/sort/{sort}/EventDateExact/{date}', function(Request $request, Response $response){
+   
+   //Get Parameters from url
+   //order is the Attribute that results are 'Ordered By'
+   //sort can be either ASC (ascending order), or DESC (descending order)
+   $order = $request->getAttribute('order');
+   $processedSort = $request->getAttribute('sort');
+   $date = $request->getAttribute('date');
+   
+   if($processedSort=='desc'||$processedSort=='asc'||$processedSort=='DESC'||$processedSort=='ASC')
+   {
+      $sort=$processedSort;
+   }
+   else
+   {
+      $sort='DESC';
+   }
+   
+   $sql = "SELECT * FROM CalendarEvent WHERE EventDate='$date' ORDER BY $order $sort";
+   
+   try{
+      //get db object
+      $db = new db();
+      //call connect to connect to database
+      $db = $db->connect();
+      
+      #PDO statement
+      $stmt = $db->query($sql);
+      $events = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+      
+      echo json_encode($events);
+   } catch(PDOException $e){
+      echo '{error": {"text": '.$e->getMessage().'}';
+   }
+});
 
-         echo '</tr>';
-        }
+#Get all events by Date Range
+$app->get('/api/events/order/{order}/sort/{sort}/EventDateA/{dateA}/EventDateB/{dateB}', function(Request $request, Response $response){
+   
+   //Get Parameters from url
+   //order is the Attribute that results are 'Ordered By'
+   //sort can be either ASC (ascending order), or DESC (descending order)
+   $order = $request->getAttribute('order');
+   $processedSort = $request->getAttribute('sort');
+   $dateA = $request->getAttribute('dateA');
+   $dateB = $request->getAttribute('dateB');
+   
+   if($processedSort=='desc'||$processedSort=='asc'||$processedSort=='DESC'||$processedSort=='ASC')
+   {
+      $sort=$processedSort;
+   }
+   else
+   {
+      $sort='DESC';
+   }
+   
+   $sql = "SELECT * FROM CalendarEvent WHERE EventDate BETWEEN '$dateA' AND '$dateB' ORDER BY $order $sort";
+   
+   try{
+      //get db object
+      $db = new db();
+      //call connect to connect to database
+      $db = $db->connect();
+      
+      #PDO statement
+      $stmt = $db->query($sql);
+      $events = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+      
+      echo json_encode($events);
+   } catch(PDOException $e){
+      echo '{error": {"text": '.$e->getMessage().'}';
+   }
+});
 
-      //echo json_encode($events);
+#Get all events by Before/After Date
+$app->get('/api/events/order/{order}/sort/{sort}/EventDateBefAft/{date}/BefAft/{befaft}', function(Request $request, Response $response){
+   
+   //Get Parameters from url
+   //order is the Attribute that results are 'Ordered By'
+   //sort can be either ASC (ascending order), or DESC (descending order)
+   $order = $request->getAttribute('order');
+   $processedSort = $request->getAttribute('sort');
+   $date = $request->getAttribute('date');
+   $processedbefaft = $request->getAttribute('befaft');
+   
+   if($processedSort=='desc'||$processedSort=='asc'||$processedSort=='DESC'||$processedSort=='ASC')
+   {
+      $sort=$processedSort;
+   }
+   else
+   {
+      $sort='DESC';
+   }
+   if($processedbefaft=='Before'||$processedbefaft=='After')
+   {
+      $befaft=$processedbefaft;
+   }
+   else if($processedbefaft=='before'){
+      $befaft='Before';
+   }
+   else if($processedbefaft=='after'){
+      $befaft='After';
+   }
+   else{
+      $befaft='After';
+   }
+   
+   if($beftaft=='After'){
+      $sql = "SELECT * FROM CalendarEvent WHERE EventDate>='$date' ORDER BY $order $sort";
+   }
+   //$befaft must be Before
+   else{
+      $sql = "SELECT * FROM CalendarEvent WHERE EventDate<='$date' ORDER BY $order $sort";
+   }
+   
+   try{
+      //get db object
+      $db = new db();
+      //call connect to connect to database
+      $db = $db->connect();
+      
+      #PDO statement
+      $stmt = $db->query($sql);
+      $events = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+      
+      echo json_encode($events);
+   } catch(PDOException $e){
+      echo '{error": {"text": '.$e->getMessage().'}';
+   }
+});
+
+#Get all events by exact StartTime
+$app->get('/api/events/order/{order}/sort/{sort}/StartTimeHourExact/{hour}/StartTimeMinuteExact/{minute}/StartTimeAMPM/{ampm}', function(Request $request, Response $response){
+   
+   //Get Parameters from url
+   //order is the Attribute that results are 'Ordered By'
+   //sort can be either ASC (ascending order), or DESC (descending order)
+   $order = $request->getAttribute('order');
+   $processedSort = $request->getAttribute('sort');
+   $hour = $request->getAttribute('hour');
+   $minute = $request->getAttribute('minute');
+   $processedampm = $request->getAttribute('ampm');
+   
+   if($processedSort=='desc'||$processedSort=='asc'||$processedSort=='DESC'||$processedSort=='ASC')
+   {
+      $sort=$processedSort;
+   }
+   else
+   {
+      $sort='DESC';
+   }
+   
+   if($processedampm=='PM'||$processedampm=='AM')
+   {
+      $ampm=$processedampm;
+   }
+   else if($processedampm=='am'){
+      $ampm='AM';
+   }
+   else if($processedampm=='pm'){
+      $ampm='PM';
+   }
+   else{
+      $ampm='AM';
+   }
+   
+   $sql = "SELECT * FROM CalendarEvent WHERE EventStartTime='$hour:$minute' AND EventStartTimeAMPM='$ampm' ORDER BY $order $sort";
+   
+   try{
+      //get db object
+      $db = new db();
+      //call connect to connect to database
+      $db = $db->connect();
+      
+      #PDO statement
+      $stmt = $db->query($sql);
+      $events = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+      
+      echo json_encode($events);
+   } catch(PDOException $e){
+      echo '{error": {"text": '.$e->getMessage().'}';
+   }
+});
+
+#Get all events by Before/After StartTime
+$app->get('/api/events/order/{order}/sort/{sort}/StartTimeHourBefAft/{hour}/StartTimeMinuteBefAft/{minute}/StartTimeAMPM/{ampm}/BefAft/{befaft}', function(Request $request, Response $response){
+   
+   //Get Parameters from url
+   //order is the Attribute that results are 'Ordered By'
+   //sort can be either ASC (ascending order), or DESC (descending order)
+   $order = $request->getAttribute('order');
+   $processedSort = $request->getAttribute('sort');
+   $hour = $request->getAttribute('hour');
+   $minute = $request->getAttribute('minute');
+   $processedampm = $request->getAttribute('ampm');
+   $processedbefaft = $request->getAttribute('befaft');
+   
+   if($processedSort=='desc'||$processedSort=='asc'||$processedSort=='DESC'||$processedSort=='ASC')
+   {
+      $sort=$processedSort;
+   }
+   else
+   {
+      $sort='DESC';
+   }
+   
+   if($processedampm=='PM'||$processedampm=='AM')
+   {
+      $ampm=$processedampm;
+   }
+   else if($processedampm=='am'){
+      $ampm='AM';
+   }
+   else if($processedampm=='pm'){
+      $ampm='PM';
+   }
+   else{
+      $ampm='AM';
+   }
+   
+   if($processedbefaft=='Before'||$processedbefaft=='After')
+   {
+      $befaft=$processedbefaft;
+   }
+   else if($processedbefaft=='before'){
+      $befaft='Before';
+   }
+   else if($processedbefaft=='after'){
+      $befaft='After';
+   }
+   else{
+      $befaft='After';
+   }
+   
+   if($beftaft=='After'){
+      if($ampm=='PM'){
+         $sql="SELECT * FROM CalendarEvent WHERE EventStartTime>='$hour:$minute' AND EventStartTimeAMPM='PM' ORDER BY $order $sort";
+      }
+      else{//$ampm must be 'AM'
+         $sql="SELECT * FROM CalendarEvent WHERE EventStartTime>='$hour:$minute' AND ID IN (SELECT ID FROM CalendarEvent WHERE EventStartTimeAMPM='AM' OR EventStartTimeAMPM='PM') ORDER BY $order $sort";
+      }
+   }
+   //$befaft must be Before
+   else{
+      if($ampm=='AM'){
+         $sql="SELECT * FROM CalendarEvent WHERE EventStartTime<='$hour:$minute' AND EventStartTimeAMPM='AM' ORDER BY $order $sort";
+      }
+      else{//$ampm must be 'PM'
+         $sql="SELECT * FROM CalendarEvent WHERE EventStartTime<='$hour:$minute' AND ID IN (SELECT ID FROM CalendarEvent WHERE EventStartTimeAMPM='AM' OR EventStartTimeAMPM='PM') ORDER BY $order $sort";
+      }
+   }
+   
+   try{
+      //get db object
+      $db = new db();
+      //call connect to connect to database
+      $db = $db->connect();
+      
+      #PDO statement
+      $stmt = $db->query($sql);
+      $events = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+      
+      echo json_encode($events);
+   } catch(PDOException $e){
+      echo '{error": {"text": '.$e->getMessage().'}';
+   }
+});
+
+#Get all events by exact Location
+$app->get('/api/events/order/{order}/sort/{sort}/LocationExact/{location}', function(Request $request, Response $response){
+   
+   //Get Parameters from url
+   //order is the Attribute that results are 'Ordered By'
+   //sort can be either ASC (ascending order), or DESC (descending order)
+   $order = $request->getAttribute('order');
+   $processedSort = $request->getAttribute('sort');
+   $location = $request->getAttribute('location');
+   
+   if($processedSort=='desc'||$processedSort=='asc'||$processedSort=='DESC'||$processedSort=='ASC')
+   {
+      $sort=$processedSort;
+   }
+   else
+   {
+      $sort='DESC';
+   }
+   
+   $sql = "SELECT * FROM CalendarEvent WHERE Location='$location' ORDER BY $order $sort";
+   
+   try{
+      //get db object
+      $db = new db();
+      //call connect to connect to database
+      $db = $db->connect();
+      
+      #PDO statement
+      $stmt = $db->query($sql);
+      $events = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+      
+      echo json_encode($events);
+   } catch(PDOException $e){
+      echo '{error": {"text": '.$e->getMessage().'}';
+   }
+});
+
+#Get all events by like-Location
+$app->get('/api/events/order/{order}/sort/{sort}/LocationLike/{location}', function(Request $request, Response $response){
+   
+   //Get Parameters from url
+   //order is the Attribute that results are 'Ordered By'
+   //sort can be either ASC (ascending order), or DESC (descending order)
+   $order = $request->getAttribute('order');
+   $processedSort = $request->getAttribute('sort');
+   $location = $request->getAttribute('location');
+   
+   if($processedSort=='desc'||$processedSort=='asc'||$processedSort=='DESC'||$processedSort=='ASC')
+   {
+      $sort=$processedSort;
+   }
+   else
+   {
+      $sort='DESC';
+   }
+   
+   $sql = "SELECT * FROM CalendarEvent WHERE Location LIKE '%$location%' ORDER BY $order $sort";
+   
+   try{
+      //get db object
+      $db = new db();
+      //call connect to connect to database
+      $db = $db->connect();
+      
+      #PDO statement
+      $stmt = $db->query($sql);
+      $events = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+      
+      echo json_encode($events);
+   } catch(PDOException $e){
+      echo '{error": {"text": '.$e->getMessage().'}';
+   }
+});
+
+#Get all events by like-Description
+$app->get('/api/events/order/{order}/sort/{sort}/DescriptionLike/{description}', function(Request $request, Response $response){
+   
+   //Get Parameters from url
+   //order is the Attribute that results are 'Ordered By'
+   //sort can be either ASC (ascending order), or DESC (descending order)
+   $order = $request->getAttribute('order');
+   $processedSort = $request->getAttribute('sort');
+   $description = $request->getAttribute('description');
+   
+   if($processedSort=='desc'||$processedSort=='asc'||$processedSort=='DESC'||$processedSort=='ASC')
+   {
+      $sort=$processedSort;
+   }
+   else
+   {
+      $sort='DESC';
+   }
+   
+   $sql = "SELECT * FROM CalendarEvent WHERE Description LIKE '%$description%' ORDER BY $order $sort";
+   
+   try{
+      //get db object
+      $db = new db();
+      //call connect to connect to database
+      $db = $db->connect();
+      
+      #PDO statement
+      $stmt = $db->query($sql);
+      $events = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+      
+      echo json_encode($events);
    } catch(PDOException $e){
       echo '{error": {"text": '.$e->getMessage().'}';
    }
