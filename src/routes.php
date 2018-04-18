@@ -7,7 +7,7 @@ use \Psr\Http\Message\ResponseInterface as Response;
 use Slim\App;
 use Slim\Middleware\TokenAuthentication;
 
-require 'Auth.php';
+require 'MyAuth.php';
 
 $config = [
     'settings' => [
@@ -25,7 +25,7 @@ $authenticator = function($request, TokenAuthentication $tokenAuth){
     $token = $tokenAuth->findToken($request);
 
     //  Call authentication logic class
-    $auth = new Auth();
+    $auth = new MyAuth();
 
     // Verify if token is valid on database
     //  If token isn't valid, must throw an UnauthorizedExceptionInterface
@@ -181,23 +181,23 @@ $app->get('/api/events/order/{order}/sort/{sort}', function(Request $request, Re
    //$sort = $request->getParam('sort');
    $order = $request->getAttribute('order');
    $sort = $request->getAttribute('sort');
-   
+
    $sql = "SELECT * FROM CalendarEvent ORDER BY $order $sort";
-   
+
    try{
       //get db object
       $db = new db();
       //call connect to connect to database
       $db = $db->connect();
-      
+
       #PDO statement
       $stmt = $db->query($sql);
       $events = $stmt->fetchAll(PDO::FETCH_OBJ);
       $db = null;
-      
+
       $eventsEncoded=json_encode($events);
       $result=json_decode($eventsEncoded,true);
-      
+
       foreach($result as $row){
          echo '<tr><td align="center">' .
            $row['ID'] . '</td><td align="center">' .
@@ -207,23 +207,23 @@ $app->get('/api/events/order/{order}/sort/{sort}', function(Request $request, Re
            $row['EventStartTime'] . '</td><td align="center">' .
            $row['EventStartTimeAMPM'] . '</td><td align="center">' .
            $row['Location'] . '</td><td align="center">' .
-           $row['Description'] . '</td><td align="center">'; 
-         
+           $row['Description'] . '</td><td align="center">';
+
          //Media fields not implemented yet
-         echo '<i>(not implemented yet)</i></td><td align="center">' . 
+         echo '<i>(not implemented yet)</i></td><td align="center">' .
               '<i>(not implemented yet)</i></td><td align="center">' .
               '<i>(not implemented yet)</i></td><td align="center">';
-              
+
          //edit button is spawned
          echo '<form action="editEvent.php" method="post">' .
               '<input type="hidden" name="EventID" value="'.$row['ID'].'"/>' .
               '<input type="submit" value="Edit"/>' .
               '</form>' .
               '</td>';
-                        
+
          echo '</tr>';
         }
-      
+
       //echo json_encode($events);
    } catch(PDOException $e){
       echo '{error": {"text": '.$e->getMessage().'}';

@@ -1,5 +1,5 @@
 <?php
-class Auth
+class MyAuth
 {
     // Need to search database for token
     public function getUserByToken($token)
