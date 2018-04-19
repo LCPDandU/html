@@ -634,6 +634,209 @@ $app->get('/api/events/order/{order}/sort/{sort}', function(Request $request, Re
    }
 });
 
+#Multiple Attribute Search
+$app->get('/api/events/MultiAttr/order/{order}/sort/{sort}/{exactTitle}/{likeTitle}/{category}/{dateExact}/{dateA}/{dateB}/{dateBefAft}/{befAftDate}/{hourExact}/{minuteExact}/{ampmExact}/{hourBefAft}/{minuteBefAft}/{ampmBefAft}/{befAftTime}/{locationExact}/{locationLike}/{descriptionLike}', function(Request $request, Response $response){
+
+   //Get Parameters from url
+   //order is the Attribute that results are 'Ordered By'
+   //sort can be either ASC (ascending order), or DESC (descending order)
+   
+   $ignoreString="|||";
+   
+   $order = $request->getAttribute('order');
+   $processedSort = $request->getAttribute('sort');
+   
+   //Title variables
+   $exactTitle=$request->getAttribute('exactTitle');
+   $likeTitle=$request->getAttribute('likeTitle');
+   
+   //Category variables
+   $category=$request->getAttribute('category');
+   
+   //Date variables
+   $dateExact=$request->getAttribute('dateExact');
+   $dateA=$request->getAttribute('dateA');
+   $dateB=$request->getAttribute('dateB');
+   $dateBefAft=$request->getAttribute('dateBefAft');
+   $befAftDate=$request->getAttribute('befAftDate');
+   
+   //Time variables
+   $hourExact=$request->getAttribute('hourExact');
+   $minuteExact=$request->getAttribute('minuteExact');
+   $ampmExact=$request->getAttribute('ampmExact');
+   $hourBefAft=$request->getAttribute('hourBefAft');
+   $minuteBefAft=$request->getAttribute('minuteBefAft');
+   $ampmBefAft=$request->getAttribute('ampmBefAft');
+   $befAftTime=$request->getAttribute('befAftTime');
+   
+   //Location variables
+   $locationExact=$request->getAttribute('locationExact');
+   $locationLike=$request->getAttribute('locationLike');
+   
+   //Description variables
+   $descriptionLike=$request->getAttribute('descriptionLike');
+   
+   
+   
+   if($processedSort=='desc'||$processedSort=='asc'||$processedSort=='DESC'||$processedSort=='ASC')
+   {
+      $sort=$processedSort;
+   }
+   else
+   {
+      $sort='DESC';
+   }
+   
+   
+   $sql = "SELECT * FROM CalendarEvent ";
+   
+   //A counter for how many conditionals are included in the query.
+   $count=0;
+   
+   
+   if($exactTitle!=$ignoreString)
+   {
+      //add to sql statement
+      if($count==0){$sql.="WHERE ";}
+      $sql.="Title='$exactTitle' ";
+      $count=$count+1;
+   }
+   if($likeTitle!=$ignoreString)
+   {
+      //add to sql statement
+      if($count==0){$sql.="WHERE ";}
+      $sql.="Title LIKE '%$likeTitle%' ";
+      $count=$count+1;
+   }
+   if($category!=$ignoreString)
+   {
+      //add to sql statement
+      if($count==0){$sql.="WHERE ";}
+      if($count>0){$sql.="AND ";}
+      $sql.="Category='$category' ";
+      $count=$count+1;
+   }
+   if($dateExact!=$ignoreString)
+   {
+      //add to sql statement
+      if($count==0){$sql.="WHERE ";}
+      if($count>0){$sql.="AND ";}
+      $sql.="EventDate='$dateExact' ";
+      $count=$count+1;
+   }
+   if($dateA!=$ignoreString)
+   {
+      //add to sql statement
+      if($count==0){$sql.="WHERE ";}
+      if($count>0){$sql.="AND ";}
+      $sql.="EventDate BETWEEN '$dateA' AND '$dateB' ";
+      $count=$count+1;
+   }
+   if($dateBefAft!=$ignoreString)
+   {
+      //add to sql statement
+      if($count==0){$sql.="WHERE ";}
+      if($count>0){$sql.="AND ";}
+      
+      if($befAftDate=='Before'||$befAftDate=='before')
+      {
+         $sql.="EventDate<='$dateBefAft' ";
+         $count=$count+1;
+      }
+      else if($befAftDate=='After'||$befAftDate=='after')
+      {
+         $sql.="EventDate>='$dateBefAft' ";
+         $count=$count+1;
+      }
+   }
+   if($hourExact!=$ignoreString)
+   {
+      //add to sql statement
+      if($count==0){$sql.="WHERE ";}
+      if($count>0){$sql.="AND ";}
+      $sql.="EventStartTime='$hourExact:$minuteExact' AND EventStartTimeAMPM='$ampmExact' ";
+      $count=$count+1;
+   }
+   if($hourBefAft!=$ignoreString)
+   {
+      //add to sql statement
+      if($count==0){$sql.="WHERE ";}
+      if($count>0){$sql.="AND ";}
+      
+      if($befAftTime=='Before'||$befAftTime=='before')
+      {
+         if($ampmBefAft=='AM'||$ampmBefAft=='am')
+         {
+            $sql.="EventStartTime<='$hourBefAft:minuteBefAft' AND EventStartTimeAMPM='AM' ";
+            $count=$count+1;
+         }
+         else if($ampmBefAft=='PM'||$ampmBefAft=='pm')
+         {
+            $sql.="EventStartTime<='$hourBefAft:minuteBefAft' AND ID IN (SELECT ID FROM CalendarEvent WHERE EventStartTimeAMPM='AM' || EventStartTimeAMPM='PM') ";
+            $count=$count+1;
+         }
+      }
+      else if($befAftTime=='After'||$befAftTime=='after')
+      {
+         if($ampmBefAft=='AM'||$ampmBefAft=='am')
+         {
+            $sql.="EventStartTime>='$hourBefAft:minuteBefAft' AND ID IN (SELECT ID FROM CalendarEvent WHERE EventStartTimeAMPM='AM' || EventStartTimeAMPM='PM') ";
+            $count=$count+1;
+         }
+         else if($ampmBefAft=='PM'||$ampmBefAft=='pm')
+         {
+            $sql.="EventStartTime>='$hourBefAft:minuteBefAft' AND EventStartTimeAMPM='PM' ";
+            $count=$count+1;
+         }
+      }
+      
+   }
+   if($locationExact!=$ignoreString)
+   {
+      //add to sql statement
+      if($count==0){$sql.="WHERE ";}
+      if($count>0){$sql.="AND ";}
+      $sql.="Location='$locationExact' ";
+      $count=$count+1;
+   }
+   if($locationLike!=$ignoreString)
+   {
+      //add to sql statement
+      if($count==0){$sql.="WHERE ";}
+      if($count>0){$sql.="AND ";}
+      $sql.="Location='$locationLike' ";
+      $count=$count+1;
+   }
+   if($descriptionLike!=$ignoreString)
+   {
+      //add to sql statement
+      if($count==0){$sql.="WHERE ";}
+      if($count>0){$sql.="AND ";}
+      $sql.="Description LIKE '$descriptionLike' ";
+      $count=$count+1;
+   }
+
+   $sql.="ORDER BY $order $sort";
+   
+   //echo "sql=".$sql;
+
+   try{
+      //get db object
+      $db = new db();
+      //call connect to connect to database
+      $db = $db->connect();
+
+      #PDO statement
+      $stmt = $db->query($sql);
+      $events = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+
+      echo json_encode($events);
+   } catch(PDOException $e){
+      echo '{error": {"text": '.$e->getMessage().'}';
+   }
+});
+
 #Get all events by exact Title
 $app->get('/api/events/order/{order}/sort/{sort}/TitleExact/{title}', function(Request $request, Response $response){
 

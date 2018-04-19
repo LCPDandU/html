@@ -43,6 +43,20 @@
    if(empty($jsonBArr)){echo "<body><p>jsonB is empty</p></body>";}
    else{echo "<body><p>jsonB is not empty</p></body>";}
    
+   $url = "test local";
+   $urlEncoded = urlencode($url);
+   
+   echo "<body><p>url=".$url."</p></body>";
+   echo "<body><p>urlEncoded=".$urlEncoded."</p></body>";
+   
+   $text="first";
+   $text.="/second";
+   
+   $cars=array("Volvo","BMW","Toyota");
+   echo "I like " . $cars[0] . ", " . $cars[1] . " and " . $cars[2] . ".";
+   
+   echo "<body><p>text=".$text."</p></body>";
+   
 ?>
 <html>
 

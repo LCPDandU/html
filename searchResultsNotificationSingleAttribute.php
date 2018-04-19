@@ -52,6 +52,7 @@ if(isset($_POST['NotificationTitleExact']) || isset($_GET['NotificationTitleExac
 {
    //The Exact Title being searched for
    isset($_POST['NotificationTitleExact']) ? $title=$_POST['NotificationTitleExact'] : $title=$_GET['NotificationTitleExact'];
+   $title=urlencode($title);
 
    $href="?NotificationTitleExact=".$title;
    $url="http://localhost/public/api/notifications/order/$order/sort/$sort/TitleExact/$title";
@@ -61,6 +62,7 @@ if(isset($_POST['NotificationTitleLike']) || isset($_GET['NotificationTitleLike'
 {
    //The Like-Title being searched for
    isset($_POST['NotificationTitleLike']) ? $title=$_POST['NotificationTitleLike'] : $title=$_GET['NotificationTitleLike'];
+   $title=urlencode($title);
    
    $href="?NotificationTitleLike=".$title;
    $url="http://localhost/public/api/notifications/order/$order/sort/$sort/TitleLike/$title";
@@ -70,6 +72,7 @@ if(isset($_POST['NotificationDescriptionLike']) || isset($_GET['NotificationDesc
 {
    //The Description key-words being searched for
    isset($_POST['NotificationDescriptionLike']) ? $description=$_POST['NotificationDescriptionLike'] : $description=$_GET['NotificationDescriptionLike'];
+   $description=urlencode($description);
 
    $href="?NotificationDescriptionLike=".$description;
    $url="http://localhost/public/api/notifications/order/$order/sort/$sort/DescriptionLike/$description";
@@ -79,6 +82,7 @@ if(isset($_POST['NotificationDateExact']) || isset($_GET['NotificationDateExact'
 {
    //The Exact Date being searched for
    isset($_POST['NotificationDateExact']) ? $date=$_POST['NotificationDateExact'] : $date=$_GET['NotificationDateExact'];
+   $date=urlencode($date);
 
    $href="?NotificationDateExact=".$date;
    $url="http://localhost/public/api/notifications/order/$order/sort/$sort/PostDateExact/$date";
@@ -89,7 +93,9 @@ if(isset($_POST['NotificationDateA']) || isset($_GET['NotificationDateA']))
    //The Dates describing the date range being searched for
    //The Range is $dateA - $dateB, inclusive
    isset($_POST['NotificationDateA']) ? $dateA=$_POST['NotificationDateA'] : $dateA=$_GET['NotificationDateA'];
+   $dateA=urlencode($dateA);
    isset($_POST['NotificationDateB']) ? $dateB=$_POST['NotificationDateB'] : $dateB=$_GET['NotificationDateB'];
+   $dateB=urlencode($dateB);
 
    $href="?NotificationDateA=".$dateA."&&NotificationDateB=".$dateB;
    $url="http://localhost/public/api/notifications/order/$order/sort/$sort/PostDateA/$dateA/PostDateB/$dateB";
@@ -99,9 +105,11 @@ if(isset($_POST['NotificationDateBefAft']) || isset($_GET['NotificationDateBefAf
 {
    //Determines whether we are looking at dates before the given date, or after
    isset($_POST['NotificationDateBefAft']) ? $date=$_POST['NotificationDateBefAft'] : $date=$_GET['NotificationDateBefAft'];
+   $date=urlencode($date);
    
    //The Date that serves as dividing date
    isset($_POST['BefAftNotifiationDate']) ? $befaft=$_POST['BefAftNotifiationDate'] : $befaft=$_GET['BefAftNotifiationDate'];
+   $befaft=urlencode($befaft);
    
    $href="?NotificationDateBefAft=".$date."&&BefAftNotifiationDate=".$befaft;
    $url="http://localhost/public/api/notifications/order/$order/sort/$sort/PostDateBefAft/$date/BefAft/$befaft";
@@ -117,8 +125,11 @@ if(isset($_POST['NotificationPostTimeHourExact']) || isset($_GET['NotificationPo
 {
    //Together form the Exact Post Time being searched for
    isset($_POST['NotificationPostTimeHourExact']) ? $hour=$_POST['NotificationPostTimeHourExact'] : $hour=$_GET['NotificationPostTimeHourExact'];
+   $hour=urlencode($hour);
    isset($_POST['NotificationPostTimeMinuteExact']) ? $minute=$_POST['NotificationPostTimeMinuteExact'] : $minute=$_GET['NotificationPostTimeMinuteExact'];
+   $minute=urlencode($minute);
    isset($_POST['NotificationPostTimeAMPMExact']) ? $ampm=$_POST['NotificationPostTimeAMPMExact'] : $ampm=$_GET['NotificationPostTimeAMPMExact'];
+   $ampm=urlencode($ampm);
    
    $href="?NotificationPostTimeHourExact=".$hour."&&NotificationPostTimeMinuteExact=".$minute."&&NotificationPostTimeAMPMExact=".$ampm;
    $url="http://localhost/public/api/notifications/order/$order/sort/PostTimeHourExact/$hour/PostTimeMinuteExact/$minute/PostTimeAMPM/$ampm";
@@ -128,11 +139,15 @@ if(isset($_POST['NotificationPostTimeHourBefAft']) || isset($_GET['NotificationP
 {
    //Together form the Post Time that serves as dividing time
    isset($_POST['NotificationPostTimeHourBefAft']) ? $hour=$_POST['NotificationPostTimeHourBefAft'] : $hour=$_GET['NotificationPostTimeHourBefAft'];
+   $hour=urlencode($hour);
    isset($_POST['NotificationPostTimeMinuteBefAft']) ? $minute=$_POST['NotificationPostTimeMinuteBefAft'] : $minute=$_GET['NotificationPostTimeMinuteBefAft'];
+   $minute=urlencode($minute);
    isset($_POST['NotificationPostTimeAMPMBefAft']) ? $ampm=$_POST['NotificationPostTimeAMPMBefAft'] : $ampm=$_GET['NotificationPostTimeAMPMBefAft'];
+   $ampm=urlencode($ampm);
    
    //Determines whether we are looking at times before the given time, or after
    isset($_POST['BefAftNotificationPostTime']) ? $befaft=$_POST['BefAftNotificationPostTime'] : $befaft=$_GET['BefAftNotificationPostTime'];
+   $befaft=urlencode($befaft);
    
    $href="?NotificationPostTimeHourBefAft=".$hour."&&NotificationPostTimeMinuteBefAft=".$minute."&&NotificationPostTimeAMPMBefAft=".$ampm."&&BefAftNotificationPostTime=".$befaft;
    $url="http://localhost/public/api/notifications/order/$order/sort/PostTimeHourBefAft/$hour/PostTimeMinuteBefAft/$minute/PostTimeAMPM/$ampm/BefAft/$befaft";

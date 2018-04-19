@@ -52,35 +52,48 @@
   <form action="searchAttributeInputEvent.php" method="post">
   <fieldset>
   <h1><strong>Search Events (Multiple Attributes)</strong></h1>
-  <p>Only exact values can be searched using this function</p>
+  <p>Search Options <i>(Selecting "None" will not use that attribute in the search)</i></p>
   </p> 
-  <div>
-   <input type="checkbox" name="EventTitle" value="EventTitleSet"/>
-   <label>Title</label>
-  </div>
-  <div>
-   <input type="checkbox" name="EventCategory" value="EventCategorySet"/>
-   <label>Category</label>
-  </div>
-  <div>
-   <input type="checkbox" name="EventDate" value="EventDateSet"/>
-   <label>Date</label>
-  </div>
-  <div>
-   <input type="checkbox" name="EventStartTime" value="EventStartTimeSet"/>
-   <label>Start Time</label>
-  </div>
-  <div>
-   <input type="checkbox" name="EventLocation" value="EventLocationSet"/>
-   <label>Location</label>
-  </div>
-  <div>
-   <input type="checkbox" name="EventDescription" value="EventDescriptionSet"/>
-   <label>Description</label>
-  </div>
-  <p>
-      <input type="submit" value="Next"/>
-  </p>  
+  <table>
+  <tr><div>
+   <td><label>Title</label></td>
+       <td><input type="radio" name="EventTitleOption" value="None" checked/><label>None</label></td>
+       <td><input type="radio" name="EventTitleOption" value="EventTitleExact"/><label>Exact Title</label></td>
+       <td><input type="radio" name="EventTitleOption" value="EventTitleLike"/><label>Like-Title</label></td>
+  </div></tr>
+  <tr><div>
+   <td><label>Category</label></td>
+       <td><input type="radio" name="EventCategoryOption" value="None" checked/><label>None</label></td>
+       <td><input type="radio" name="EventCategoryOption" value="EventCategoryExact"/><label>Exact Category</label></td>
+  </div></tr>
+  <tr><div>
+   <td><label>Date</label></td>
+       <td><input type="radio" name="EventDateOption" value="None" checked/><label>None</label></td>
+       <td><input type="radio" name="EventDateOption" value="EventDateExact"/><label>Exact Date</label></td>
+       <td><input type="radio" name="EventDateOption" value="EventDateRange"/><label>Date Range</label></td>
+       <td><input type="radio" name="EventDateOption" value="EventDateBefAft"/><label>Before/After Date</label></td>
+  </div></tr>
+  <tr><div>
+   <td><label>Start Time</label></td>
+       <td><input type="radio" name="EventStartTimeOption" value="None" checked/><label>None</label></td>
+       <td><input type="radio" name="EventStartTimeOption" value="EventStartTimeExact"/><label>Exact Start Time</label></td>
+       <td><input type="radio" name="EventStartTimeOption" value="EventStartTimeBefAft"/><label>Before/After Start Time</label></td>
+  </div></tr>
+  <tr><div>
+   <td><label>Location</label></td>
+       <td><input type="radio" name="EventLocationOption" value="None" checked/><label>None</label></td>
+       <td><input type="radio" name="EventLocationOption" value="EventLocationExact"/><label>Exact Location</label></td>
+       <td><input type="radio" name="EventLocationOption" value="EventLocationLike"/><label>Like-Location</label></td>
+  </div></tr>
+  <tr><div>
+   <td><label>Description</label></td>
+       <td><input type="radio" name="EventDescriptionOption" value="None" checked/><label>None</label></td>
+       <td><input type="radio" name="EventDescriptionOption" value="EventDescriptionLike"/><label>Like-Description</label></td>
+  </div></tr>
+  <tr>
+      <td><input type="submit" value="Next"/></td>
+  </tr>  
+  </table>
   </fieldset>
   </form>
   
