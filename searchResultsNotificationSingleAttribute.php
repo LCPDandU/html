@@ -191,8 +191,8 @@ if($handle){
            $row['Title'] . '</td><td align="center">' .
            $row['Description'] . '</td><td align="center">' .
            $row['PostDate'] . '</td><td align="center">' .
-           $row['PostStartTime'] . '</td><td align="center">' .
-           $row['PostStartTimeAMPM'] . '</td><td align="center">'; 
+           $row['PostTime'] . '</td><td align="center">' .
+           $row['PostTimeAMPM'] . '</td><td align="center">'; 
               
          //edit button is spawned
          echo '<form action="editNotification.php" method="post">' .

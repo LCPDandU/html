@@ -52,7 +52,6 @@
   <form action="searchAttributeInputEvent.php" method="post">
   <fieldset>
   <h1><strong>Search Events (Multiple Attributes)</strong></h1>
-  <p>Search Options <i>(Selecting "None" will not use that attribute in the search)</i></p>
   </p> 
   <table>
   <tr><div>
@@ -101,28 +100,37 @@
   <form action="searchAttributeInputNotification.php" method="post">
   <fieldset>
   <h1><strong>Search Notifications (Multiple Attributes)</strong></h1>
-  <p>Only exact values can be searched using this function</p>
-  <p>Only exact values can be searched using this function</p>
   </p> 
-  <div>
-   <input type="checkbox" name="NotificationTitle" value="NotificationTitleSet"/>
-   <label>Title</label>
-  </div>
-  <div>
-   <input type="checkbox" name="NotificationDescription" value="NotificationDescriptionSet"/>
-   <label>Description</label>
-  </div>
-  <div>
-   <input type="checkbox" name="NotificationDate" value="NotificationDateSet"/>
-   <label>Date</label>
-  </div>
-  <div>
-   <input type="checkbox" name="NotificationPostTime" value="NotificationPostTimeSet"/>
-   <label>Post Time</label>
-  </div>
-  <p>
-      <input type="submit" value="Next"/>
-  </p>   
+  <table>
+  <tr><div>
+   <td><label>Title</label></td>
+       <td><input type="radio" name="NotificationTitleOption" value="None" checked/><label>None</label></td>
+       <td><input type="radio" name="NotificationTitleOption" value="NotificationTitleExact"/><label>Exact Title</label></td>
+       <td><input type="radio" name="NotificationTitleOption" value="NotificationTitleLike"/><label>Like-Title</label></td>
+  </div></tr>
+  <tr><div>
+   <td><label>Description</label></td>
+       <td><input type="radio" name="NotificationDescriptionOption" value="None" checked/><label>None</label></td>
+       <td><input type="radio" name="NotificationDescriptionOption" value="NotificationDescriptionLike"/><label>Like-Description</label></td>
+  </div></tr>
+  <tr><div>
+   <td><label>Post Date</label></td>
+       <td><input type="radio" name="NotificationDateOption" value="None" checked/><label>None</label></td>
+       <td><input type="radio" name="NotificationDateOption" value="NotificationDateExact"/><label>Exact Date</label></td>
+       <td><input type="radio" name="NotificationDateOption" value="NotificationDateRange"/><label>Date Range</label></td>
+       <td><input type="radio" name="NotificationDateOption" value="NotificationDateBefAft"/><label>Before/After Date</label></td>
+  </div></tr>
+  <tr><div>
+   <td><label>Post Time</label></td>
+       <td><input type="radio" name="NotificationPostTimeOption" value="None" checked/><label>None</label></td>
+       <td><input type="radio" name="NotificationPostTimeOption" value="NotificationPostTimeExact"/><label>Exact Post Time</label></td>
+       <td><input type="radio" name="NotificationPostTimeOption" value="NotificationPostTimeBefAft"/><label>Before/After Post Time</label></td>
+  </div></tr>
+  <tr><div>
+  <tr>
+      <td><input type="submit" value="Next"/></td>
+  </tr>  
+  </table>  
   </fieldset>
   </form>
   

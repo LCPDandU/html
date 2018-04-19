@@ -186,6 +186,178 @@ $app->get('/api/notifications/order/{order}/sort/{sort}', function(Request $requ
    }
 });
 
+#Multiple Attribute Search
+$app->get('/api/notifications/MultiAttr/order/{order}/sort/{sort}/{exactTitle}/{likeTitle}/{descriptionLike}/{dateExact}/{dateA}/{dateB}/{dateBefAft}/{befAftDate}/{hourExact}/{minuteExact}/{ampmExact}/{hourBefAft}/{minuteBefAft}/{ampmBefAft}/{befAftTime}', function(Request $request, Response $response){
+
+   //Get Parameters from url
+   //order is the Attribute that results are 'Ordered By'
+   //sort can be either ASC (ascending order), or DESC (descending order)
+   
+   $ignoreString="|||";
+   
+   $order = $request->getAttribute('order');
+   $processedSort = $request->getAttribute('sort');
+   
+   //Title variables
+   $exactTitle=$request->getAttribute('exactTitle');
+   $likeTitle=$request->getAttribute('likeTitle');
+
+   //Description variables
+   $descriptionLike=$request->getAttribute('descriptionLike');
+   
+   //Date variables
+   $dateExact=$request->getAttribute('dateExact');
+   $dateA=$request->getAttribute('dateA');
+   $dateB=$request->getAttribute('dateB');
+   $dateBefAft=$request->getAttribute('dateBefAft');
+   $befAftDate=$request->getAttribute('befAftDate');
+   
+   //Time variables
+   $hourExact=$request->getAttribute('hourExact');
+   $minuteExact=$request->getAttribute('minuteExact');
+   $ampmExact=$request->getAttribute('ampmExact');
+   $hourBefAft=$request->getAttribute('hourBefAft');
+   $minuteBefAft=$request->getAttribute('minuteBefAft');
+   $ampmBefAft=$request->getAttribute('ampmBefAft');
+   $befAftTime=$request->getAttribute('befAftTime');
+   
+
+   
+   if($processedSort=='desc'||$processedSort=='asc'||$processedSort=='DESC'||$processedSort=='ASC')
+   {
+      $sort=$processedSort;
+   }
+   else
+   {
+      $sort='DESC';
+   }
+   
+   
+   $sql = "SELECT * FROM Notification ";
+   
+   //A counter for how many conditionals are included in the query.
+   $count=0;
+   
+   
+   if($exactTitle!=$ignoreString)
+   {
+      //add to sql statement
+      if($count==0){$sql.="WHERE ";}
+      $sql.="Title='$exactTitle' ";
+      $count=$count+1;
+   }
+   if($likeTitle!=$ignoreString)
+   {
+      //add to sql statement
+      if($count==0){$sql.="WHERE ";}
+      $sql.="Title LIKE '%$likeTitle%' ";
+      $count=$count+1;
+   }
+   if($descriptionLike!=$ignoreString)
+   {
+      //add to sql statement
+      if($count==0){$sql.="WHERE ";}
+      if($count>0){$sql.="AND ";}
+      $sql.="Description LIKE '$descriptionLike' ";
+      $count=$count+1;
+   }
+   if($dateExact!=$ignoreString)
+   {
+      //add to sql statement
+      if($count==0){$sql.="WHERE ";}
+      if($count>0){$sql.="AND ";}
+      $sql.="PostDate='$dateExact' ";
+      $count=$count+1;
+   }
+   if($dateA!=$ignoreString)
+   {
+      //add to sql statement
+      if($count==0){$sql.="WHERE ";}
+      if($count>0){$sql.="AND ";}
+      $sql.="PostDate BETWEEN '$dateA' AND '$dateB' ";
+      $count=$count+1;
+   }
+   if($dateBefAft!=$ignoreString)
+   {
+      //add to sql statement
+      if($count==0){$sql.="WHERE ";}
+      if($count>0){$sql.="AND ";}
+      
+      if($befAftDate=='Before'||$befAftDate=='before')
+      {
+         $sql.="PostDate<='$dateBefAft' ";
+         $count=$count+1;
+      }
+      else if($befAftDate=='After'||$befAftDate=='after')
+      {
+         $sql.="PostDate>='$dateBefAft' ";
+         $count=$count+1;
+      }
+   }
+   if($hourExact!=$ignoreString)
+   {
+      //add to sql statement
+      if($count==0){$sql.="WHERE ";}
+      if($count>0){$sql.="AND ";}
+      $sql.="PostTime='$hourExact:$minuteExact' AND PostTimeAMPM='$ampmExact' ";
+      $count=$count+1;
+   }
+   if($hourBefAft!=$ignoreString)
+   {
+      //add to sql statement
+      if($count==0){$sql.="WHERE ";}
+      if($count>0){$sql.="AND ";}
+      
+      if($befAftTime=='Before'||$befAftTime=='before')
+      {
+         if($ampmBefAft=='AM'||$ampmBefAft=='am')
+         {
+            $sql.="PostTime<='$hourBefAft:minuteBefAft' AND PostTimeAMPM='AM' ";
+            $count=$count+1;
+         }
+         else if($ampmBefAft=='PM'||$ampmBefAft=='pm')
+         {
+            $sql.="PostTime<='$hourBefAft:minuteBefAft' AND ID IN (SELECT ID FROM CalendarEvent WHERE PostTimeAMPM='AM' || PostTimeAMPM='PM') ";
+            $count=$count+1;
+         }
+      }
+      else if($befAftTime=='After'||$befAftTime=='after')
+      {
+         if($ampmBefAft=='AM'||$ampmBefAft=='am')
+         {
+            $sql.="PostTime>='$hourBefAft:minuteBefAft' AND ID IN (SELECT ID FROM CalendarEvent WHERE PostTimeAMPM='AM' || PostTimeAMPM='PM') ";
+            $count=$count+1;
+         }
+         else if($ampmBefAft=='PM'||$ampmBefAft=='pm')
+         {
+            $sql.="PostTime>='$hourBefAft:minuteBefAft' AND PostTimeAMPM='PM' ";
+            $count=$count+1;
+         }
+      }
+      
+   }
+
+   $sql.="ORDER BY $order $sort";
+   
+   //echo "sql=".$sql;
+
+   try{
+      //get db object
+      $db = new db();
+      //call connect to connect to database
+      $db = $db->connect();
+
+      #PDO statement
+      $stmt = $db->query($sql);
+      $events = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+
+      echo json_encode($events);
+   } catch(PDOException $e){
+      echo '{error": {"text": '.$e->getMessage().'}';
+   }
+});
+
 #Get all notifications by exact Title
 $app->get('/api/notifications/order/{order}/sort/{sort}/TitleExact/{title}', function(Request $request, Response $response){
 

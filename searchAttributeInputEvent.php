@@ -82,6 +82,9 @@ if($_POST['EventDescriptionOption']!="None")
    }
 }
 
+echo '<p><label>Order By </label><select name="Sorting"><option value="ID" selected>ID</option><option value="Title">Title</option><option value="Category">Category</option><option value="EventDate">EventDate</option><option value="EventStartTime">EventStartTime</option><option value="EventStartTimeAMPM">EventStartTimeAMPM</option><option value="Location">Location</option><option value="Description">Description</option></select></p>';
+echo '<p><label>Sorting </label><input type="radio" name="Ordering" value="ASC"/><label>Ascending</label><input type="radio" name="Ordering" value="DESC" checked/><label>Descending</label></p>';
+
 echo '<p><input type="submit" value="Search"/></p>';
 
 echo '</fieldset>';
