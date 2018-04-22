@@ -10,9 +10,9 @@ create table CalendarEvent (
     EventStartTimeAMPM enum ('AM', 'PM'),
     Location varchar(128),
     Description varchar(2048),
-    Media1 longblob, -- longblob type allows for file of 4294967295 bytes ~ 4294 MB ~ 4 GB
-    Media2 longblob,
-    Media3 longblob
+    Media1 varchar(128),
+    Media2 varchar(128),
+    Media3 varchar(128)
 );
 
 create table Notification (
@@ -27,7 +27,7 @@ create table Notification (
 create table User (
 	ID int unsigned not null primary key auto_increment,
 	LoginID varchar(32),
-    Password varchar(32),
+    Password varchar(256),
     Name varchar(128),
     AccountStatus enum ('Pending', 'Standard', 'Admin'),
 		Token varchar(128)
