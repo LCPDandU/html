@@ -3,10 +3,6 @@
 include("config.php");
 include("header.php");
 
-//check that all of the fields are populated correctly
-
-//check that inputs are of valid lengths?
-
 //set variables
 //use filter_var to remove special characters from input
 $EventTitle = filter_var($_POST['EventTitle'], FILTER_SANITIZE_STRING);
@@ -20,29 +16,41 @@ $EventStartTime = $EventStartTimeHour.":".$EventStartTimeMinute;
 $EventStartTimeAMPM = $_POST['EventStartTimeAMPM'];
 $EventLocation = filter_var($_POST['EventLocation'], FILTER_SANITIZE_STRING);
 $EventDescription = filter_var($_POST['EventDescription'], FILTER_SANITIZE_STRING);
-$Media1 = "null";
-$Media2 = "null";
-$Media3 = "null";
+
+//target folder
+$target_media1 = "media/".basename($_FILES['media1']['name']);
+$target_media2 = "media2/".basename($_FILES['media2']['name']);
+$target_media3 = "media3/".basename($_FILES['media3']['name']);
+  
+//move media file to the media folder
+move_uploaded_file($_FILES['media1']['tmp_name'], $target_media1);
+move_uploaded_file($_FILES['media2']['tmp_name'], $target_media2);
+move_uploaded_file($_FILES['media3']['tmp_name'], $target_media3);
+    
+//get selected media info
+$Media1 = $_FILES['media1']['name'];
+$Media2 = $_FILES['media2']['name'];
+$Media3 = $_FILES['media3']['name'];
 
 try
 {
-   //Connect to CRUD Database  mysqli(Server,User,Password,Database)
-   $link = connectDB();
+  //Connect to CRUD Database  mysqli(Server,User,Password,Database)
+  $link = connectDB();
 
-   $sql = "INSERT INTO CalendarEvent VALUES (null,'".$EventTitle."','".$EventCategory."','".$EventDate."','".$EventStartTime."','".$EventStartTimeAMPM."','".$EventLocation."','".$EventDescription."',".$Media1.",".$Media2.",".$Media3.")";
-   if (mysqli_query($link, $sql))
-   {
-      $message = 'New Event added';
-   }
-   else
-   {
-      echo  "<br>Error: " . $sql . "<br>" . mysqli_error($link);
-   }
+  $sql = "INSERT INTO CalendarEvent VALUES (null,'".$EventTitle."','".$EventCategory."','".$EventDate."','".$EventStartTime."','".$EventStartTimeAMPM."','".$EventLocation."','".$EventDescription."','".$Media1."','".$Media2."','".$Media3."')";
+  if (mysqli_query($link, $sql))
+  {
+    $message = 'New Event added';
+  }
+  else
+  {
+    echo  "<br>Error: " . $sql . "<br>" . mysqli_error($link);
+  }
 }
 catch(Exception $e)
 {
-   $message = 'Unable to process request';
-}
+  $message = 'Unable to process request';
+}   
 
 ?>
 

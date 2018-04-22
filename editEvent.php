@@ -47,12 +47,14 @@ else
             $AMPM=$row['EventStartTimeAMPM'];
             $Location=$row['Location'];
             $Description=$row['Description'];
-            //media not yet implemented
+            
+            $Media1=$row['Media1'];
+            $Media2=$row['Media2'];
+            $Media3=$row['Media3'];
 
          }
 
       }
-
 
    }
    catch(Exception $e)
@@ -63,7 +65,8 @@ else
 
 ?>
 
-<form action="editEventSubmit" method="post">
+
+<form action="editEventSubmit" method="post" enctype="multipart/form-data">
    <fieldset>
 
       <h1><strong>Edit Event</strong></h1>
@@ -158,20 +161,75 @@ else
          <textarea name="EventDescription" maxlength="2048" rows="10" cols="45" required><?php echo $Description;?></textarea>
          <i>(maximum of 2048 characters)</i>
       </p>
+      
+      <p>
+      <i>(only files types of jpg, jpeg, and png)</i>
+      </p>
 
       <p>
       <label>Media 1</label>
-      <i>(not yet implemented)</i>
+         <input type="file" name="media1"/>
+
+           <?php 
+           if(!empty($Media1))
+           {
+           ?>
+             <p>
+               <?php echo $Media1; ?>
+             </p>
+             <img src="media/<?php echo $Media1; ?>" width="50" height="100"/> 
+           <?php 
+           } 
+           else
+           {
+             $Media1 = "null";
+           }
+           ?>
       </p>
 
       <p>
       <label>Media 2</label>
-      <i>(not yet implemented)</i>
+      <!-- <i>(not implemented yet)</i> -->
+         <input type="file" name="media2"/>
+         
+           <?php 
+           if(!empty($Media2))
+           {
+           ?>
+             <p>
+               <?php echo $Media2; ?>
+             </p>
+             <img src="media2/<?php echo $Media2; ?>" width="50" height="100"/> 
+           <?php 
+           } 
+           else
+           {
+             $Media2 = "null";
+           }
+           ?>
       </p>
 
       <p>
       <label>Media 3</label>
-      <i>(not yet implemented)</i>
+      <!-- <i>(not implemented yet)</i> --> 
+        <input type="file" name="media3"/> 
+        
+          <?php 
+            if(!empty($Media3))
+            {
+          ?>
+            <p>
+              <?php echo $Media3; ?>
+            </p> 
+           <img src="media3/<?php echo $Media3; ?>" width="50" height="100"/>
+          <?php 
+          } 
+          else
+          {
+            $Media3 = "null";
+          }
+          ?>
+         
       </p>
 
       <p>

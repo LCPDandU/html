@@ -2,7 +2,7 @@
 <html>
 
 <!--The form for creating a CalendarEvent-->
-<form action="createNewEvent" method="post">
+<form action="createNewEvent" method="post" enctype="multipart/form-data">
    <fieldset>
 
       <h1><strong>Create Event</strong></h1>
@@ -53,22 +53,26 @@
          <textarea name="EventDescription" maxlength="2048" rows="10" cols="45" required> </textarea>
          <i>(maximum of 2048 characters)</i>
       </p>
+      
+      <p>
+      <i>(only files types of jpg, jpeg, and png)</i>
+      </p>
 
       <p>
       <label>Media 1</label>
-      <i>(not yet implemented)</i>
+        <input type="file" name="media1"/>
       </p>
 
       <p>
       <label>Media 2</label>
-      <i>(not yet implemented)</i>
+        <input type="file" name="media2"/>
       </p>
-
+      
       <p>
       <label>Media 3</label>
-      <i>(not yet implemented)</i>
+        <input type="file" name="media3"/>
       </p>
-
+      
       <p>
          <input type="submit" value="Create New Event"/>
       </p>
@@ -76,6 +80,7 @@
    </fieldset>
 </form>
 
+<!--The form for creating a Notification-->
 <form action="createNewNotification" method="post">
    <fieldset>
       <h1><strong>Create Notification</strong></h1>

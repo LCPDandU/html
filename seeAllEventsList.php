@@ -76,10 +76,10 @@ if($handle){
            $row['Location'] . '</td><td align="center">' .
            $row['Description'] . '</td><td align="center">'; 
          
-         //Media fields not implemented yet
-         echo '<i>(not implemented yet)</i></td><td align="center">' . 
-              '<i>(not implemented yet)</i></td><td align="center">' .
-              '<i>(not implemented yet)</i></td><td align="center">';
+         //Media fields
+         echo $row['Media1'] . '</td><td align="center">' . 
+              $row['Media2'] . '</td><td align="center">' .
+              $row['Media3'] . '</td><td align="center">' ;
               
          //edit button is spawned
          echo '<form action="editEvent.php" method="post">' .
