@@ -1656,3 +1656,97 @@ $app->post('/api/notifications/add', function(Request $request, Response $respon
       echo '{"error": {"text": '.$e->getMessage().'}';
     }
 });
+
+/*********************************************
+POST: Event
+*********************************************/
+# Add notification.
+$app->post('/api/events/add', function(Request $request, Response $response){
+    
+    $EventTitle = $request->getParam('EventTitle');
+    $EventCategory = $request->getParam('EventCategory');
+    $EventDate = $request->getParam('EventDate');
+    $EventStartTime = $request->getParam('EventStartTime');
+    $EventStartTimeAMPM = $request->getParam('EventStartTimeAMPM');
+    $EventLocation= $request->getParam('EventLocation');
+    $EventDescription = $request->getParam('EventDescription');
+    $EventMedia1 = $request->getParam('EventMedia1');
+    $EventMedia2 = $request->getParam('EventMedia2');
+    $EventMedia3 = $request->getParam('EventMedia3');
+    
+    $sql = "INSERT INTO CalendarEvent (ID, Title, Category, EventDate, EventStartTime, EventStartTimeAMPM, Location, Description, Media1, Media2, Media3)
+            VALUES (NULL,:EventTitle,:EventCategory,:EventDate,:EventStartTime,:EventStartTimeAMPM,:EventLocation,:EventDescription,:EventMedia1,:EventMedia2,:EventMedia3)";
+
+
+    try{
+      // Get DB object
+      $configDB = parse_ini_file('../db.ini');
+      $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
+      // Call connect; connect to database.
+      $db = $db->connect();
+
+      # PDO statement
+      $stmt = $db->prepare($sql);
+
+      $stmt->bindParam(':EventTitle', $EventTitle);
+      $stmt->bindParam(':EventCategory', $EventCategory);
+      $stmt->bindParam(':EventDate', $EventDate);
+      $stmt->bindParam(':EventStartTime', $EventStartTime);
+      $stmt->bindParam(':EventStartTimeAMPM', $EventStartTimeAMPM);
+      $stmt->bindParam(':EventLocation', $EventLocation);
+      $stmt->bindParam(':EventDescription', $EventDescription);
+      $stmt->bindParam(':EventMedia1', $EventMedia1);
+      $stmt->bindParam(':EventMedia2', $EventMedia2);
+      $stmt->bindParam(':EventMedia3', $EventMedia3);
+
+      $stmt->execute();
+      echo '{"notice": {"text": "Event Added"}';
+
+    } catch(PDOException $e){
+      echo '{"error": {"text": '.$e->getMessage().'}';
+    }
+});
+
+/*********************************************
+POST: User
+*********************************************/
+# Add notification.
+$app->post('/api/users/add', function(Request $request, Response $response){
+
+    $NotificationTitle = $request->getParam('NotificationTitle');
+    $NotificationDescription = $request->getParam('NotificationDescription');
+    $PostDate = $request->getParam('PostDate');
+    $PostTimeHour = $request->getParam('PostTimeHour');
+    $PostTimeMinute = $request->getParam('PostTimeMinute');
+    $PostTime = $PostTimeHour.":".$PostTimeMinute;
+    $PostTimeAMPM = $request->getParam('PostTimeAMPM');
+
+    $sql = "INSERT INTO Notification (ID,Title,Description,PostDate,PostTime,PostTimeAMPM)
+      VALUES (NULL,:NotificationTitle,:NotificationDescription,:PostDate,:PostTime,:PostTimeAMPM)";
+
+
+    try{
+      // Get DB object
+      $configDB = parse_ini_file('../db.ini');
+      $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
+      // Call connect; connect to database.
+      $db = $db->connect();
+
+      # PDO statement
+      $stmt = $db->prepare($sql);
+
+      $stmt->bindParam(':NotificationTitle', $NotificationTitle);
+      $stmt->bindParam(':NotificationDescription', $NotificationDescription);
+      $stmt->bindParam(':PostDate', $PostDate);
+      $stmt->bindParam(':PostTime', $PostTime);
+      $stmt->bindParam(':PostTimeAMPM', $PostTimeAMPM);
+
+      $stmt->execute();
+      echo '{"notice": {"text": "Notification Added"}';
+
+    } catch(PDOException $e){
+      echo '{"error": {"text": '.$e->getMessage().'}';
+    }
+});
+
+

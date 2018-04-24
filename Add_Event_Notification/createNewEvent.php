@@ -1,7 +1,7 @@
 <?php
 
-include("config.php");
-include("header.php");
+include("../config.php");
+include("../header.php");
 
 //set variables
 //use filter_var to remove special characters from input
@@ -32,7 +32,51 @@ $Media1 = $_FILES['media1']['name'];
 $Media2 = $_FILES['media2']['name'];
 $Media3 = $_FILES['media3']['name'];
 
-try
+
+/*********************************************
+POST TO DATABASE VIA REST
+*********************************************/
+
+// REST url
+$url = 'http://localhost/public/api/events/add';
+
+// Store session token in variable.
+$token = $_SESSION['token'];
+
+// Need to initiate curl
+$ch = curl_init($url . '?authorization=' . $token);
+
+// Create array for json data.
+$jsonData = array(
+    'EventTitle' => $EventTitle,
+    'EventCategory' => $EventCategory,
+    'EventDate' => $EventDate,
+    'EventStartTime' => $EventStartTime,
+    'EventStartTimeAMPM' => $EventStartTimeAMPM,
+    'EventLocation' => $EventLocation,
+    'EventDescription' => $EventDescription,
+    'EventMedia1' => $Media1,
+    'EventMedia2' => $Media2,
+    'EventMedia3' => $Media3
+);
+
+// Need to encode this array into json.
+$jsonDataEncoded = json_encode($jsonData);
+
+// curl hands the post request
+curl_setopt($ch, CURLOPT_POST, 1);
+
+// json string is now attached to the post fields.
+curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonDataEncoded);
+
+// Set the content type to application/json.
+curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+
+// Need to execute the request.
+$result = curl_exec($ch);
+
+//Below is the original method of posting
+/*try
 {
   //Connect to CRUD Database  mysqli(Server,User,Password,Database)
   $link = connectDB();
@@ -50,7 +94,7 @@ try
 catch(Exception $e)
 {
   $message = 'Unable to process request';
-}   
+}*/   
 
 ?>
 

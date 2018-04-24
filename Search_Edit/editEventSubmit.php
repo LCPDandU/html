@@ -1,7 +1,7 @@
 <?php
 
-include("config.php");
-include("header.php");
+include("../config.php");
+include("../header.php");
 
 //set variables
 //use filter_var to remove special characters from input

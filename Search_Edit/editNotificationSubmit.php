@@ -1,7 +1,7 @@
 <?php
 
-include("config.php");
-include("header.php");
+include("../config.php");
+include("../header.php");
 
 //check that all of the fields are populated correctly
 

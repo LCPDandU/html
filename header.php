@@ -30,13 +30,12 @@
       echo '<div align="left">
             <a href="home">Home</a>
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="createMenu">Add Event/Notification</a>
+            <a href="/Add_Event_Notification/createMenu">Add Event/Notification</a>
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="searchMenu">Search/Edit</a>
+            <a href="/Search_Edit/searchMenu">Search/Edit</a>
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="accountManagementMenu">Account Management</a>
+            <a href="/Account_Management/accountManagementMenu">Account Management</a>
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <!--<a href="accountManagementMenu">Logged in as: '.$loginID.' ('.$name.')</a>-->
             Logged in as: '.$loginID.' ('.$name.')
             &nbsp;&nbsp;&nbsp;&nbsp;
             <a href="logout">Logout</a>

@@ -1,6 +1,6 @@
 <?php
-include("config.php");
-//include("header.php");
+include("../config.php");
+//include("../header.php");
 
 /****************************************************************
  * Update the database with the edited info from the user.      *

@@ -1,6 +1,6 @@
 <?php
-include ('header.php');
-include('config.php');
+include ('../header.php');
+include('../config.php');
 
 /***********************************************************
  * Output all of the user accounts info onto the screen in *

@@ -1,10 +1,10 @@
 <?php
 
 //to connect to the database we do this
-//include('config.php');
+//include('../config.php');
 
 //to include header hyperlinks
-include('header.php');
+include('../header.php');
 
 if(isset($_GET['order']))
 {
@@ -28,7 +28,7 @@ if(isset($_GET['sort']))
 }
 else
 {
-   //$sort='DESC';$sorting='Descending';
+   $sort='DESC';$sorting='Descending';
 }
 
 //echo "<html><head><h1>See All Notifications List</h1></head>";

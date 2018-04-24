@@ -1,27 +1,15 @@
 <?php
 
 //to connect to the database we do this
-include('config.php');
+include('../config.php');
 
 //to include header hyperlinks
-include('header.php');
+include('../header.php');
 
 
 /*Processing of URL variables 'order' and 'sort'*/
 //Determine what Attribute to ORDER BY (ID is the default)
-if(isset($_POST['Sorting']))
-{
-   if($_POST['Sorting']=='ID'){$order='ID';}
-   else if($_POST['Sorting']=='Title'){$order='Title';}
-   else if($_POST['Sorting']=='Category'){$order='Category';}
-   else if($_POST['Sorting']=='EventDate'){$order='EventDate';}
-   else if($_POST['Sorting']=='EventStartTime'){$order='EventStartTime';}
-   else if($_POST['Sorting']=='EventStartTimeAMPM'){$order='EventStartTimeAMPM';}
-   else if($_POST['Sorting']=='Location'){$order='Location';}
-   else if($_POST['Sorting']=='Description'){$order='Description';}
-   else{$order='ID';}
-}
-else if(isset($_GET['order']))
+if(isset($_GET['order']))
 {
    if($_GET['order']=='ID'){$order='ID';}
    else if($_GET['order']=='Title'){$order='Title';}
@@ -66,50 +54,25 @@ else
 //$url - A variable used to hold the REST api route
 //$attr - A variable used to hold the Single Attribute Search being performed
 //$href - A variable used to hold the new URL variables that will be used to preserve search criteria
-
-$url="http://localhost/public/api/events/order/$order/sort/$sort";
-$href="?";
-
-$ignoreString="|||";
-
-$exactTitle=$ignoreString;
-$likeTitle=$ignoreString;
-$category=$ignoreString;
-$dateExact=$ignoreString;
-$dateA=$ignoreString;
-$dateB=$ignoreString;
-$dateBefAft=$ignoreString;
-$befAftDate=$ignoreString;
-$hourExact=$ignoreString;
-$minuteExact=$ignoreString;
-$ampmExact=$ignoreString;
-$hourBefAft=$ignoreString;
-$minuteBefAft=$ignoreString;
-$ampmBefAft=$ignoreString;
-$befAftTime=$ignoreString;
-$locationExact=$ignoreString;
-$locationLike=$ignoreString;
-$descriptionLike=$ignoreString;
-
-$attr="";
-
 if(isset($_POST['EventTitleExact']) || isset($_GET['EventTitleExact']))
 {
    //The Exact Title being searched for
    isset($_POST['EventTitleExact']) ? $title=$_POST['EventTitleExact'] : $title=$_GET['EventTitleExact'];
-   $exactTitle=urlencode($title);
+   $title=urlencode($title);
 
-   $href.="EventTitleExact=".$title."&&";
-   $attr.="[Exact Title]";
+   $href="?EventTitleExact=".$title;
+   $url="http://localhost/public/api/events/order/$order/sort/$sort/TitleExact/$title";
+   $attr="Exact Title";
 }
 if(isset($_POST['EventTitleLike']) || isset($_GET['EventTitleLike']))
 {
    //The Like-Title being searched for
    isset($_POST['EventTitleLike']) ? $title=$_POST['EventTitleLike'] : $title=$_GET['EventTitleLike'];
-   $likeTitle=urlencode($title);
+   $title=urlencode($title);
    
-   $href.="EventTitleLike=".$title."&&";
-   $attr.="[Like-Title]";
+   $href="?EventTitleLike=".$title;
+   $url="http://localhost/public/api/events/order/$order/sort/$sort/TitleLike/$title";
+   $attr="Like-Title";
 }
 if(isset($_POST['EventCategory']) || isset($_GET['EventCategory']))
 {
@@ -117,17 +80,19 @@ if(isset($_POST['EventCategory']) || isset($_GET['EventCategory']))
    isset($_POST['EventCategory']) ? $category=$_POST['EventCategory'] : $category=$_GET['EventCategory'];
    $category=urlencode($category);
 
-   $href.="EventCategory=".$category."&&";
-   $attr.="[Category]";
+   $href="?EventCategory=".$category;
+   $url="http://localhost/public/api/events/order/$order/sort/$sort/Category/$category";
+   $attr="Category";
 }
 if(isset($_POST['EventDateExact']) || isset($_GET['EventDateExact']))
 {
    //The Exact Date being searched for
    isset($_POST['EventDateExact']) ? $date=$_POST['EventDateExact'] : $date=$_GET['EventDateExact'];
-   $dateExact=urlencode($date);
+   $date=urlencode($date);
 
-   $href.="EventDateExact=".$date."&&";
-   $attr.="[Exact Date]";
+   $href="?EventDateExact=".$date;
+   $url="http://localhost/public/api/events/order/$order/sort/$sort/EventDateExact/$date";
+   $attr="Exact Date";
 }
 if(isset($_POST['EventDateA']) || isset($_GET['EventDateA']))
 {
@@ -138,95 +103,100 @@ if(isset($_POST['EventDateA']) || isset($_GET['EventDateA']))
    isset($_POST['EventDateB']) ? $dateB=$_POST['EventDateB'] : $dateB=$_GET['EventDateB'];
    $dateB=urlencode($dateB);
 
-   $href.="EventDateA=".$dateA."&&EventDateB=".$dateB."&&";
-   $attr.="[Date Range]";
+   $href="?EventDateA=".$dateA."&&EventDateB=".$dateB;
+   $url="http://localhost/public/api/events/order/$order/sort/$sort/EventDateA/$dateA/EventDateB/$dateB";
+   $attr="Date Range";
 }
 if(isset($_POST['EventDateBefAft']) || isset($_GET['EventDateBefAft']))
 {
    //Determines whether we are looking at dates before the given date, or after
    isset($_POST['EventDateBefAft']) ? $date=$_POST['EventDateBefAft'] : $date=$_GET['EventDateBefAft'];
-   $dateBefAft=urlencode($date);
+   $date=urlencode($date);
    
    //The Date that serves as dividing date
    isset($_POST['BefAftEventDate']) ? $befaft=$_POST['BefAftEventDate'] : $befaft=$_GET['BefAftEventDate'];
-   $befAftDate=urlencode($befaft);
+   $befaft=urlencode($befaft);
    
-   $href.="EventDateBefAft=".$date."&&BefAftEventDate=".$befaft."&&";
-   
+   $href="?EventDateBefAft=".$date."&&BefAftEventDate=".$befaft;
+   $url="http://localhost/public/api/events/order/$order/sort/$sort/EventDateBefAft/$date/BefAft/$befaft";
+
    if($befaft=="Before"){
-      $attr.="[Before Date]";
+      $attr="Before Date";
    }
    if($befaft=="After"){
-      $attr.="[After Date]";
+      $attr="After Date";
    }
 }
 if(isset($_POST['EventStartTimeHourExact']) || isset($_GET['EventStartTimeHourExact']))
 {
    //Together form the Exact Start Time being searched for
    isset($_POST['EventStartTimeHourExact']) ? $hour=$_POST['EventStartTimeHourExact'] : $hour=$_GET['EventStartTimeHourExact'];
-   $hourExact=urlencode($hour);
+   $hour=urlencode($hour);
    isset($_POST['EventStartTimeMinuteExact']) ? $minute=$_POST['EventStartTimeMinuteExact'] : $minute=$_GET['EventStartTimeMinuteExact'];
-   $minuteExact=urlencode($minute);
+   $minute=urlencode($minute);
    isset($_POST['EventStartTimeAMPMExact']) ? $ampm=$_POST['EventStartTimeAMPMExact'] : $ampm=$_GET['EventStartTimeAMPMExact'];
-   $ampmExact=urlencode($ampm);
+   $ampm=urlencode($ampm);
    
-   $href.="EventStartTimeHourExact=".$hour."&&EventStartTimeMinuteExact=".$minute."&&EventStartTimeAMPMExact=".$ampm."&&";
-   $attr.="[Exact Start Time]";
+   $href="?EventStartTimeHourExact=".$hour."&&EventStartTimeMinuteExact=".$minute."&&EventStartTimeAMPMExact=".$ampm;
+   $url="http://localhost/public/api/events/order/$order/sort/StartTimeHourExact/$hour/StartTimeMinuteExact/$minute/StartTimeAMPM/$ampm";
+   $attr="Exact Start Time";
 }
 if(isset($_POST['EventStartTimeHourBefAft']) || isset($_GET['EventStartTimeHourBefAft']))
 {
    //Together form the Start Time that serves as dividing time
    isset($_POST['EventStartTimeHourBefAft']) ? $hour=$_POST['EventStartTimeHourBefAft'] : $hour=$_GET['EventStartTimeHourBefAft'];
-   $hourBefAft=urlencode($hour);
+   $hour=urlencode($hour);
    isset($_POST['EventStartTimeMinuteBefAft']) ? $minute=$_POST['EventStartTimeMinuteBefAft'] : $minute=$_GET['EventStartTimeMinuteBefAft'];
-   $minuteBefAft=urlencode($minute);
+   $minute=urlencode($minute);
    isset($_POST['EventStartTimeAMPMBefAft']) ? $ampm=$_POST['EventStartTimeAMPMBefAft'] : $ampm=$_GET['EventStartTimeAMPMBefAft'];
-   $ampmBefAft=urlencode($ampm);
+   $ampm=urlencode($ampm);
    
    //Determines whether we are looking at times before the given time, or after
    isset($_POST['BefAftEventStartTime']) ? $befaft=$_POST['BefAftEventStartTime'] : $befaft=$_GET['BefAftEventStartTime'];
-   $befAftTime=urlencode($befaft);
+   $befaft=urlencode($befaft);
    
-   $href.="EventStartTimeHourBefAft=".$hour."&&EventStartTimeMinuteBefAft=".$minute."&&EventStartTimeAMPMBefAft=".$ampm."&&BefAftEventStartTime=".$befaft."&&";
+   $href="?EventStartTimeHourBefAft=".$hour."&&EventStartTimeMinuteBefAft=".$minute."&&EventStartTimeAMPMBefAft=".$ampm."&&BefAftEventStartTime=".$befaft;
+   $url="http://localhost/public/api/events/order/$order/sort/StartTimeHourBefAft/$hour/StartTimeMinuteBefAft/$minute/StartTimeAMPM/$ampm/BefAft/$befaft";
 
    if($befaft=="Before")
    {
-      $attr.="[Before Start Time]";
+      $attr="Before Start Time";
    }
    if($befaft=="After")
    {
-      $attr.="[After Start Time]";
+      $attr="After Start Time";
    }
 }
 if(isset($_POST['EventLocationExact']) || isset($_GET['EventLocationExact']))
 {
    //The Exact Location being searched for
    isset($_POST['EventLocationExact']) ? $location=$_POST['EventLocationExact'] : $location=$_GET['EventLocationExact'];
-   $locationExact=urlencode($location);
+   $location=urlencode($location);
 
-   $href.="EventLocationExact=".$location."&&";
-   $attr.="[Exact Location]";
+   $href="?EventLocationExact=".$location;
+   $url="http://localhost/public/api/events/order/$order/sort/$sort/LocationExact/$location";
+   $attr="Exact Location";
 }
 if(isset($_POST['EventLocationLike']) || isset($_GET['EventLocationLike']))
 {
    //The Like-Location being searched for
    isset($_POST['EventLocationLike']) ? $location=$_POST['EventLocationLike'] : $location=$_GET['EventLocationLike'];
-   $locationLike=urlencode($location);
+   $location=urlencode($location);
 
-   $href.="EventLocationLike=".$location."&&";
-   $attr.="[Like-Location]";
+   $href="?EventLocationLike=".$location;
+   $url="http://localhost/public/api/events/order/$order/sort/$sort/LocationLike/$location";
+   $attr="Like-Location";
 }
 if(isset($_POST['EventDescriptionLike']) || isset($_GET['EventDescriptionLike']))
 {
    //The Description key-words being searched for
    isset($_POST['EventDescriptionLike']) ? $description=$_POST['EventDescriptionLike'] : $description=$_GET['EventDescriptionLike'];
-   $descriptionLike=urlencode($description);
+   $description=urlencode($description);
 
-   $href.="EventDescriptionLike=".$description."&&";
-   $attr.="[Like-Description]";
+   $href="?EventDescriptionLike=".$description;
+   $url="http://localhost/public/api/events/order/$order/sort/$sort/DescriptionLike/$description";
+   $attr="Like-Description";
 }
-
-$url="http://localhost/public/api/events/MultiAttr/order/$order/sort/$sort/$exactTitle/$likeTitle/$category/$dateExact/$dateA/$dateB/$dateBefAft/$befAftDate/$hourExact/$minuteExact/$ampmExact/$hourBefAft/$minuteBefAft/$ampmBefAft/$befAftTime/$locationExact/$locationLike/$descriptionLike";
 
 echo "<html><head><h1>Search Results (Event by " . $attr . ", Ordered by ".$order.", ".$sorting." Sorting)</h1></head>";
 

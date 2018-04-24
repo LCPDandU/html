@@ -1,7 +1,7 @@
 <?php
 
-include("config.php");
-include("header.php");
+include("../config.php");
+include("../header.php");
 
 /*********************************************
 POST TO DATABASE VIA REST
@@ -83,6 +83,9 @@ if ($_POST['PushNotificationOption'] == 1) {
     echo $result . "\n\n";
 
 } // End if statement for checking if notification should be sent.
+
+
+
 
 // Below is the code for the old method of posting
 /*

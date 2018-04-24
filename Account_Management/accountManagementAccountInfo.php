@@ -1,6 +1,6 @@
 <?php
-include ('header.php');
-include('config.php');
+include ('../header.php');
+include('../config.php');
 
 /***************************************************************
  * Outputs the selected account that the admin chose to edit.  *

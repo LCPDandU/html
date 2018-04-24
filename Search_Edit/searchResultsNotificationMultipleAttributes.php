@@ -1,10 +1,10 @@
 <?php
 
 //to connect to the database we do this
-include('config.php');
+include('../config.php');
 
 //to include header hyperlinks
-include('header.php');
+include('../header.php');
 
 
 /*Processing of URL variables 'order' and 'sort'*/

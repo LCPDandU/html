@@ -1,6 +1,6 @@
 <?php
-include ('header.php');
-include('config.php');
+include ('../header.php');
+include('../config.php');
 
 /**************************************************************************
  * Output the user's info onto the screen. The name will                  *
