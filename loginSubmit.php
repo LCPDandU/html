@@ -33,91 +33,83 @@ elseif (strlen( $_POST['Password']) > 32 || strlen($_POST['Password']) < 7)
     $message = 'Incorrect Length for Password';
 }
 
-else
-{
-    // Store LoginID and Passwords as variables
-    $LoginID = filter_var($_POST['LoginID'], FILTER_SANITIZE_STRING);
-    $Password = filter_var($_POST['Password'], FILTER_SANITIZE_STRING);
+else{
+   $LoginID = filter_var($_POST['LoginID'], FILTER_SANITIZE_STRING);
+   $Password = filter_var($_POST['Password'], FILTER_SANITIZE_STRING);
 
-    try
-    {
-         //Connect to MySQL Database  mysqli(Server,User,Password,Database)
-        $link = connectDB();
+   // REST command url. http://localhost works for both a localhost
+   //  and when hosted on the server.
+   $url="http://localhost/public/api/users/login/LoginID/$LoginID/Password/$Password";
 
+   // Need to read the file created by the REST command.
+   $handle=fopen($url,"r");
+   // Only enter if handle variable was successfully created.
+   if($handle){
+      // Only enter if current line contains data.
+      if(($line=fgets($handle))!==false){
+         // Decode json response. If it is empty then login has failed.
+         $arr=json_decode($line,true);
+         // Output error if empty.
+         if(empty($arr)){
+            $message="Login Failed";
+         }
+         //If login hasn't failed, then global variables are set, a token is generated and assigned to the User
+         else foreach($arr as $row){
+               $userID = $row['ID'];
+               $userLoginID = $row['LoginID'];
+               $userName = $row['Name'];
 
-        // Prep SQL statement which will compare the user credentials with what is stored in the database
-        $sql = "SELECT * FROM User WHERE LoginID = '".$LoginID."' AND AccountStatus != 'Pending'";//AND Password = '".$Password."'";
-        //echo $sql."<br>";
+               // Set the session userID, LoginID, and Name.
+               $_SESSION['userID'] = $userID;
+               $_SESSION['LoginID'] = $userLoginID;
+               $_SESSION['Name'] = $userName;
 
-        //Run the query
-        if($result=mysqli_query($link,$sql))
-        {
-          //give values to session variables
-          while($row = mysqli_fetch_assoc($result)) {
-            
-            //verify the password with the hash password
-            if(password_verify($Password, $row['Password']))
-            { 
-              $userID = $row['ID'];
-              $userLoginID = $row['LoginID']; 
-              $userName = $row['Name'];
+               // Success message.
+               $message = 'You are now logged in';
 
-              // Set the session userID, LoginID, and Name
-              $_SESSION['userID'] = $userID;
-              $_SESSION['LoginID'] = $userLoginID;
-              $_SESSION['Name'] = $userName;
+               // Generate key for this login session.
+               $token = bin2hex(random_bytes(64));
+               $_SESSION['token'] = $token;
 
-              $message = 'You are now logged in';
-            
-              // Generate key for this Login
-              $token = bin2hex(random_bytes(64));
-              $_SESSION['token'] = $token;
+               // Need to generate timestamp to allow token to expire.
 
-              $sql = "UPDATE User SET Token = :Token WHERE LoginID = :LoginID";
+               // Update the database by assigning the generated token to the current user.
+               $sql = "UPDATE User SET Token = :Token WHERE LoginID = :LoginID";
 
-              try{
-                // Get DB object
-                $db = new db();
-                // Call connect; connect to database.
-                $db = $db->connect();
+               // Use prepare, bindParam, and PDO statements to more securely
+               //  add the new token to the database.
+               try{
+                 // Get DB object
+                 $configDB = parse_ini_file('./db.ini');
+                 $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
+                 // Call connect; connect to database.
+                 $db = $db->connect();
 
-                # PDO statement
-                $stmt = $db->prepare($sql);
+                 // PHP Data Objects (PDO) statements.
+                 $stmt = $db->prepare($sql);
 
-                $stmt->bindParam(':LoginID', $userLoginID);
-                $stmt->bindParam(':Token', $token);
+                 // Bind variables and parameters.
+                 $stmt->bindParam(':LoginID', $userLoginID);
+                 $stmt->bindParam(':Token', $token);
 
-                $stmt->execute();
-                echo '{"notice": {"text": "Token Added"}';
+                 // Execute the SQL statement.
+                 $stmt->execute();
+                 echo '{"notice": {"text": "Token Added"}';
 
-              } 
-              catch(PDOException $e){
-                echo '{"error": {"text": '.$e->getMessage().'}';
-              }
+               }//end try
+               catch(PDOException $e){
+                 echo '{"error": {"text": '.$e->getMessage().'}';
+               }//end catch
 
-              echo ("<script>
-                       window.location.assign('home');
-                     </script>");
+               echo ("<script>
+                  window.location.assign('home');
+                  </script>");
 
-              exit();
-            
-            }//end password verify
-            else
-            {
-              $message = 'Invalid password';
-            }
-            
-          }//end while
-        }
-        if($userID == false) {
-            $message = 'Login Failed';
-        }
-    }
-    catch(Exception $e)
-    {
-        $message = 'Unable to process request';
-    }
-}
+               exit();
+         }//end foreach
+      }//end if
+   }//end if
+}//end else
 
 ?>
 
@@ -129,4 +121,8 @@ else
     <body>
     <p><?php echo $message; ?>
     </body>
+
+    <form action="index.php" method="Post">
+      <input type="submit" value="Submit"/>
+    </form>
 </html>
