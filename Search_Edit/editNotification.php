@@ -116,8 +116,8 @@ else
 </form>
 
 
-   <form action="seeAllNotificationsList" method="post">
-      <input type="submit" value="Back"/>
+   <form action="searchMenu" method="post">
+      <input type="submit" value="Back to Search Menu"/>
    </form>
     <body>
     <p><?php echo $message; ?></p>

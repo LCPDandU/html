@@ -86,6 +86,29 @@ $app->get('/api/notifications/id/{id}', function(Request $request, Response $res
     }
 });
 
+# Get newest notification (highest ID)
+$app->get('/api/notifications/newest', function(Request $request, Response $response){
+
+   $sql = "SELECT * FROM Notification WHERE ID=(SELECT MAX(ID) FROM Notification)";
+
+   try{
+     // Get DB object
+     $configDB = parse_ini_file('../db.ini');
+     $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
+      //call connect to connect to database
+      $db = $db->connect();
+
+      #PDO statement
+      $stmt = $db->query($sql);
+      $events = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+
+      echo json_encode($events);
+   } catch(PDOException $e){
+      echo '{error": {"text": '.$e->getMessage().'}';
+   }
+});
+
 # Get notification by title.  (Like-Title)
 $app->get('/api/notifications/title/{title}', function(Request $request, Response $response){
     $title = $request->getAttribute('title');
@@ -785,6 +808,58 @@ $app->get('/api/events', function(Request $request, Response $response){
     } catch(PDOException $e){
       echo '{"error": {"text": '.$e->getMessage().'}';
     }
+});
+
+# Get events by specific ID
+$app->get('/api/events/id/{id}', function(Request $request, Response $response){
+
+   //Get Parameters from url
+   //order is the Attribute that results are 'Ordered By'
+   //sort can be either ASC (ascending order), or DESC (descending order)
+   $id = $request->getAttribute('id');
+
+
+   $sql = "SELECT * FROM CalendarEvent WHERE ID='$id'";
+
+   try{
+     // Get DB object
+     $configDB = parse_ini_file('../db.ini');
+     $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
+      //call connect to connect to database
+      $db = $db->connect();
+
+      #PDO statement
+      $stmt = $db->query($sql);
+      $events = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+
+      echo json_encode($events);
+   } catch(PDOException $e){
+      echo '{error": {"text": '.$e->getMessage().'}';
+   }
+});
+
+# Get newest event (highest ID)
+$app->get('/api/events/newest', function(Request $request, Response $response){
+
+   $sql = "SELECT * FROM CalendarEvent WHERE ID=(SELECT MAX(ID) FROM CalendarEvent)";
+
+   try{
+     // Get DB object
+     $configDB = parse_ini_file('../db.ini');
+     $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
+      //call connect to connect to database
+      $db = $db->connect();
+
+      #PDO statement
+      $stmt = $db->query($sql);
+      $events = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+
+      echo json_encode($events);
+   } catch(PDOException $e){
+      echo '{error": {"text": '.$e->getMessage().'}';
+   }
 });
 
 # Get all events ordered
