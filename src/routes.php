@@ -192,26 +192,26 @@ $app->get('/api/notifications/MultiAttr/order/{order}/sort/{sort}/{exactTitle}/{
    //Get Parameters from url
    //order is the Attribute that results are 'Ordered By'
    //sort can be either ASC (ascending order), or DESC (descending order)
-   
+
    $ignoreString="|||";
-   
+
    $order = $request->getAttribute('order');
    $processedSort = $request->getAttribute('sort');
-   
+
    //Title variables
    $exactTitle=$request->getAttribute('exactTitle');
    $likeTitle=$request->getAttribute('likeTitle');
 
    //Description variables
    $descriptionLike=$request->getAttribute('descriptionLike');
-   
+
    //Date variables
    $dateExact=$request->getAttribute('dateExact');
    $dateA=$request->getAttribute('dateA');
    $dateB=$request->getAttribute('dateB');
    $dateBefAft=$request->getAttribute('dateBefAft');
    $befAftDate=$request->getAttribute('befAftDate');
-   
+
    //Time variables
    $hourExact=$request->getAttribute('hourExact');
    $minuteExact=$request->getAttribute('minuteExact');
@@ -220,9 +220,9 @@ $app->get('/api/notifications/MultiAttr/order/{order}/sort/{sort}/{exactTitle}/{
    $minuteBefAft=$request->getAttribute('minuteBefAft');
    $ampmBefAft=$request->getAttribute('ampmBefAft');
    $befAftTime=$request->getAttribute('befAftTime');
-   
 
-   
+
+
    if($processedSort=='desc'||$processedSort=='asc'||$processedSort=='DESC'||$processedSort=='ASC')
    {
       $sort=$processedSort;
@@ -231,14 +231,14 @@ $app->get('/api/notifications/MultiAttr/order/{order}/sort/{sort}/{exactTitle}/{
    {
       $sort='DESC';
    }
-   
-   
+
+
    $sql = "SELECT * FROM Notification ";
-   
+
    //A counter for how many conditionals are included in the query.
    $count=0;
-   
-   
+
+
    if($exactTitle!=$ignoreString)
    {
       //add to sql statement
@@ -282,7 +282,7 @@ $app->get('/api/notifications/MultiAttr/order/{order}/sort/{sort}/{exactTitle}/{
       //add to sql statement
       if($count==0){$sql.="WHERE ";}
       if($count>0){$sql.="AND ";}
-      
+
       if($befAftDate=='Before'||$befAftDate=='before')
       {
          $sql.="PostDate<='$dateBefAft' ";
@@ -307,7 +307,7 @@ $app->get('/api/notifications/MultiAttr/order/{order}/sort/{sort}/{exactTitle}/{
       //add to sql statement
       if($count==0){$sql.="WHERE ";}
       if($count>0){$sql.="AND ";}
-      
+
       if($befAftTime=='Before'||$befAftTime=='before')
       {
          if($ampmBefAft=='AM'||$ampmBefAft=='am')
@@ -334,11 +334,11 @@ $app->get('/api/notifications/MultiAttr/order/{order}/sort/{sort}/{exactTitle}/{
             $count=$count+1;
          }
       }
-      
+
    }
 
    $sql.="ORDER BY $order $sort";
-   
+
    //echo "sql=".$sql;
 
    try{
@@ -812,26 +812,26 @@ $app->get('/api/events/MultiAttr/order/{order}/sort/{sort}/{exactTitle}/{likeTit
    //Get Parameters from url
    //order is the Attribute that results are 'Ordered By'
    //sort can be either ASC (ascending order), or DESC (descending order)
-   
+
    $ignoreString="|||";
-   
+
    $order = $request->getAttribute('order');
    $processedSort = $request->getAttribute('sort');
-   
+
    //Title variables
    $exactTitle=$request->getAttribute('exactTitle');
    $likeTitle=$request->getAttribute('likeTitle');
-   
+
    //Category variables
    $category=$request->getAttribute('category');
-   
+
    //Date variables
    $dateExact=$request->getAttribute('dateExact');
    $dateA=$request->getAttribute('dateA');
    $dateB=$request->getAttribute('dateB');
    $dateBefAft=$request->getAttribute('dateBefAft');
    $befAftDate=$request->getAttribute('befAftDate');
-   
+
    //Time variables
    $hourExact=$request->getAttribute('hourExact');
    $minuteExact=$request->getAttribute('minuteExact');
@@ -840,16 +840,16 @@ $app->get('/api/events/MultiAttr/order/{order}/sort/{sort}/{exactTitle}/{likeTit
    $minuteBefAft=$request->getAttribute('minuteBefAft');
    $ampmBefAft=$request->getAttribute('ampmBefAft');
    $befAftTime=$request->getAttribute('befAftTime');
-   
+
    //Location variables
    $locationExact=$request->getAttribute('locationExact');
    $locationLike=$request->getAttribute('locationLike');
-   
+
    //Description variables
    $descriptionLike=$request->getAttribute('descriptionLike');
-   
-   
-   
+
+
+
    if($processedSort=='desc'||$processedSort=='asc'||$processedSort=='DESC'||$processedSort=='ASC')
    {
       $sort=$processedSort;
@@ -858,14 +858,14 @@ $app->get('/api/events/MultiAttr/order/{order}/sort/{sort}/{exactTitle}/{likeTit
    {
       $sort='DESC';
    }
-   
-   
+
+
    $sql = "SELECT * FROM CalendarEvent ";
-   
+
    //A counter for how many conditionals are included in the query.
    $count=0;
-   
-   
+
+
    if($exactTitle!=$ignoreString)
    {
       //add to sql statement
@@ -909,7 +909,7 @@ $app->get('/api/events/MultiAttr/order/{order}/sort/{sort}/{exactTitle}/{likeTit
       //add to sql statement
       if($count==0){$sql.="WHERE ";}
       if($count>0){$sql.="AND ";}
-      
+
       if($befAftDate=='Before'||$befAftDate=='before')
       {
          $sql.="EventDate<='$dateBefAft' ";
@@ -934,7 +934,7 @@ $app->get('/api/events/MultiAttr/order/{order}/sort/{sort}/{exactTitle}/{likeTit
       //add to sql statement
       if($count==0){$sql.="WHERE ";}
       if($count>0){$sql.="AND ";}
-      
+
       if($befAftTime=='Before'||$befAftTime=='before')
       {
          if($ampmBefAft=='AM'||$ampmBefAft=='am')
@@ -961,7 +961,7 @@ $app->get('/api/events/MultiAttr/order/{order}/sort/{sort}/{exactTitle}/{likeTit
             $count=$count+1;
          }
       }
-      
+
    }
    if($locationExact!=$ignoreString)
    {
@@ -989,7 +989,7 @@ $app->get('/api/events/MultiAttr/order/{order}/sort/{sort}/{exactTitle}/{likeTit
    }
 
    $sql.="ORDER BY $order $sort";
-   
+
    //echo "sql=".$sql;
 
    try{
