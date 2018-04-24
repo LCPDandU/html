@@ -7,12 +7,14 @@ class MyAuth
     // Need to search database for token
     public function getUserByToken($token)
     {
+
       // Check if the token used exists in the database.
       // Need to also check if any found token's timestamp has not expired.
       $sql = "SELECT * FROM User WHERE token = '$token'";
 
-          // Get the database object.
-          $db = new db();
+      // Get DB object
+      $configDB = parse_ini_file('../db.ini');
+      $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
           // Call connect to connect to database.
           $db = $db->connect();
 

@@ -48,7 +48,8 @@ $app->get('/api/notifications', function(Request $request, Response $response){
 
     try{
       // Get DB object
-      $db = new db();
+      $configDB = parse_ini_file('../db.ini');
+      $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
       // Call connect; connect to database.
       $db = $db->connect();
 
@@ -70,7 +71,8 @@ $app->get('/api/notifications/id/{id}', function(Request $request, Response $res
 
     try{
       // Get DB object
-      $db = new db();
+      $configDB = parse_ini_file('../db.ini');
+      $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
       // Call connect; connect to database.
       $db = $db->connect();
 
@@ -92,7 +94,8 @@ $app->get('/api/notifications/title/{title}', function(Request $request, Respons
 
     try{
       // Get DB object
-      $db = new db();
+      $configDB = parse_ini_file('../db.ini');
+      $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
       // Call connect; connect to database.
       $db = $db->connect();
 
@@ -114,7 +117,8 @@ $app->get('/api/notifications/date/day/{date}', function(Request $request, Respo
 
     try{
       // Get DB object
-      $db = new db();
+      $configDB = parse_ini_file('../db.ini');
+      $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
       // Call connect; connect to database.
       $db = $db->connect();
 
@@ -136,7 +140,8 @@ $app->get('/api/notifications/date/month/{date}', function(Request $request, Res
 
     try{
       // Get DB object
-      $db = new db();
+      $configDB = parse_ini_file('../db.ini');
+      $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
       // Call connect; connect to database.
       $db = $db->connect();
 
@@ -170,8 +175,9 @@ $app->get('/api/notifications/order/{order}/sort/{sort}', function(Request $requ
    $sql = "SELECT * FROM Notification ORDER BY $order $sort";
 
    try{
-      //get db object
-      $db = new db();
+     // Get DB object
+     $configDB = parse_ini_file('../db.ini');
+     $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
       //call connect to connect to database
       $db = $db->connect();
 
@@ -342,8 +348,9 @@ $app->get('/api/notifications/MultiAttr/order/{order}/sort/{sort}/{exactTitle}/{
    //echo "sql=".$sql;
 
    try{
-      //get db object
-      $db = new db();
+     // Get DB object
+     $configDB = parse_ini_file('../db.ini');
+     $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
       //call connect to connect to database
       $db = $db->connect();
 
@@ -380,8 +387,9 @@ $app->get('/api/notifications/order/{order}/sort/{sort}/TitleExact/{title}', fun
    $sql = "SELECT * FROM Notification WHERE Title='$title' ORDER BY $order $sort";
 
    try{
-      //get db object
-      $db = new db();
+     // Get DB object
+     $configDB = parse_ini_file('../db.ini');
+     $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
       //call connect to connect to database
       $db = $db->connect();
 
@@ -419,7 +427,9 @@ $app->get('/api/notifications/order/{order}/sort/{sort}/TitleLike/{title}', func
 
    try{
       //get db object
-      $db = new db();
+      // Get DB object
+      $configDB = parse_ini_file('../db.ini');
+      $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
       //call connect to connect to database
       $db = $db->connect();
 
@@ -456,8 +466,9 @@ $app->get('/api/notifications/order/{order}/sort/{sort}/DescriptionLike/{descrip
    $sql = "SELECT * FROM Notification WHERE Description LIKE '%$description%' ORDER BY $order $sort";
 
    try{
-      //get db object
-      $db = new db();
+     // Get DB object
+     $configDB = parse_ini_file('../db.ini');
+     $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
       //call connect to connect to database
       $db = $db->connect();
 
@@ -494,8 +505,9 @@ $app->get('/api/notifications/order/{order}/sort/{sort}/PostDateExact/{date}', f
    $sql = "SELECT * FROM Notification WHERE PostDate='$date' ORDER BY $order $sort";
 
    try{
-      //get db object
-      $db = new db();
+     // Get DB object
+     $configDB = parse_ini_file('../db.ini');
+     $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
       //call connect to connect to database
       $db = $db->connect();
 
@@ -533,8 +545,9 @@ $app->get('/api/notifications/order/{order}/sort/{sort}/PostDateA/{dateA}/PostDa
    $sql = "SELECT * FROM Notification WHERE PostDate BETWEEN '$dateA' AND '$dateB' ORDER BY $order $sort";
 
    try{
-      //get db object
-      $db = new db();
+     // Get DB object
+     $configDB = parse_ini_file('../db.ini');
+     $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
       //call connect to connect to database
       $db = $db->connect();
 
@@ -591,8 +604,9 @@ $app->get('/api/notificaions/order/{order}/sort/{sort}/PostDateBefAft/{date}/Bef
    }
 
    try{
-      //get db object
-      $db = new db();
+     // Get DB object
+     $configDB = parse_ini_file('../db.ini');
+     $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
       //call connect to connect to database
       $db = $db->connect();
 
@@ -645,8 +659,9 @@ $app->get('/api/notifications/order/{order}/sort/{sort}/PostTimeHourExact/{hour}
    $sql = "SELECT * FROM Notification WHERE PostTime='$hour:$minute' AND PostStartTimeAMPM='$ampm' ORDER BY $order $sort";
 
    try{
-      //get db object
-      $db = new db();
+     // Get DB object
+     $configDB = parse_ini_file('../db.ini');
+     $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
       //call connect to connect to database
       $db = $db->connect();
 
@@ -730,8 +745,9 @@ $app->get('/api/notifications/order/{order}/sort/{sort}/PostTimeHourBefAft/{hour
    }
 
    try{
-      //get db object
-      $db = new db();
+     // Get DB object
+     $configDB = parse_ini_file('../db.ini');
+     $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
       //call connect to connect to database
       $db = $db->connect();
 
@@ -756,7 +772,8 @@ $app->get('/api/events', function(Request $request, Response $response){
 
     try{
       // Get DB object
-      $db = new db();
+      $configDB = parse_ini_file('../db.ini');
+      $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
       // Call connect; connect to database.
       $db = $db->connect();
 
@@ -790,8 +807,9 @@ $app->get('/api/events/order/{order}/sort/{sort}', function(Request $request, Re
    $sql = "SELECT * FROM CalendarEvent ORDER BY $order $sort";
 
    try{
-      //get db object
-      $db = new db();
+     // Get DB object
+     $configDB = parse_ini_file('../db.ini');
+     $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
       //call connect to connect to database
       $db = $db->connect();
 
@@ -993,8 +1011,9 @@ $app->get('/api/events/MultiAttr/order/{order}/sort/{sort}/{exactTitle}/{likeTit
    //echo "sql=".$sql;
 
    try{
-      //get db object
-      $db = new db();
+     // Get DB object
+     $configDB = parse_ini_file('../db.ini');
+     $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
       //call connect to connect to database
       $db = $db->connect();
 
@@ -1031,8 +1050,9 @@ $app->get('/api/events/order/{order}/sort/{sort}/TitleExact/{title}', function(R
    $sql = "SELECT * FROM CalendarEvent WHERE Title='$title' ORDER BY $order $sort";
 
    try{
-      //get db object
-      $db = new db();
+     // Get DB object
+     $configDB = parse_ini_file('../db.ini');
+     $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
       //call connect to connect to database
       $db = $db->connect();
 
@@ -1069,8 +1089,9 @@ $app->get('/api/events/order/{order}/sort/{sort}/TitleLike/{title}', function(Re
    $sql = "SELECT * FROM CalendarEvent WHERE Title LIKE '%$title%' ORDER BY $order $sort";
 
    try{
-      //get db object
-      $db = new db();
+     // Get DB object
+     $configDB = parse_ini_file('../db.ini');
+     $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
       //call connect to connect to database
       $db = $db->connect();
 
@@ -1107,8 +1128,9 @@ $app->get('/api/events/order/{order}/sort/{sort}/Category/{category}', function(
    $sql = "SELECT * FROM CalendarEvent WHERE Category='$category' ORDER BY $order $sort";
 
    try{
-      //get db object
-      $db = new db();
+     // Get DB object
+     $configDB = parse_ini_file('../db.ini');
+     $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
       //call connect to connect to database
       $db = $db->connect();
 
@@ -1145,8 +1167,9 @@ $app->get('/api/events/order/{order}/sort/{sort}/EventDateExact/{date}', functio
    $sql = "SELECT * FROM CalendarEvent WHERE EventDate='$date' ORDER BY $order $sort";
 
    try{
-      //get db object
-      $db = new db();
+     // Get DB object
+     $configDB = parse_ini_file('../db.ini');
+     $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
       //call connect to connect to database
       $db = $db->connect();
 
@@ -1184,8 +1207,9 @@ $app->get('/api/events/order/{order}/sort/{sort}/EventDateA/{dateA}/EventDateB/{
    $sql = "SELECT * FROM CalendarEvent WHERE EventDate BETWEEN '$dateA' AND '$dateB' ORDER BY $order $sort";
 
    try{
-      //get db object
-      $db = new db();
+     // Get DB object
+     $configDB = parse_ini_file('../db.ini');
+     $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
       //call connect to connect to database
       $db = $db->connect();
 
@@ -1242,8 +1266,9 @@ $app->get('/api/events/order/{order}/sort/{sort}/EventDateBefAft/{date}/BefAft/{
    }
 
    try{
-      //get db object
-      $db = new db();
+     // Get DB object
+     $configDB = parse_ini_file('../db.ini');
+     $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
       //call connect to connect to database
       $db = $db->connect();
 
@@ -1296,8 +1321,9 @@ $app->get('/api/events/order/{order}/sort/{sort}/StartTimeHourExact/{hour}/Start
    $sql = "SELECT * FROM CalendarEvent WHERE EventStartTime='$hour:$minute' AND EventStartTimeAMPM='$ampm' ORDER BY $order $sort";
 
    try{
-      //get db object
-      $db = new db();
+     // Get DB object
+     $configDB = parse_ini_file('../db.ini');
+     $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
       //call connect to connect to database
       $db = $db->connect();
 
@@ -1381,8 +1407,9 @@ $app->get('/api/events/order/{order}/sort/{sort}/StartTimeHourBefAft/{hour}/Star
    }
 
    try{
-      //get db object
-      $db = new db();
+     // Get DB object
+     $configDB = parse_ini_file('../db.ini');
+     $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
       //call connect to connect to database
       $db = $db->connect();
 
@@ -1419,8 +1446,9 @@ $app->get('/api/events/order/{order}/sort/{sort}/LocationExact/{location}', func
    $sql = "SELECT * FROM CalendarEvent WHERE Location='$location' ORDER BY $order $sort";
 
    try{
-      //get db object
-      $db = new db();
+     // Get DB object
+     $configDB = parse_ini_file('../db.ini');
+     $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
       //call connect to connect to database
       $db = $db->connect();
 
@@ -1457,8 +1485,9 @@ $app->get('/api/events/order/{order}/sort/{sort}/LocationLike/{location}', funct
    $sql = "SELECT * FROM CalendarEvent WHERE Location LIKE '%$location%' ORDER BY $order $sort";
 
    try{
-      //get db object
-      $db = new db();
+     // Get DB object
+     $configDB = parse_ini_file('../db.ini');
+     $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
       //call connect to connect to database
       $db = $db->connect();
 
@@ -1495,8 +1524,9 @@ $app->get('/api/events/order/{order}/sort/{sort}/DescriptionLike/{description}',
    $sql = "SELECT * FROM CalendarEvent WHERE Description LIKE '%$description%' ORDER BY $order $sort";
 
    try{
-      //get db object
-      $db = new db();
+     // Get DB object
+     $configDB = parse_ini_file('../db.ini');
+     $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
       //call connect to connect to database
       $db = $db->connect();
 
@@ -1521,7 +1551,8 @@ $app->get('/api/users', function(Request $request, Response $response){
 
     try{
       // Get DB object
-      $db = new db();
+      $configDB = parse_ini_file('../db.ini');
+      $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
       // Call connect; connect to database.
       $db = $db->connect();
 
@@ -1544,7 +1575,8 @@ $app->get('/api/users/login/LoginID/{login}/Password/{password}', function(Reque
 
     try{
       // Get DB object
-      $db = new db();
+      $configDB = parse_ini_file('../db.ini');
+      $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
       // Call connect; connect to database.
       $db = $db->connect();
 
@@ -1567,7 +1599,8 @@ $app->get('/api/restrict', function(Request $request, Response $response){
 
     try{
       // Get DB object
-      $db = new db();
+      $configDB = parse_ini_file('../db.ini');
+      $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
       // Call connect; connect to database.
       $db = $db->connect();
 
@@ -1602,7 +1635,8 @@ $app->post('/api/notifications/add', function(Request $request, Response $respon
 
     try{
       // Get DB object
-      $db = new db();
+      $configDB = parse_ini_file('../db.ini');
+      $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
       // Call connect; connect to database.
       $db = $db->connect();
 
