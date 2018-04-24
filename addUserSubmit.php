@@ -6,34 +6,30 @@ include('config.php');
 //start the session so we can set global variables
 //session_start();
 
-$valid_form = true;
 //check that Name, LoginID, and password are populated
 if(empty( $_POST['Name']))
 {
     $message = 'All fields are required';
-    $valid_form = false;
 }
 
 if(empty($_POST['LoginID']))
 {
     $message = 'All fields are required';
-    $valid_form = false;
 }
 
 if(empty($_POST['Password']))
 {
     $message = 'All fields are required';
-    $valid_form = false;
 }
 
 //Check LoginId length
-else if (strlen($_POST['LoginID']) > 32 || strlen($_POST['LoginID']) < 4)
+elseif (strlen($_POST['LoginID']) > 32 || strlen($_POST['LoginID']) < 4)
 {
     $message = 'LoginID length must be greater than 4 characters';
 }
 
 //check password length
-else if (strlen($_POST['Password']) > 32 || strlen($_POST['Password']) < 7)
+elseif (strlen($_POST['Password']) > 32 || strlen($_POST['Password']) < 7)
 {
     $message = 'Password length must be greater than 7 characters';
 }
@@ -43,7 +39,10 @@ $Name = filter_var($_POST['Name'], FILTER_SANITIZE_STRING);
 $LoginID = filter_var($_POST['LoginID'], FILTER_SANITIZE_STRING);
 $Password = filter_var($_POST['Password'], FILTER_SANITIZE_STRING);
 
-if($valid_form){
+//hash the password
+$PasswordHash = password_hash($Password, PASSWORD_DEFAULT);
+
+try{
     //Connect to MYSQL Database mysqli(Server,User, Password,Database)
     $link = connectDB();
 
@@ -58,7 +57,8 @@ if($valid_form){
 
     else //insert if its a new login id
     {
-      $sql = "INSERT INTO User VALUES (null, '".$LoginID."', '".$Password."', '".$Name."', 'Pending', null)";
+      //$sql = "INSERT INTO User VALUES (null, '".$LoginID."', '".$Password."', '".$Name."', 'Pending', null)";
+      $sql = "INSERT INTO User VALUES (null, '".$LoginID."', '".$PasswordHash."', '".$Name."', 'Pending', null)";
 
       $result=mysqli_query($link,$sql);
 
@@ -72,6 +72,10 @@ if($valid_form){
         $message = 'Thank you, your account is waiting for approval.';
       }
     }
+}
+catch(exception $e)
+{
+  $message = 'Unable to process request';
 }
 
 ?>
