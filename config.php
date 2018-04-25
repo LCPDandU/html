@@ -1,6 +1,8 @@
 <?php
 
- define('FIREBASE_API_KEY', 'AIzaSyCKZqpdli2qcVtTRA6TdIP3wW5CNjI7M4E'); /*Firebase API key for push notifications.*/
+// define firebase api key
+$FBconfig = parse_ini_file('./db.ini');
+define('FIREBASE_API_KEY', $FBconfig['FIREBASE_API_KEY']);
 
 function connectDB() {
   $config = parse_ini_file('./db.ini');

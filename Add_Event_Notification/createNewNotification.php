@@ -49,8 +49,9 @@ PUSH NOTIFICATION FOR ANNOUNCEMENT
 // Will only send post notification if admin denoted 'Yes' on createMenu.php.
 if ($_POST['PushNotificationOption'] == 1) {
 
-  // Need to define API key. Can generate new key for public release.
-    define( 'API_ACCESS_KEY', 'AAAAsNgqZHk:APA91bEFw_2VkH7teZR-vxEF97cjPm80w_rw7sf45Tjlfcx04LPUATBG157NF2LL4_xrX7XtFzpGCVvn25nyTIa-nJFvh6tuNB7pn4cu0CASni83ZverF_9O-lwPV4n33jAqeU0jD9kO' );
+  // Need to define API key.
+  $APIconfig = parse_ini_file('./db.ini');
+  define('API_ACCESS_KEY', $APIconfig['API_ACCESS_KEY']);
 
     // Message contents will contain notification title and description.
     $fcmMsg = array(
