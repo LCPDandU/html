@@ -1,4 +1,6 @@
-<?php include('../header.php');?>
+<?php 
+//include('../header.php');
+?>
 
 <?php
    if(!isset( $_POST['val'] ))
@@ -56,6 +58,14 @@
    echo "I like " . $cars[0] . ", " . $cars[1] . " and " . $cars[2] . ".";
    
    echo "<body><p>text=".$text."</p></body>";
+   
+   if(password_verify('U8theb8m80', '$2y$10$Y.bmXynDH7uU4fD.Sn3kF.pYAPVzX4.qGroP3JU5u6x1.lyqbXn7q'))
+   {
+      echo 'password verified';
+   }
+   else{
+      echo 'password not verified';
+   }
    
 ?>
 <html>

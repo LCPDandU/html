@@ -16,7 +16,7 @@
        //echo ("<script>
        //           window.location.assign('index.php');
        //           </script>");
-       header('refresh: '.$countDown.'; url=index');
+       header('refresh: '.$countDown.'; url=/index');
        exit();
    }
    //If a user is logged in, we put up the headers and the rest of the page
@@ -28,7 +28,7 @@
 
       //print header of hyper links on every page
       echo '<div align="left">
-            <a href="home">Home</a>
+            <a href="/home">Home</a>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <a href="/Add_Event_Notification/createMenu">Add Event/Notification</a>
             &nbsp;&nbsp;&nbsp;&nbsp;

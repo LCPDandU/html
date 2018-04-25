@@ -7,7 +7,7 @@ require 'src/db.php';
 include('config.php');
 
 //start the session so we can set global variables
-//session_start();
+session_start();
 
 // Check if the user is already logged in
 if(isset( $_SESSION['userID'] ))
@@ -46,7 +46,7 @@ else
 
 
         // Prep SQL statement which will compare the user credentials with what is stored in the database
-        $sql = "SELECT * FROM User WHERE LoginID = '".$LoginID."' AND AccountStatus != 'Pending'";//AND Password = '".$Password."'";
+        $sql = "SELECT * FROM User WHERE LoginID = '".$LoginID."' AND AccountStatus != 'Pending';";//AND Password = '".$Password."'";
         //echo $sql."<br>";
 
         //Run the query
@@ -99,7 +99,8 @@ else
               catch(PDOException $e){
                 echo '{"error": {"text": '.$e->getMessage().'}';
               }
-
+               
+              
               echo ("<script>
                        window.location.assign('home');
                      </script>");
