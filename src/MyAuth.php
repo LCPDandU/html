@@ -10,7 +10,7 @@ class MyAuth
 
       // Check if the token used exists in the database.
       // Need to also check if any found token's timestamp has not expired.
-      $sql = "SELECT * FROM User WHERE token = '$token'";
+      $sql = "SELECT TokenStamp FROM User WHERE Token = '$token'";
 
       // Get DB object
       $configDB = parse_ini_file('../db.ini');
@@ -26,11 +26,15 @@ class MyAuth
       // Throw an error if the SQL query returns no results,
       //  aka, the token used is not in the database.
       if (! $row) {
-
-        // Throws error, which is useful for debugging, but needs
-        //  to be removed and replaced for the final product.
         throw new UnauthorizedException('Invalid Token');
       }
+
+      // Check if timestamp is valid (valid for 4 hours)
+      $timestamp = $row['TokenStamp'];
+      if (strtotime($timestamp) <= strtotime('-4 hours')) {
+                throw new UnauthorizedException('Invalid Token');
+              }
+
     }
   }
 

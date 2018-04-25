@@ -7,7 +7,7 @@ require 'src/db.php';
 include('config.php');
 
 //start the session so we can set global variables
-session_start();
+//session_start();
 
 // Check if the user is already logged in
 if(isset( $_SESSION['userID'] ))
@@ -73,14 +73,15 @@ else
               $token = bin2hex(random_bytes(64));
               $_SESSION['token'] = $token;
 
-              $sql = "UPDATE User SET Token = :Token WHERE LoginID = :LoginID";
+              // Generate timestamp
+              $timestamp = date("Y-m-d H:i:s");
+
+              $sql = "UPDATE User SET Token = :Token, TokenStamp = :TokenStamp WHERE LoginID = :LoginID";
 
               try{
                 // Get DB object
-                $configDB = parse_ini_file('../db.ini');
+                $configDB = parse_ini_file('./db.ini');
                 $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
-                 //call connect to connect to database
-                 $db = $db->connect();
                 // Call connect; connect to database.
                 $db = $db->connect();
 
@@ -89,6 +90,7 @@ else
 
                 $stmt->bindParam(':LoginID', $userLoginID);
                 $stmt->bindParam(':Token', $token);
+                $stmt->bindParam(':TokenStamp', $timestamp);
 
                 $stmt->execute();
                 echo '{"notice": {"text": "Token Added"}';
