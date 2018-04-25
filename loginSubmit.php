@@ -54,12 +54,12 @@ else
         {
           //give values to session variables
           while($row = mysqli_fetch_assoc($result)) {
-            
+
             //verify the password with the hash password
             if(password_verify($Password, $row['Password']))
-            { 
+            {
               $userID = $row['ID'];
-              $userLoginID = $row['LoginID']; 
+              $userLoginID = $row['LoginID'];
               $userName = $row['Name'];
 
               // Set the session userID, LoginID, and Name
@@ -68,7 +68,7 @@ else
               $_SESSION['Name'] = $userName;
 
               $message = 'You are now logged in';
-            
+
               // Generate key for this Login
               $token = bin2hex(random_bytes(64));
               $_SESSION['token'] = $token;
@@ -77,7 +77,10 @@ else
 
               try{
                 // Get DB object
-                $db = new db();
+                $configDB = parse_ini_file('../db.ini');
+                $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
+                 //call connect to connect to database
+                 $db = $db->connect();
                 // Call connect; connect to database.
                 $db = $db->connect();
 
@@ -90,7 +93,7 @@ else
                 $stmt->execute();
                 echo '{"notice": {"text": "Token Added"}';
 
-              } 
+              }
               catch(PDOException $e){
                 echo '{"error": {"text": '.$e->getMessage().'}';
               }
@@ -100,13 +103,13 @@ else
                      </script>");
 
               exit();
-            
+
             }//end password verify
             else
             {
               $message = 'Invalid password';
             }
-            
+
           }//end while
         }
         if($userID == false) {
