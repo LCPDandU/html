@@ -1,4 +1,7 @@
-<?php include('../header.php');?>
+<?php 
+//This page is a form that determines whether the user will see all notifications or all events
+include('../header.php');
+?>
 <html>
 
 <head>
@@ -15,6 +18,9 @@
       <input type="submit" value="See All Notifications"/>
   </form>
   
+  <!--
+   Unimplemented Calendar view
+  -->
   <!--<h2>Calendar Format</h2>
   <form action="seeAllEventsCalendar.php" method="post">
       <input type="submit" value="See All Events"/>

@@ -1,5 +1,7 @@
 <?php
 
+/*This page takes input from addUser.php and creates a new user with that information.*/
+
 //to connect to the database we do this
 include('config.php');
 

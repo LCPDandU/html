@@ -31,7 +31,6 @@ else
    $sort='DESC';$sorting='Descending';
 }
 
-//echo "<html><head><h1>See All Notifications List</h1></head>";
 echo "<html><head><h1>See All Notifications List <i>(Order By ".$order.", ".$sorting." Sorting)</i></h1>";
 
 // REST url

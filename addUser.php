@@ -1,4 +1,6 @@
 <html>
+
+<!-- This page is a form that takes information for creating an account. -->
 <body>
 
   <h2><strong>Create Account</strong></h2>

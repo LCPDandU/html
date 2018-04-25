@@ -1,4 +1,7 @@
-<?php include('../header.php');?>
+<?php 
+//This page is a form that determines which search mode the user will go to.
+include('../header.php');
+?>
 <html>
 
 <head>
@@ -12,7 +15,6 @@
   </form>
   <form action="searchAttributeMenu.php" method="post">
       <input type="submit" value="Search By Attribute"/>
-      <i>(not implemented yet)</i>
   </form>
   
   <!--<form action="searchTestpage.php" method="post">

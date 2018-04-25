@@ -1,4 +1,7 @@
-<?php include('../header.php');?>
+<?php 
+//This page is a form that takes the user to whatever attribute search they wish.
+include('../header.php');
+?>
 <html>
 
 <head>
@@ -8,6 +11,7 @@
 <!--<body style = "Color: #000000; background-color:#afbfff;">-->
 <body>
 
+  <!-- Search Events by a single attribute -->
   <form action="searchSingleAttributeInputEvent.php" method="post">
   <fieldset>
   <h1><strong>Search Events (Single Attribute)</strong></h1>
@@ -29,7 +33,7 @@
   </form>
   
   
-  
+  <!-- Search Notifications by a single attribute -->
   <form action="searchSingleAttributeInputNotification.php" method="post">
   <fieldset>
   <h1><strong>Search Notifications (Single Attribute)</strong></h1>
@@ -49,6 +53,7 @@
   </form>
   
   
+  <!-- Search Events by multiple attributes. -->
   <form action="searchAttributeInputEvent.php" method="post">
   <fieldset>
   <h1><strong>Search Events (Multiple Attributes)</strong></h1>
@@ -97,6 +102,7 @@
   </form>
   
   
+  <!-- Search Notifications by a single attribute -->
   <form action="searchAttributeInputNotification.php" method="post">
   <fieldset>
   <h1><strong>Search Notifications (Multiple Attributes)</strong></h1>

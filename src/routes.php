@@ -109,7 +109,7 @@ $app->get('/api/notifications/newest', function(Request $request, Response $resp
    }
 });
 
-# Get notification by title.  (Like-Title)
+# Get notification by Like-title.  (Like-Title)
 $app->get('/api/notifications/title/{title}', function(Request $request, Response $response){
     $title = $request->getAttribute('title');
 
@@ -132,7 +132,7 @@ $app->get('/api/notifications/title/{title}', function(Request $request, Respons
     }
 });
 
-# Get notification by date. (Exact Date)
+# Get notification by Exact-date. (Exact Date)
 $app->get('/api/notifications/date/day/{date}', function(Request $request, Response $response){
     $date = $request->getAttribute('date');
 
@@ -222,6 +222,7 @@ $app->get('/api/notifications/MultiAttr/order/{order}/sort/{sort}/{exactTitle}/{
    //order is the Attribute that results are 'Ordered By'
    //sort can be either ASC (ascending order), or DESC (descending order)
 
+   //ignore string is a string that is unlikely to be user input and indicates an empty url parameter
    $ignoreString="|||";
 
    $order = $request->getAttribute('order');
@@ -268,6 +269,7 @@ $app->get('/api/notifications/MultiAttr/order/{order}/sort/{sort}/{exactTitle}/{
    $count=0;
 
 
+   //Dynamically construct WHERE portion of sql statement
    if($exactTitle!=$ignoreString)
    {
       //add to sql statement
@@ -367,8 +369,6 @@ $app->get('/api/notifications/MultiAttr/order/{order}/sort/{sort}/{exactTitle}/{
    }
 
    $sql.="ORDER BY $order $sort";
-
-   //echo "sql=".$sql;
 
    try{
      // Get DB object
@@ -814,8 +814,6 @@ $app->get('/api/events', function(Request $request, Response $response){
 $app->get('/api/events/id/{id}', function(Request $request, Response $response){
 
    //Get Parameters from url
-   //order is the Attribute that results are 'Ordered By'
-   //sort can be either ASC (ascending order), or DESC (descending order)
    $id = $request->getAttribute('id');
 
 
@@ -959,6 +957,7 @@ $app->get('/api/events/MultiAttr/order/{order}/sort/{sort}/{exactTitle}/{likeTit
    $count=0;
 
 
+   //Dynamically construct WHERE portion of sql statement
    if($exactTitle!=$ignoreString)
    {
       //add to sql statement
@@ -1083,7 +1082,6 @@ $app->get('/api/events/MultiAttr/order/{order}/sort/{sort}/{exactTitle}/{likeTit
 
    $sql.="ORDER BY $order $sort";
 
-   //echo "sql=".$sql;
 
    try{
      // Get DB object
@@ -1735,7 +1733,7 @@ $app->post('/api/notifications/add', function(Request $request, Response $respon
 /*********************************************
 POST: Event
 *********************************************/
-# Add notification.
+# Add Event.
 $app->post('/api/events/add', function(Request $request, Response $response){
     
     $EventTitle = $request->getParam('EventTitle');
@@ -1788,6 +1786,7 @@ POST: User
 # Add notification.
 $app->post('/api/users/add', function(Request $request, Response $response){
 
+   //INCOMPLETE
     $NotificationTitle = $request->getParam('NotificationTitle');
     $NotificationDescription = $request->getParam('NotificationDescription');
     $PostDate = $request->getParam('PostDate');

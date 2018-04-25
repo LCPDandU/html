@@ -1,4 +1,7 @@
-<?php include('../header.php');?>
+<?php 
+//This page contains two forms, one for creating an Event and another for creating a Notification.
+include('../header.php');
+?>
 <html>
 
 <!--The form for creating a CalendarEvent-->
