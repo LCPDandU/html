@@ -12,4 +12,7 @@ function connectDB() {
   }
   return $con;
 }
+
+define('URL_START', 'http://localhost');
+
 ?>

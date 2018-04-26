@@ -63,7 +63,7 @@ else
 //$attr - A variable used to hold the Single Attribute Search being performed
 //$href - A variable used to hold the new URL variables that will be used to preserve search criteria
 
-$url="http://localhost/public/api/events/order/$order/sort/$sort";
+$url=URL_START ."/public/api/events/order/$order/sort/$sort";
 $href="?";
 
 $ignoreString="|||";
@@ -193,7 +193,7 @@ if(isset($_POST['NotificationPostTimeHourBefAft']) || isset($_GET['NotificationP
    }
 }
 
-$url="http://localhost/public/api/notifications/MultiAttr/order/$order/sort/$sort/$exactTitle/$likeTitle/$descriptionLike/$dateExact/$dateA/$dateB/$dateBefAft/$befAftDate/$hourExact/$minuteExact/$ampmExact/$hourBefAft/$minuteBefAft/$ampmBefAft/$befAftTime";
+$url=URL_START ."/public/api/notifications/MultiAttr/order/$order/sort/$sort/$exactTitle/$likeTitle/$descriptionLike/$dateExact/$dateA/$dateB/$dateBefAft/$befAftDate/$hourExact/$minuteExact/$ampmExact/$hourBefAft/$minuteBefAft/$ampmBefAft/$befAftTime";
 
 echo "<html><head><h1>Search Results (Notifiction by " . $attr . ", Ordered by ".$order.", ".$sorting." Sorting)</h1></head>";
 

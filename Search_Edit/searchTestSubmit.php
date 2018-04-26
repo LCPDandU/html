@@ -67,6 +67,8 @@
       echo 'password not verified';
    }
    
+   echo "<body><p>phpeol = ".ord(PHP_EOL)."</p></body>";
+   
 ?>
 <html>
 

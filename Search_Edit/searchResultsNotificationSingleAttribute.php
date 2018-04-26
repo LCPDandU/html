@@ -55,7 +55,7 @@ if(isset($_POST['NotificationTitleExact']) || isset($_GET['NotificationTitleExac
    $title=urlencode($title);
 
    $href="?NotificationTitleExact=".$title;
-   $url="http://localhost/public/api/notifications/order/$order/sort/$sort/TitleExact/$title";
+   $url=URL_START."/public/api/notifications/order/$order/sort/$sort/TitleExact/$title";
    $attr="Exact Title";
 }
 if(isset($_POST['NotificationTitleLike']) || isset($_GET['NotificationTitleLike']))
@@ -65,7 +65,7 @@ if(isset($_POST['NotificationTitleLike']) || isset($_GET['NotificationTitleLike'
    $title=urlencode($title);
    
    $href="?NotificationTitleLike=".$title;
-   $url="http://localhost/public/api/notifications/order/$order/sort/$sort/TitleLike/$title";
+   $url=URL_START."/public/api/notifications/order/$order/sort/$sort/TitleLike/$title";
    $attr="Like-Title";
 }
 if(isset($_POST['NotificationDescriptionLike']) || isset($_GET['NotificationDescriptionLike']))
@@ -75,7 +75,7 @@ if(isset($_POST['NotificationDescriptionLike']) || isset($_GET['NotificationDesc
    $description=urlencode($description);
 
    $href="?NotificationDescriptionLike=".$description;
-   $url="http://localhost/public/api/notifications/order/$order/sort/$sort/DescriptionLike/$description";
+   $url=URL_START."/public/api/notifications/order/$order/sort/$sort/DescriptionLike/$description";
    $attr="Like-Description";
 }
 if(isset($_POST['NotificationDateExact']) || isset($_GET['NotificationDateExact']))
@@ -85,7 +85,7 @@ if(isset($_POST['NotificationDateExact']) || isset($_GET['NotificationDateExact'
    $date=urlencode($date);
 
    $href="?NotificationDateExact=".$date;
-   $url="http://localhost/public/api/notifications/order/$order/sort/$sort/PostDateExact/$date";
+   $url=URL_START."/public/api/notifications/order/$order/sort/$sort/PostDateExact/$date";
    $attr="Exact Date";
 }
 if(isset($_POST['NotificationDateA']) || isset($_GET['NotificationDateA']))
@@ -98,7 +98,7 @@ if(isset($_POST['NotificationDateA']) || isset($_GET['NotificationDateA']))
    $dateB=urlencode($dateB);
 
    $href="?NotificationDateA=".$dateA."&&NotificationDateB=".$dateB;
-   $url="http://localhost/public/api/notifications/order/$order/sort/$sort/PostDateA/$dateA/PostDateB/$dateB";
+   $url=URL_START."/public/api/notifications/order/$order/sort/$sort/PostDateA/$dateA/PostDateB/$dateB";
    $attr="Date Range";
 }
 if(isset($_POST['NotificationDateBefAft']) || isset($_GET['NotificationDateBefAft']))
@@ -112,7 +112,7 @@ if(isset($_POST['NotificationDateBefAft']) || isset($_GET['NotificationDateBefAf
    $befaft=urlencode($befaft);
    
    $href="?NotificationDateBefAft=".$date."&&BefAftNotifiationDate=".$befaft;
-   $url="http://localhost/public/api/notifications/order/$order/sort/$sort/PostDateBefAft/$date/BefAft/$befaft";
+   $url=URL_START."/public/api/notifications/order/$order/sort/$sort/PostDateBefAft/$date/BefAft/$befaft";
 
    if($befaft=="Before"){
       $attr="Before Date";
@@ -132,7 +132,7 @@ if(isset($_POST['NotificationPostTimeHourExact']) || isset($_GET['NotificationPo
    $ampm=urlencode($ampm);
    
    $href="?NotificationPostTimeHourExact=".$hour."&&NotificationPostTimeMinuteExact=".$minute."&&NotificationPostTimeAMPMExact=".$ampm;
-   $url="http://localhost/public/api/notifications/order/$order/sort/PostTimeHourExact/$hour/PostTimeMinuteExact/$minute/PostTimeAMPM/$ampm";
+   $url=URL_START."/public/api/notifications/order/$order/sort/PostTimeHourExact/$hour/PostTimeMinuteExact/$minute/PostTimeAMPM/$ampm";
    $attr="Exact Start Time";
 }
 if(isset($_POST['NotificationPostTimeHourBefAft']) || isset($_GET['NotificationPostTimeHourBefAft']))
@@ -150,7 +150,7 @@ if(isset($_POST['NotificationPostTimeHourBefAft']) || isset($_GET['NotificationP
    $befaft=urlencode($befaft);
    
    $href="?NotificationPostTimeHourBefAft=".$hour."&&NotificationPostTimeMinuteBefAft=".$minute."&&NotificationPostTimeAMPMBefAft=".$ampm."&&BefAftNotificationPostTime=".$befaft;
-   $url="http://localhost/public/api/notifications/order/$order/sort/PostTimeHourBefAft/$hour/PostTimeMinuteBefAft/$minute/PostTimeAMPM/$ampm/BefAft/$befaft";
+   $url=URL_START."/public/api/notifications/order/$order/sort/PostTimeHourBefAft/$hour/PostTimeMinuteBefAft/$minute/PostTimeAMPM/$ampm/BefAft/$befaft";
 
    if($befaft=="Before")
    {

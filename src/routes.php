@@ -1730,6 +1730,39 @@ $app->post('/api/notifications/add', function(Request $request, Response $respon
     }
 });
 
+# Edit Notification
+$app->post('/api/notifications/edit/id/{id}', function(Request $request, Response $response){
+
+    $NotificationID = $request->getAttribute('id');
+    $NotificationTitle = $request->getParam('NotificationTitle');
+    $NotificationDescription = $request->getParam('NotificationDescription');
+    $PostDate = $request->getParam('PostDate');
+    $PostTime = $request->getParam('PostTime');
+    $PostTimeAMPM = $request->getParam('PostTimeAMPM');
+    
+    $sql = "UPDATE Notification SET Title='$NotificationTitle', Description='$NotificationDescription', PostDate='$PostDate', PostTime='$PostTime', 
+            PostTimeAMPM='$PostTimeAMPM' WHERE ID=$NotificationID";
+            
+
+
+    try{
+      // Get DB object
+      $configDB = parse_ini_file('../../db.ini');
+      $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
+      // Call connect; connect to database.
+      $db = $db->connect();
+
+      # PDO statement
+      $stmt = $db->prepare($sql);
+
+      $stmt->execute();
+      echo '{"notice": {"text": "Notification Edited"}';
+
+    } catch(PDOException $e){
+      echo '{"error": {"text": '.$e->getMessage().'}';;
+    }
+});
+
 /*********************************************
 POST: Event
 *********************************************/
@@ -1777,6 +1810,45 @@ $app->post('/api/events/add', function(Request $request, Response $response){
 
     } catch(PDOException $e){
       echo '{"error": {"text": '.$e->getMessage().'}';
+    }
+});
+
+# Edit Event
+$app->post('/api/events/edit/id/{id}', function(Request $request, Response $response){
+
+    $EventID = $request->getAttribute('id');
+    $EventTitle = $request->getParam('EventTitle');
+    $EventCategory = $request->getParam('EventCategory');
+    $EventDate = $request->getParam('EventDate');
+    $EventStartTime = $request->getParam('EventStartTime');
+    $EventStartTimeAMPM = $request->getParam('EventStartTimeAMPM');
+    $EventLocation= $request->getParam('EventLocation');
+    $EventDescription = $request->getParam('EventDescription');
+    $EventMedia1 = $request->getParam('EventMedia1');
+    $EventMedia2 = $request->getParam('EventMedia2');
+    $EventMedia3 = $request->getParam('EventMedia3');
+    
+    $sql = "UPDATE CalendarEvent SET Title='$EventTitle', Category='$EventCategory', EventDate='$EventDate', EventStartTime='$EventStartTime', 
+            EventStartTimeAMPM='$EventStartTimeAMPM', Location='$EventLocation', Description='$EventDescription', Media1='$EventMedia1', Media2='$EventMedia2', 
+            Media3='$EventMedia3' WHERE ID=$EventID";
+            
+
+
+    try{
+      // Get DB object
+      $configDB = parse_ini_file('../../db.ini');
+      $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
+      // Call connect; connect to database.
+      $db = $db->connect();
+
+      # PDO statement
+      $stmt = $db->prepare($sql);
+
+      $stmt->execute();
+      echo '{"notice": {"text": "Event Edited"}';
+
+    } catch(PDOException $e){
+      echo '{"error": {"text": '.$e->getMessage().'}';;
     }
 });
 
