@@ -68,6 +68,16 @@ else
               $_SESSION['Name'] = $userName;
 
               $message = 'You are now logged in';
+              
+                  //Log
+                  //Add Event to log
+                  $file = 'Log/userAccess.log';
+                  
+                  date_default_timezone_set("America/Denver");
+                  $currDate=date("Y-m-d h:i:sa");
+                  $ip = $_SERVER['REMOTE_ADDR']?:($_SERVER['HTTP_X_FORWARDED_FOR']?:$_SERVER['HTTP_CLIENT_IP']);
+                  $line='User (ID:'.$_SESSION['userID'].', User Name:'.$_SESSION['LoginID'].') Logged In on '.$currDate.' from '.$ip.PHP_EOL;
+                  file_put_contents($file,$line,FILE_APPEND | LOCK_EX);
 
               // Generate key for this Login
               $token = bin2hex(random_bytes(64));

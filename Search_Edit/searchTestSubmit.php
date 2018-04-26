@@ -69,6 +69,12 @@
    
    echo "<body><p>phpeol = ".ord(PHP_EOL)."</p></body>";
    
+   $json='[{"ID":"5"}]';
+   if(empty(json_decode($json,$true)))
+      echo "<body><p>json is empty</p></body>";
+   else
+      echo "<body><p>json is not empty</p></body>";
+   
 ?>
 <html>
 

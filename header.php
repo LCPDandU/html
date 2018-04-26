@@ -38,7 +38,7 @@
             &nbsp;&nbsp;&nbsp;&nbsp;
             Logged in as: '.$loginID.' ('.$name.')
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <a href="logout">Logout</a>
+            <a href="/logout">Logout</a>
             &nbsp;&nbsp;&nbsp;&nbsp;
             </div>';
    }

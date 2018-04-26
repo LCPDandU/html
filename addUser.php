@@ -8,17 +8,17 @@
   <fieldset>
     <p>
       <label>Name:</label>
-      <input type="text" name="Name" value="" maxlength="128" />
+      <input type="text" name="Name" value="" maxlength="128" required/>
       <i>(maximum length of 128 characters)</i>
     </p>
     <p>
       <label>Login ID:</label>
-      <input type="text" name="LoginID" value="" minlength="4" maxlength="32" />
+      <input type="text" name="LoginID" value="" minlength="4" maxlength="32" required/>
       <i>(Login ID must be between 4 and 32 characters long)</i>
     </p>
     <p>
       <label>Password:</label>
-      <input type="password" name="Password" value="" minlength="7" maxlength="32" />
+      <input type="password" name="Password" value="" minlength="7" maxlength="32" required/>
       <i>(Password must be between 7 and 32 characters long)</i>
     </p>
     <p>

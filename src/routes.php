@@ -1620,7 +1620,7 @@ GET: USERS
 
 # Get all users.
 $app->get('/api/users', function(Request $request, Response $response){
-    $sql = "SELECT * FROM User";
+    $sql = "SELECT ID, AccountStatus FROM User";
 
     try{
       // Get DB object
@@ -1631,9 +1631,55 @@ $app->get('/api/users', function(Request $request, Response $response){
 
       # PDO statement
       $stmt = $db->query($sql);
-      $notifications = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $users = $stmt->fetchAll(PDO::FETCH_OBJ);
       $db = null;
-      echo json_encode($notifications);
+      echo json_encode($users);
+    } catch(PDOException $e){
+      echo '{"error": {"text": '.$e->getMessage().'}';
+    }
+});
+
+# Get user by login id
+$app->get('/api/users/LoginID/{login}', function(Request $request, Response $response){
+    $login=$request->getAttribute('login');
+    
+    $sql = "SELECT ID FROM User WHERE LoginID='$login'";
+
+    try{
+      // Get DB object
+      $configDB = parse_ini_file('../../db.ini');
+      $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
+      // Call connect; connect to database.
+      $db = $db->connect();
+
+      # PDO statement
+      $stmt = $db->query($sql);
+      $users = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+      echo json_encode($users);
+    } catch(PDOException $e){
+      echo '{"error": {"text": '.$e->getMessage().'}';
+    }
+});
+
+# Get newest user
+$app->get('/api/users/newest', function(Request $request, Response $response){
+    $login=$request->getAttribute('login');
+    
+    $sql = "SELECT ID, LoginID, Name, AccountStatus FROM User WHERE ID=(SELECT MAX(ID) FROM User)";
+
+    try{
+      // Get DB object
+      $configDB = parse_ini_file('../../db.ini');
+      $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
+      // Call connect; connect to database.
+      $db = $db->connect();
+
+      # PDO statement
+      $stmt = $db->query($sql);
+      $users = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+      echo json_encode($users);
     } catch(PDOException $e){
       echo '{"error": {"text": '.$e->getMessage().'}';
     }
@@ -1644,7 +1690,7 @@ $app->get('/api/users/login/LoginID/{login}/Password/{password}', function(Reque
    $login=$request->getAttribute('login');
    $password=$request->getAttribute('password');
 
-    $sql = "SELECT * FROM User WHERE LoginID='$login' AND AccountStatus!='Pending' AND Password='$password'";
+    $sql = "SELECT ID FROM User WHERE LoginID='$login' AND AccountStatus!='Pending' AND Password='$password'";
 
     try{
       // Get DB object
@@ -1655,9 +1701,9 @@ $app->get('/api/users/login/LoginID/{login}/Password/{password}', function(Reque
 
       # PDO statement
       $stmt = $db->query($sql);
-      $notifications = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $users = $stmt->fetchAll(PDO::FETCH_OBJ);
       $db = null;
-      echo json_encode($notifications);
+      echo json_encode($users);
     } catch(PDOException $e){
       echo '{"error": {"text": '.$e->getMessage().'}';
     }
@@ -1859,16 +1905,15 @@ POST: User
 $app->post('/api/users/add', function(Request $request, Response $response){
 
    //INCOMPLETE
-    $NotificationTitle = $request->getParam('NotificationTitle');
-    $NotificationDescription = $request->getParam('NotificationDescription');
-    $PostDate = $request->getParam('PostDate');
-    $PostTimeHour = $request->getParam('PostTimeHour');
-    $PostTimeMinute = $request->getParam('PostTimeMinute');
-    $PostTime = $PostTimeHour.":".$PostTimeMinute;
-    $PostTimeAMPM = $request->getParam('PostTimeAMPM');
+    $LoginID = $request->getParam('LoginID');
+    $Password = $request->getParam('Password');
+    $Name = $request->getParam('Name');
+    $Token = $request->getParam('Token');
+    $TokenStamp = $request->getParam('TokenStamp');
+    
 
-    $sql = "INSERT INTO Notification (ID,Title,Description,PostDate,PostTime,PostTimeAMPM)
-      VALUES (NULL,:NotificationTitle,:NotificationDescription,:PostDate,:PostTime,:PostTimeAMPM)";
+    $sql = "INSERT INTO User (ID, LoginID, Password, Name, AccountStatus, Token, TokenStamp)
+      VALUES (NULL, :LoginID, :Password, :Name, 'Pending', :Token, :TokenStamp)";
 
 
     try{
@@ -1881,14 +1926,14 @@ $app->post('/api/users/add', function(Request $request, Response $response){
       # PDO statement
       $stmt = $db->prepare($sql);
 
-      $stmt->bindParam(':NotificationTitle', $NotificationTitle);
-      $stmt->bindParam(':NotificationDescription', $NotificationDescription);
-      $stmt->bindParam(':PostDate', $PostDate);
-      $stmt->bindParam(':PostTime', $PostTime);
-      $stmt->bindParam(':PostTimeAMPM', $PostTimeAMPM);
+      $stmt->bindParam(':LoginID', $LoginID);
+      $stmt->bindParam(':Password', $Password);
+      $stmt->bindParam(':Name', $Name);
+      $stmt->bindParam(':Token', $Token);
+      $stmt->bindParam(':TokenStamp', $TokenStamp);
 
       $stmt->execute();
-      echo '{"notice": {"text": "Notification Added"}';
+      echo '{"notice": {"text": "User Added"}';
 
     } catch(PDOException $e){
       echo '{"error": {"text": '.$e->getMessage().'}';
