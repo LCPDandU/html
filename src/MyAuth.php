@@ -13,7 +13,7 @@ class MyAuth
       $sql = "SELECT TokenStamp FROM User WHERE Token = '$token'";
 
       // Get DB object
-      $configDB = parse_ini_file('../db.ini');
+      $configDB = parse_ini_file('../../db.ini');
       $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
           // Call connect to connect to database.
           $db = $db->connect();

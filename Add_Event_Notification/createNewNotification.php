@@ -50,7 +50,7 @@ PUSH NOTIFICATION FOR ANNOUNCEMENT
 if ($_POST['PushNotificationOption'] == 1) {
 
   // Need to define API key.
-  $APIconfig = parse_ini_file('./db.ini');
+  $APIconfig = parse_ini_file('../../db.ini');
   define('API_ACCESS_KEY', $APIconfig['API_ACCESS_KEY']);
 
     // Message contents will contain notification title and description.

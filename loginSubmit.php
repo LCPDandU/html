@@ -80,7 +80,7 @@ else
 
               try{
                 // Get DB object
-                $configDB = parse_ini_file('./db.ini');
+                $configDB = parse_ini_file('../db.ini');
                 $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
                 // Call connect; connect to database.
                 $db = $db->connect();
@@ -99,8 +99,8 @@ else
               catch(PDOException $e){
                 echo '{"error": {"text": '.$e->getMessage().'}';
               }
-               
-              
+
+
               echo ("<script>
                        window.location.assign('home');
                      </script>");
