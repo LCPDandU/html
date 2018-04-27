@@ -221,18 +221,11 @@ else
                <?php echo $Media1; ?>
              </p>
              <img src="../media/<?php echo $Media1; ?>" width="50" height="100"/> 
-           <?php 
-           } 
-           else
-           {
-             $Media1 = "null";
-           }
-           ?>
+           <?php } ?>
       </p>
 
       <p>
       <label>Media 2</label>
-      <!-- <i>(not implemented yet)</i> -->
          <input type="file" name="media2"/>
          
            <?php 
@@ -243,18 +236,11 @@ else
                <?php echo $Media2; ?>
              </p>
              <img src="../media2/<?php echo $Media2; ?>" width="50" height="100"/> 
-           <?php 
-           } 
-           else
-           {
-             $Media2 = "null";
-           }
-           ?>
+           <?php } ?>
       </p>
 
       <p>
       <label>Media 3</label>
-      <!-- <i>(not implemented yet)</i> --> 
         <input type="file" name="media3"/> 
         
           <?php 
@@ -265,13 +251,7 @@ else
               <?php echo $Media3; ?>
             </p> 
            <img src="../media3/<?php echo $Media3; ?>" width="50" height="100"/>
-          <?php 
-          } 
-          else
-          {
-            $Media3 = "null";
-          }
-          ?>
+          <?php } ?>
          
       </p>
 
@@ -281,6 +261,37 @@ else
 
    </fieldset>
 </form>
+
+<?php if(!empty($Media1) || !empty($Media2) || !empty($Media3)){?>
+  <form action="editEventDeleteMediaSubmit" method="post" enctype="multipart/form-data">
+    <fieldset>
+    
+      <input type="hidden" name="eventID" value="<?php echo $ID;?>"/>
+    
+      <h1><strong>Delete Media</strong></h1>
+      
+      <?php if(!empty($Media1)){ ?>
+        <p>
+          <input type="submit" name="deleteMedia1" value="Delete Media1"/>
+        </p>
+      <?php } ?>
+      
+      <?php if(!empty($Media2)){ ?>
+        <p>
+          <input type="submit" name="deleteMedia2" value="Delete Media2"/>
+        </p>
+      <?php } ?>
+      
+      <?php if(!empty($Media3)){ ?>
+        <p>
+          <input type="submit" name="deleteMedia3" value="Delete Media3"/>
+        </p>
+      <?php } ?>
+      
+    </fieldset>
+  </form>
+<?php } ?>
+
 
    <form action="searchMenu" method="post">
       <input type="submit" value="Back to Search Menu"/>
