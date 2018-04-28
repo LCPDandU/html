@@ -206,7 +206,7 @@ else
       </p>
       
       <p>
-      <i>(only files types of jpg, jpeg, and png)</i>
+      <i>(only file types of jpg, jpeg, and png)</i>
       </p>
 
       <p>
@@ -262,31 +262,52 @@ else
    </fieldset>
 </form>
 
+
+<!--Clear Media from event-->
 <?php if(!empty($Media1) || !empty($Media2) || !empty($Media3)){?>
-  <form action="editEventDeleteMediaSubmit" method="post" enctype="multipart/form-data">
+  <form action="editEventClearMediaSubmit" method="post" enctype="multipart/form-data">
     <fieldset>
     
-      <input type="hidden" name="eventID" value="<?php echo $ID;?>"/>
-    
-      <h1><strong>Delete Media</strong></h1>
+      <input type="hidden" name="EventID" value="<?php echo $ID;?>"/>
+      <input type="hidden" name="EventTitle" value="<?php echo $Title;?>"/>
+      <input type="hidden" name="EventCategory" value="<?php echo $Category; ?>"/>
+      <input type="hidden" name="EventDate" value="<?php echo $Date;?>"/>
+      <input type="hidden" name="EventStartTimeHour" value="<?php echo $TimeHour;?>"/>
+       :
+      <input type="hidden" name="EventStartTimeMinute" value="<?php echo $TimeMinute;?>"/>
+      <input type="hidden" name="EventStartTimeAMPM" value="<?php echo $AMPM; ?>"/>
+      <input type="hidden" name="EventLocation" value="<?php echo $Location;?>" />
+      <input type="hidden" name="EventDescription" value="<?php echo $Description;?>" /> 
+      
+      <h1><strong>Clear Media</strong></h1>
       
       <?php if(!empty($Media1)){ ?>
         <p>
-          <input type="submit" name="deleteMedia1" value="Delete Media1"/>
+          <label>Media 1</label>
+          <input type="radio" name="clearMedia1Option" value="None" checked/><label>None</label>
+          <input type="radio" name="clearMedia1Option" value="clearMedia1"/><label>Clear</label>
         </p>
       <?php } ?>
       
       <?php if(!empty($Media2)){ ?>
         <p>
-          <input type="submit" name="deleteMedia2" value="Delete Media2"/>
+          <label>Media 2</label>
+          <input type="radio" name="clearMedia2Option" value="None" checked/><label>None</label>
+          <input type="radio" name="clearMedia2Option" value="clearMedia2"/><label>Clear</label>
         </p>
       <?php } ?>
       
       <?php if(!empty($Media3)){ ?>
         <p>
-          <input type="submit" name="deleteMedia3" value="Delete Media3"/>
+          <label>Media 3</label>
+          <input type="radio" name="clearMedia3Option" value="None" checked/><label>None</label>
+          <input type="radio" name="clearMedia3Option" value="clearMedia3"/><label>Clear</label>
         </p>
       <?php } ?>
+      
+      <p>
+        <input type="submit" value="Clear Media"/>
+      </p>
       
     </fieldset>
   </form>
