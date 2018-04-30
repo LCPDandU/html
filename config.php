@@ -27,6 +27,7 @@ function connectDB(){
    if($link->connect_error){
       die("Connection Failed: " . $link->connect_error);
    }
+   //echo $link->host_info;
    return $link;
 }
 

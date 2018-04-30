@@ -1619,8 +1619,24 @@ GET: USERS
 *********************************************/
 
 # Get all users.
-$app->get('/api/users', function(Request $request, Response $response){
-    $sql = "SELECT ID, AccountStatus FROM User";
+$app->get('/api/users/order/{order}/sort/{sort}', function(Request $request, Response $response){
+
+   //Get Parameters from url
+   //order is the Attribute that results are 'Ordered By'
+   //sort can be either ASC (ascending order), or DESC (descending order)
+   $order = $request->getAttribute('order');
+   $processedSort = $request->getAttribute('sort');
+   
+   if($processedSort=='desc'||$processedSort=='asc'||$processedSort=='DESC'||$processedSort=='ASC')
+   {
+      $sort=$processedSort;
+   }
+   else
+   {
+      $sort='DESC';
+   }
+   
+    $sql = "SELECT ID, AccountStatus, LoginID, Name FROM User ORDER BY $order $sort";
 
     try{
       // Get DB object
@@ -1643,7 +1659,7 @@ $app->get('/api/users', function(Request $request, Response $response){
 $app->get('/api/users/LoginID/{login}', function(Request $request, Response $response){
     $login=$request->getAttribute('login');
     
-    $sql = "SELECT ID FROM User WHERE LoginID='$login'";
+    $sql = "SELECT ID, AccountStatus, LoginID, Name FROM User WHERE LoginID='$login'";
 
     try{
       // Get DB object
@@ -1667,30 +1683,6 @@ $app->get('/api/users/newest', function(Request $request, Response $response){
     $login=$request->getAttribute('login');
     
     $sql = "SELECT ID, LoginID, Name, AccountStatus FROM User WHERE ID=(SELECT MAX(ID) FROM User)";
-
-    try{
-      // Get DB object
-      $configDB = parse_ini_file('../../db.ini');
-      $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
-      // Call connect; connect to database.
-      $db = $db->connect();
-
-      # PDO statement
-      $stmt = $db->query($sql);
-      $users = $stmt->fetchAll(PDO::FETCH_OBJ);
-      $db = null;
-      echo json_encode($users);
-    } catch(PDOException $e){
-      echo '{"error": {"text": '.$e->getMessage().'}';
-    }
-});
-
-#Login get request
-$app->get('/api/users/login/LoginID/{login}/Password/{password}', function(Request $request, Response $response){
-   $login=$request->getAttribute('login');
-   $password=$request->getAttribute('password');
-
-    $sql = "SELECT ID FROM User WHERE LoginID='$login' AND AccountStatus!='Pending' AND Password='$password'";
 
     try{
       // Get DB object
@@ -1968,14 +1960,15 @@ $app->post('/api/users/add', function(Request $request, Response $response){
     }
 });
 
-# Edit my account info
+# Edit account info
 $app->post('/api/user/edit/id/{id}', function(Request $request, Response $response){
 
     $id = $request->getAttribute('id');
     $name = $request->getParam('Name');
     $password = $request->getParam('Password');
+    $accountStatus = $request->getParam('AccountStatus');
     
-    $sql = "UPDATE User SET Name = '$name', Password = '$password' WHERE ID=$EventID";
+    $sql = "UPDATE User SET Name = '$name', Password = '$password', AccountStatus = '$accountStatus' WHERE ID=$EventID";
             
     try{
       // Get DB object
