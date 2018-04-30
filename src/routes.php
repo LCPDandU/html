@@ -1659,7 +1659,8 @@ $app->get('/api/users/order/{order}/sort/{sort}', function(Request $request, Res
 $app->get('/api/users/LoginID/{login}', function(Request $request, Response $response){
     $login=$request->getAttribute('login');
     
-    $sql = "SELECT ID, AccountStatus, LoginID, Name FROM User WHERE LoginID='$login'";
+    $sql = "SELECT * FROM User WHERE ID='$login'";
+    //$sql = "SELECT ID, AccountStatus, LoginID, Name FROM User WHERE LoginID='$login'";
 
     try{
       // Get DB object
@@ -1699,6 +1700,33 @@ $app->get('/api/users/newest', function(Request $request, Response $response){
     } catch(PDOException $e){
       echo '{"error": {"text": '.$e->getMessage().'}';
     }
+});
+
+# Get my account info jm
+$app->get('/api/users/id/{id}', function(Request $request, Response $response){
+
+   //Get Parameters from url
+   $id = $request->getAttribute('id');
+
+   //$sql = "SELECT ID, Name, LoginID, AccountStatus FROM User WHERE ID='$id'";
+   $sql = "SELECT * FROM User WHERE ID='$id'";
+
+   try{
+     // Get DB object
+     $configDB = parse_ini_file('../../db.ini');
+     $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
+      //call connect to connect to database
+      $db = $db->connect();
+
+      #PDO statement
+      $stmt = $db->query($sql);
+      $accountInfo = $stmt->fetchAll(PDO::FETCH_OBJ);
+      $db = null;
+
+      echo json_encode($accountInfo);
+   } catch(PDOException $e){
+      echo '{error": {"text": '.$e->getMessage().'}';
+   }
 });
 
 //Restrict route example    Our token is "usertokensecret"
@@ -1890,34 +1918,6 @@ $app->post('/api/events/edit/id/{id}', function(Request $request, Response $resp
     }
 });
 
-# Delete Media
-$app->post('/api/events/remove/id/{id}', function(Request $request, Response $response){
-
-    $EventID = $request->getAttribute('id');
-    $EventMedia1 = $request->getParam('EventMedia1');
-    $EventMedia2 = $request->getParam('EventMedia2');
-    $EventMedia3 = $request->getParam('EventMedia3');
-    
-    $sql = "UPDATE CalendarEvent SET Media1= '$EventMedia1' WHERE ID='$EventID'";
-            
-    try{
-      // Get DB object
-      $configDB = parse_ini_file('../../db.ini');
-      $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
-      // Call connect; connect to database.
-      $db = $db->connect();
-
-      # PDO statement
-      $stmt = $db->prepare($sql);
-
-      $stmt->execute();
-      echo '{"notice": {"text": "Media Deleted"}';
-
-    } catch(PDOException $e){
-      echo '{"error": {"text": '.$e->getMessage().'}';;
-    }
-});
-
 /*********************************************
 POST: User
 *********************************************/
@@ -1960,15 +1960,17 @@ $app->post('/api/users/add', function(Request $request, Response $response){
     }
 });
 
-# Edit account info
-$app->post('/api/user/edit/id/{id}', function(Request $request, Response $response){
+# Edit account info jm
+$app->post('/api/users/edit/id/{id}', function(Request $request, Response $response){
 
     $id = $request->getAttribute('id');
     $name = $request->getParam('Name');
+    $loginID = $request->getParam('LoginID');
     $password = $request->getParam('Password');
     $accountStatus = $request->getParam('AccountStatus');
     
-    $sql = "UPDATE User SET Name = '$name', Password = '$password', AccountStatus = '$accountStatus' WHERE ID=$EventID";
+    //$sql = "UPDATE User SET AccountStatus = '$accountStatus' WHERE ID=$id";
+    $sql = "UPDATE User SET Name = '$name', Password = '$password', AccountStatus = '$accountStatus' WHERE ID=$id";
             
     try{
       // Get DB object
