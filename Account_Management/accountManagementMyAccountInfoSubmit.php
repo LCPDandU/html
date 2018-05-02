@@ -152,7 +152,7 @@ else
       if(!$result)
       {
         echo $message_error; ?>
-      <form action="accountManagementMyAccountInfo" method="post">
+      <form action="accountManagementMyAccountInfo.php" method="post">
          <input type="hidden" name="ID" value="<?php echo $id;?>"/>
          <input type="submit" value="Return"/>
       </form>
@@ -166,7 +166,7 @@ else
           echo '<br> Please logout and log back in for changes to take effect.';
       ?>
 
-      <form action="index" method="post">
+      <form action="../logout.php" method="post">
         <input type="hidden" name="ID" value="<?php echo $id;?>"/>
         <input type="submit" value="Logout"/>
       </form>
