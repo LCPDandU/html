@@ -1619,16 +1619,29 @@ GET: USERS
 *********************************************/
 
 # Get all users.
-$app->get('/api/users', function(Request $request, Response $response){
-    $sql = "SELECT ID, AccountStatus, Name, LoginID FROM User";
-    
+$app->get('/api/users/order/{order}/sort/{sort}', function(Request $request, Response $response){
+   //Get Parameters from url
+   //order is the Attribute that results are 'Ordered By'
+   //sort can be either ASC (ascending order), or DESC (descending order)
+   $order = $request->getAttribute('order');
+   $processedSort = $request->getAttribute('sort');
+   
+   if($processedSort=='desc'||$processedSort=='asc'||$processedSort=='DESC'||$processedSort=='ASC')
+   {
+      $sort=$processedSort;
+   }
+   else
+   {
+      $sort='DESC';
+   }
+   
+    $sql = "SELECT ID, AccountStatus, LoginID, Name FROM User ORDER BY $order $sort";
     try{
       // Get DB object
       $configDB = parse_ini_file('../../db.ini');
       $db = new db($configDB['DB_HOST'],$configDB['DB_USER'],$configDB['DB_PWD'],$configDB['DB_NAME']);
       // Call connect; connect to database.
       $db = $db->connect();
-      
       # PDO statement
       $stmt = $db->query($sql);
       $users = $stmt->fetchAll(PDO::FETCH_OBJ);

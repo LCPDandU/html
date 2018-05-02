@@ -82,8 +82,8 @@ else
   // Need to execute the request.
   $result = curl_exec($ch);
 
-  //Add Event to log
-  $file = '../Log/accountManagementMyAccountInfo.log';
+  //Add to log
+  $file = '../Log/accountManagementAccountInfo.log';
 
   //REST url
   //Here we pull the newest Event, which is the one that was just created.
