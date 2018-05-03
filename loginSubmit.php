@@ -38,6 +38,29 @@ else
     // Store LoginID and Passwords as variables
     $LoginID = filter_var($_POST['LoginID'], FILTER_SANITIZE_STRING);
     $Password = filter_var($_POST['Password'], FILTER_SANITIZE_STRING);
+    
+    //User input is scanned for undersierable characters. This is done to prevent SQL injection
+   $userInput = array(
+      $LoginID,
+      $Password
+   );
+   $inputCount=0;
+   foreach($userInput as $string)
+   {
+      $evaluate=containsSpecialChar($string);
+      if($evaluate['contains']==true)
+      {
+         if(inputCount==0)echo '<body><p>Your input contains special characters, please go back and remove the characters listed below from your input.</p></body>';
+         echo '<body><p>"'.$string.'" contains the following special characters: ['.$evaluate['charList'].']</p></body>';
+         $inputCount=$inputCount+1;
+      }
+   }
+
+if($inputCount>0)
+{
+   die();
+}
+
 
     try
     {

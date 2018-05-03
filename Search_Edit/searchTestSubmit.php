@@ -1,5 +1,6 @@
 <?php 
 //include('../header.php');
+include('../config.php');
 ?>
 
 <?php
@@ -74,6 +75,18 @@
       echo "<body><p>json is empty</p></body>";
    else
       echo "<body><p>json is not empty</p></body>";
+      
+   $strings = array('No special characters', '////slashes\\\\\\\\', '"\'quotes\'"', '!@%&+=the rest');
+   foreach($strings as $string)
+   {
+      $evaluate = containsSpecialChar($string);
+      if($evaluate['contains']==true)
+      {
+         echo '<body><p>"'.$string.'" contains the following special characters: ['.$evaluate['charList'].']</p></body>';
+      }
+      else
+         echo '<body><p>"'.$string.'" contains no special characters.</p></body>';
+   }
    
 ?>
 <html>

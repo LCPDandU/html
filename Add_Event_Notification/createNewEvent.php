@@ -33,6 +33,35 @@ $Media2 = $_FILES['media2']['name'];
 $Media3 = $_FILES['media3']['name'];
 
 
+//User input is scanned for undersierable characters. This is done to prevent SQL injection
+$userInput = array(
+   $EventTitle,
+   $EventCategory,
+   $EventDate,
+   $EventStartTimeHour,
+   $EventStartTimeMinute,
+   $EventStartTimeAMPM,
+   $EventLocation,
+   $EventDescription
+);
+$inputCount=0;
+foreach($userInput as $string)
+{
+   $evaluate=containsSpecialChar($string);
+   if($evaluate['contains']==true)
+   {
+      if(inputCount==0)echo '<body><p>Your input contains special characters, please go back and remove the characters listed below from your input.</p></body>';
+      echo '<body><p>"'.$string.'" contains the following special characters: ['.$evaluate['charList'].']</p></body>';
+      $inputCount=$inputCount+1;
+   }
+}
+
+if($inputCount>0)
+{
+   die();
+}
+
+
 /*********************************************
 POST TO DATABASE VIA REST
 *********************************************/

@@ -39,6 +39,52 @@ else
 }
 
 
+//User input is scanned for undersierable characters. This is done to prevent SQL injection
+$userInput = array(
+   $_POST['NotificationTitleExact'],
+   $_POST['NotificationTitleLike'],
+   $_POST['NotificationDescriptionLike'],
+   $_POST['NotificationDateExact'],
+   $_POST['NotificationDateA'],
+   $_POST['NotificationDateB'],
+   $_POST['NotificationDateBefAft'],
+   $_POST['BefAftNotificationDate'],
+   $_POST['NotificationPostTimeHourExact'],
+   $_POST['NotificationPostTimeMinuteExact'],
+   $_POST['NotificationPostTimeAMPMExact'],
+   $_POST['NotificationPostTimeHourBefAft'],
+   $_POST['NotificationPostTimeMinuteBefAft'],
+   $_POST['NotificationPostTimeAMPMBefAft'],
+   $_POST['BefAftNotificationPostTime'],
+   $_GET['NotificationTitleExact'],
+   $_GET['NotificationTitleLike'],
+   $_GET['NotificationDescriptionLike'],
+   $_GET['NotificationDateExact'],
+   $_GET['NotificationDateA'],
+   $_GET['NotificationDateB'],
+   $_GET['NotificationDateBefAft'],
+   $_GET['BefAftNotificationDate'],
+   $_GET['NotificationPostTimeHourExact'],
+   $_GET['NotificationPostTimeMinuteExact'],
+   $_GET['NotificationPostTimeAMPMExact'],
+   $_GET['NotificationPostTimeHourBefAft'],
+   $_GET['NotificationPostTimeMinuteBefAft'],
+   $_GET['NotificationPostTimeAMPMBefAft'],
+   $_GET['BefAftNotificationPostTime']
+);
+$inputCount=0;
+foreach($userInput as $string)
+{
+   $evaluate=containsSpecialChar($string);
+   if($evaluate['contains']==true)
+   {
+      if(inputCount==0)echo '<body><p>Your input contains special characters, please go back and remove the characters listed below from your input.</p></body>';
+      echo '<body><p>"'.$string.'" contains the following special characters: ['.$evaluate['charList'].']</p></body>';
+      $inputCount=$inputCount+1;
+   }
+}
+
+
 /*Processing of form/URL variables*/
 //Form variables ($_POST) come from the initial form on the page searchSingleAttributeInputNotification
 //URL variables ($_GET) are used to preserve search criteria while allowing the results to be dynamically sorted via table headers

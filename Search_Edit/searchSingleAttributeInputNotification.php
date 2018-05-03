@@ -194,7 +194,6 @@
   <?php echo $form; ?>
   <form action="searchAttributeMenu.php" method="post">
       <input type="submit" value="Back"/>
-      <i>(not implemented yet)</i>
   </form>
 </body>
 

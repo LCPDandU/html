@@ -11,6 +11,10 @@ include('../header.php');
 <!--<body style = "Color: #000000; background-color:#afbfff;">-->
 <body>
 
+   <form action="searchMenu.php" method="post">
+      <input type="submit" value="Back"/>
+   </form>
+
   <!-- Search Events by a single attribute -->
   <form action="searchSingleAttributeInputEvent.php" method="post">
   <fieldset>

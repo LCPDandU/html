@@ -10,6 +10,11 @@ include('../header.php');
 
 <!--<body style = "Color: #000000; background-color:#afbfff;">-->
 <body>
+
+   <form action="searchMenu.php" method="post">
+      <input type="submit" value="Back"/>
+   </form>
+
   <h2>List Format</h2>
   <form action="seeAllEventsList.php" method="post">
       <input type="submit" value="See All Events"/>

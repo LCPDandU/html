@@ -83,7 +83,7 @@ echo '</form>';
 <!--<body style = "Color: #000000; background-color:#afbfff;">-->
 <body>
   <form action="searchAttributeMenu.php" method="post">
-      <input type="submit" value="Return"/>
+      <input type="submit" value="Back"/>
   </form>
 </body>
 

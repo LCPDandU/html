@@ -56,6 +56,66 @@ else
   //isset($_POST['Ordering']) ? $sort=$_POST['Ordering'] : $title='DESC';
 }
 
+//User input is scanned for undersierable characters. This is done to prevent SQL injection
+$userInput = array(
+   $_POST['EventTitleExact'],
+   $_POST['EventTitleLike'],
+   $_POST['EventCategory'],
+   $_POST['EventDateExact'],
+   $_POST['EventDateA'],
+   $_POST['EventDateB'],
+   $_POST['EventDateBefAft'],
+   $_POST['BefAftEventDate'],
+   $_POST['EventStartTimeHourExact'],
+   $_POST['EventStartTimeMinuteExact'],
+   $_POST['EventStartTimeAMPMExact'],
+   $_POST['EventStartTimeHourBefAft'],
+   $_POST['EventStartTimeMinuteBeftAft'],
+   $_POST['EventStartTimeAMPMBefAft'],
+   $_POST['BefAftEventStartTime'],
+   $_POST['EventLocationExact'],
+   $_POST['EventLocationLike'],
+   $_POST['EventDescriptionLike'],
+   $_GET['EventTitleExact'],
+   $_GET['EventTitleLike'],
+   $_GET['EventCategory'],
+   $_GET['EventDateExat'],
+   $_GET['EventDateA'],
+   $_GET['EventDateB'],
+   $_GET['EventDateBefAft'],
+   $_GET['BefAftEventDate'],
+   $_GET['EventStartTimeHourExact'],
+   $_GET['EventStartTimeMinuteExact'],
+   $_GET['EventStartTimeAMPMExact'],
+   $_GET['EventStartTimeHourBefAft'],
+   $_GET['EventStartTimeMinuteBeftAft'],
+   $_GET['EventStartTimeAMPMBefAft'],
+   $_GET['BefAftEventStartTime'],
+   $_GET['EventLocationExact'],
+   $_GET['EventLocationLike'],
+   $_GET['EventDescriptionLike']
+);
+$inputCount=0;
+foreach($userInput as $string)
+{
+   $evaluate=containsSpecialChar($string);
+   if($evaluate['contains']==true)
+   {
+      if(inputCount==0)echo '<body><p>Your input contains special characters, please go back and remove the characters listed below from your input.</p></body>';
+      echo '<body><p>"'.$string.'" contains the following special characters: ['.$evaluate['charList'].']</p></body>';
+      $inputCount=$inputCount+1;
+   }
+}
+if($inputCount>0)
+{
+   echo '<body><p>';
+   echo '<form action="searchAttributeMenu.php" method="post">';
+   echo '<input type="submit" value="Back"/>';
+   echo '</form></p></body>';
+   die();
+}
+
+
 
 /*Processing of form/URL variables*/
 //Form variables ($_POST) come from the initial form on the page searchSingleAttributeInputEvent
@@ -225,6 +285,7 @@ if(isset($_POST['EventDescriptionLike']) || isset($_GET['EventDescriptionLike'])
    $href.="EventDescriptionLike=".$description."&&";
    $attr.="[Like-Description]";
 }
+
 
 $url=URL_START ."/public/api/events/MultiAttr/order/$order/sort/$sort/$exactTitle/$likeTitle/$category/$dateExact/$dateA/$dateB/$dateBefAft/$befAftDate/$hourExact/$minuteExact/$ampmExact/$hourBefAft/$minuteBefAft/$ampmBefAft/$befAftTime/$locationExact/$locationLike/$descriptionLike";
 
