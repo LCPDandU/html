@@ -18,9 +18,9 @@ $EventLocation = filter_var($_POST['EventLocation'], FILTER_SANITIZE_STRING);
 $EventDescription = filter_var($_POST['EventDescription'], FILTER_SANITIZE_STRING);
 
 //target folder
-$target_media1 = "media/".basename($_FILES['media1']['name']);
-$target_media2 = "media2/".basename($_FILES['media2']['name']);
-$target_media3 = "media3/".basename($_FILES['media3']['name']);
+$target_media1 = "../media/".basename($_FILES['media1']['name']);
+$target_media2 = "../media2/".basename($_FILES['media2']['name']);
+$target_media3 = "../media3/".basename($_FILES['media3']['name']);
   
 //move media file to the media folder
 move_uploaded_file($_FILES['media1']['tmp_name'], $target_media1);
